@@ -306,7 +306,7 @@ content/配下の同期済みドキュメント一覧（自動生成）。
 - [goal](content/claude-code/goal.md) (fetched_at: 2026-08-06T04:45:15+00:00)
 - [google-vertex-ai](content/claude-code/google-vertex-ai.md) (fetched_at: 2026-08-06T04:45:15+00:00)
 - [headless](content/claude-code/headless.md) (fetched_at: 2026-08-06T04:45:15+00:00)
-- [hooks-guide](content/claude-code/hooks-guide.md) (fetched_at: 2026-08-06T04:45:15+00:00)
+- [hooks-guide](content/claude-code/hooks-guide.md) (fetched_at: 2026-08-06T04:51:14+00:00)
 - [hooks](content/claude-code/hooks.md) (fetched_at: 2026-08-06T04:45:15+00:00)
 - [how-claude-code-works](content/claude-code/how-claude-code-works.md) (fetched_at: 2026-08-06T04:45:15+00:00)
 - [interactive-mode](content/claude-code/interactive-mode.md) (fetched_at: 2026-08-06T04:45:15+00:00)
