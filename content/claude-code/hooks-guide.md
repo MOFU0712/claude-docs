@@ -1,16 +1,10 @@
 ---
 source_url: https://code.claude.com/docs/en/hooks-guide
-fetched_at: '2026-08-06T04:51:14+00:00'
-content_hash: 91cb7efb8bc70871c5d7a7b43670030df270d88e0677daaaffdeb9cca7bed999
+fetched_at: '2026-08-06T05:50:13+00:00'
+content_hash: c8b79f614bab4071cd5e6ccf87a8e8cbf1cfbf8334744fb18c6754cee9f3c756
 ---
 
-> ## Documentation Index
-> Fetch the complete documentation index at: https://code.claude.com/docs/llms.txt
-> Use this file to discover all available pages before exploring further.
-
-# Automate actions with hooks
-
-> Run shell commands automatically when Claude Code edits files, finishes tasks, or needs input. Format code, send notifications, validate commands, and enforce project rules.
+Run shell commands automatically when Claude Code edits files, finishes tasks, or needs input. Format code, send notifications, validate commands, and enforce project rules.
 
 Hooks are user-defined shell commands. Claude Code runs them at specific points in its lifecycle, which gives you deterministic control: certain actions always happen rather than relying on the LLM to choose to run them. Use hooks to enforce project rules, automate repetitive tasks, and integrate Claude Code with your existing tools.
 
@@ -252,9 +246,6 @@ This example uses a separate script file that the hook calls. The script checks 
 
     INPUT=$(cat)
     FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
-
-    # Normalize Windows backslash separators so the patterns below match
-    FILE_PATH="${FILE_PATH//\\//}"
 
     PROTECTED_PATTERNS=(".env" "package-lock.json" ".git/")
 
