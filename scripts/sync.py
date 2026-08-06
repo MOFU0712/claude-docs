@@ -2,23 +2,31 @@
 
 各ソースについて「取得 → 分割 → 差分検知 → 保存」を行い、INDEX.mdを再生成したうえで
 claude-docsリポジトリにgit commitする。1ソースの取得失敗は他ソースの処理を止めない。
+
+実行例:
+    uv run python scripts/sync.py
 """
 
 from __future__ import annotations
 
-import logging
 import sys
-from dataclasses import dataclass, field
-from datetime import date
 from pathlib import Path
 
-import requests
-import yaml
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
 
-from scripts.lib.splitter import Page, split_pages
-from scripts.lib.storage import git_commit_if_changed, rebuild_index, save_page
+import logging  # noqa: E402
+from dataclasses import dataclass, field  # noqa: E402
+from datetime import date  # noqa: E402
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+import requests  # noqa: E402
+import yaml  # noqa: E402
+
+from scripts.lib.splitter import Page, split_pages  # noqa: E402
+from scripts.lib.storage import git_commit_if_changed, rebuild_index, save_page  # noqa: E402
+
+REPO_ROOT = _REPO_ROOT
 SOURCES_FILE = REPO_ROOT / "sources.yaml"
 DEFAULT_TIMEOUT_SEC = 30
 
@@ -27,7 +35,13 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class Source:
-    """sources.yamlの1エントリ。"""
+    """sources.yamlの1エントリ。
+
+    Attributes:
+        name: ソースの識別名（content/配下のサブディレクトリ名にもなる）。
+        full_dump: llms-full.txtのURL。
+        page_base_url: 個別ページ`.md`取得時のベースURL。
+    """
 
     name: str
     full_dump: str
@@ -36,7 +50,15 @@ class Source:
 
 @dataclass
 class SyncResult:
-    """1ソース分の同期結果サマリー。"""
+    """1ソース分の同期結果サマリー。
+
+    Attributes:
+        source_name: 対象ソース名。
+        added: 新規追加されたファイルパスの一覧。
+        updated: 更新されたファイルパスの一覧。
+        unchanged_count: 変更がなかったファイルの件数。
+        failed: 取得に失敗したURLの一覧。
+    """
 
     source_name: str
     added: list[str] = field(default_factory=list)
@@ -46,20 +68,45 @@ class SyncResult:
 
 
 def load_sources(path: Path = SOURCES_FILE) -> list[Source]:
-    """sources.yamlを読み込み、Sourceのリストを返す。"""
+    """sources.yamlを読み込み、Sourceのリストを返す。
+
+    Args:
+        path: sources.yamlのパス。
+
+    Returns:
+        定義された全ソースのリスト。
+    """
     raw = yaml.safe_load(path.read_text(encoding="utf-8"))
     return [Source(**entry) for entry in raw["sources"]]
 
 
 def fetch_text(url: str) -> str:
-    """指定URLをGETし、本文テキストを返す。"""
+    """指定URLをGETし、本文テキストを返す。
+
+    Args:
+        url: 取得対象のURL。
+
+    Returns:
+        レスポンス本文のテキスト。
+
+    Raises:
+        requests.RequestException: リクエストが失敗した場合。
+    """
     response = requests.get(url, timeout=DEFAULT_TIMEOUT_SEC)
     response.raise_for_status()
     return response.text
 
 
 def sync_source(repo_root: Path, source: Source) -> SyncResult:
-    """1ソースの取得→分割→差分検知→保存を行う。"""
+    """1ソースの取得→分割→差分検知→保存を行う。
+
+    Args:
+        repo_root: claude-docsリポジトリのルートパス。
+        source: 同期対象のSource。
+
+    Returns:
+        当該ソースの同期結果サマリー。
+    """
     result = SyncResult(source_name=source.name)
     try:
         full_dump_text = fetch_text(source.full_dump)
@@ -88,7 +135,11 @@ def sync_source(repo_root: Path, source: Source) -> SyncResult:
 
 
 def log_summary(results: list[SyncResult]) -> None:
-    """全ソースの同期結果サマリー（新規/更新/変更なし/取得失敗）をログ出力する。"""
+    """全ソースの同期結果サマリー（新規/更新/変更なし/取得失敗）をログ出力する。
+
+    Args:
+        results: 各ソースのSyncResultのリスト。
+    """
     for result in results:
         logger.info(
             "[%s] 新規:%d 更新:%d 変更なし:%d 取得失敗:%d",
@@ -103,6 +154,7 @@ def log_summary(results: list[SyncResult]) -> None:
 
 
 def main() -> None:
+    """全ソースを同期し、INDEX.mdを再生成、変更があればコミットする。"""
     logging.basicConfig(level=logging.INFO, format="%(message)s")
 
     sources = load_sources()

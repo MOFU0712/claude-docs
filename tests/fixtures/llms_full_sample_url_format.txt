@@ -1,0 +1,34 @@
+# English Documentation - Full Content
+
+## Messages
+
+### First steps
+
+---
+
+# Get started with Claude
+
+**URL:** https://platform.claude.com/docs/en/get-started
+
+Make your first API call to Claude and build a simple web search assistant.
+
+## Prerequisites
+
+* A Claude Console account
+* An API key
+
+---
+
+# Intro to Claude
+
+**URL:** https://platform.claude.com/docs/en/intro
+
+Claude is a family of large language models developed by Anthropic.
+
+---
+
+# Classification
+
+**URL:** https://platform.claude.com/docs/en/build-with-claude/classification
+
+Learn how to classify text with Claude.

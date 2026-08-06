@@ -11,7 +11,15 @@ _DELIMITER = "---\n"
 
 
 def write_frontmatter(metadata: dict[str, str], body: str) -> str:
-    """frontmatter辞書と本文から、frontmatter付きMarkdown文字列を生成する。"""
+    """frontmatter辞書と本文から、frontmatter付きMarkdown文字列を生成する。
+
+    Args:
+        metadata: frontmatterとして書き出すキーと値の辞書。
+        body: 本文（前後の空白は除去される）。
+
+    Returns:
+        `---`区切りのYAML frontmatterを先頭に持つMarkdown文字列。
+    """
     yaml_block = yaml.safe_dump(metadata, allow_unicode=True, sort_keys=False)
     return f"{_DELIMITER}{yaml_block}{_DELIMITER}\n{body.strip()}\n"
 
@@ -19,7 +27,12 @@ def write_frontmatter(metadata: dict[str, str], body: str) -> str:
 def read_frontmatter(markdown_text: str) -> tuple[dict[str, str], str]:
     """frontmatter付きMarkdown文字列を、frontmatter辞書と本文に分割する。
 
-    frontmatterが存在しないテキストを渡した場合は、空辞書と元テキストをそのまま返す。
+    Args:
+        markdown_text: frontmatterを含む可能性のあるMarkdown全文。
+
+    Returns:
+        (frontmatter辞書, 本文) のタプル。frontmatterが存在しない、または
+        閉じ区切りが見つからない場合は空辞書と元テキストをそのまま返す。
     """
     if not markdown_text.startswith(_DELIMITER):
         return {}, markdown_text

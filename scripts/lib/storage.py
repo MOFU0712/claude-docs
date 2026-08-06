@@ -19,7 +19,14 @@ INDEX_FILE_NAME = "INDEX.md"
 
 
 def content_hash(body: str) -> str:
-    """本文のsha256ハッシュを求める（差分検知に使用）。"""
+    """本文のsha256ハッシュを求める（差分検知に使用）。
+
+    Args:
+        body: ハッシュ対象の本文。
+
+    Returns:
+        本文（前後の空白を除去したもの）のsha256ハッシュ値（16進文字列）。
+    """
     return hashlib.sha256(body.strip().encode("utf-8")).hexdigest()
 
 
@@ -28,6 +35,15 @@ def page_path(repo_root: Path, source_name: str, page_base_url: str, source_url:
 
     例: page_base_url=".../docs/en", source_url=".../docs/en/agents"
         -> content/<source_name>/agents.md
+
+    Args:
+        repo_root: claude-docsリポジトリのルートパス。
+        source_name: `sources.yaml`の`name`（content/配下のサブディレクトリ名）。
+        page_base_url: 対象ソースの`page_base_url`（この部分を相対パスから除く）。
+        source_url: ページの取得元URL。
+
+    Returns:
+        保存先のファイルパス。
     """
     relative = source_url
     if relative.startswith(page_base_url):
@@ -41,7 +57,15 @@ def page_path(repo_root: Path, source_name: str, page_base_url: str, source_url:
 
 
 def has_changed(path: Path, new_hash: str) -> bool:
-    """保存先ファイルが存在しない、または既存のcontent_hashと異なる場合Trueを返す。"""
+    """保存先ファイルが存在しない、または既存のcontent_hashと異なるかを判定する。
+
+    Args:
+        path: 保存先ファイルパス。
+        new_hash: 今回取得した本文のcontent_hash。
+
+    Returns:
+        ファイルが存在しない、またはcontent_hashが変化していればTrue。
+    """
     if not path.exists():
         return True
     existing_metadata, _ = read_frontmatter(path.read_text(encoding="utf-8"))
@@ -50,16 +74,30 @@ def has_changed(path: Path, new_hash: str) -> bool:
 
 @dataclass
 class SaveOutcome:
-    """1ページ保存処理の結果。"""
+    """1ページ保存処理の結果。
+
+    Attributes:
+        path: 保存先（または保存先だったはずの）ファイルパス。
+        status: "added" | "updated" | "unchanged" のいずれか。
+    """
 
     path: Path
-    status: str  # "added" | "updated" | "unchanged"
+    status: str
 
 
 def save_page(repo_root: Path, source_name: str, page_base_url: str, page: Page) -> SaveOutcome:
     """Pageを差分検知しつつcontent/配下に保存する。
 
     内容に変更がない場合は書き込みを行わず、statusを"unchanged"として返す。
+
+    Args:
+        repo_root: claude-docsリポジトリのルートパス。
+        source_name: `sources.yaml`の`name`。
+        page_base_url: 対象ソースの`page_base_url`。
+        page: 保存対象のPage。
+
+    Returns:
+        保存結果を表すSaveOutcome。
     """
     path = page_path(repo_root, source_name, page_base_url, page.source_url)
     new_hash = content_hash(page.body)
@@ -79,7 +117,11 @@ def save_page(repo_root: Path, source_name: str, page_base_url: str, page: Page)
 
 
 def rebuild_index(repo_root: Path) -> None:
-    """content/配下の全ファイルから、ソースごとにグループ化したINDEX.mdを再生成する。"""
+    """content/配下の全ファイルから、ソースごとにグループ化したINDEX.mdを再生成する。
+
+    Args:
+        repo_root: claude-docsリポジトリのルートパス。
+    """
     content_dir = repo_root / CONTENT_DIR_NAME
     lines = ["# INDEX", "", "content/配下の同期済みドキュメント一覧（自動生成）。", ""]
 
@@ -98,7 +140,15 @@ def rebuild_index(repo_root: Path) -> None:
 
 
 def git_commit_if_changed(repo_root: Path, message: str) -> bool:
-    """git add -A したうえで、差分があればcommitする。差分がなければFalseを返す。"""
+    """git add -A したうえで、差分があればcommitする。
+
+    Args:
+        repo_root: git commit対象のリポジトリルートパス。
+        message: コミットメッセージ。
+
+    Returns:
+        コミットを実行した場合True、差分がなくスキップした場合False。
+    """
     subprocess.run(["git", "add", "-A"], cwd=repo_root, check=True)
     status = subprocess.run(
         ["git", "status", "--porcelain"],
