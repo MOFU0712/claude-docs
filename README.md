@@ -54,12 +54,12 @@ uv run mypy scripts/
 uv run pytest
 ```
 
-## 定期実行（cron）の想定手順
+## 定期実行（cron）
 
-本リポジトリ自体はcron登録を行いません。`sync.py`を手動実行で検証したうえで、`schedule`スキル等を使って別途、以下のようなコマンドを定期実行するジョブを登録することを想定しています。
+本リポジトリ自体はcron登録の仕組みを持ちません。OSの`crontab`に以下の内容で登録済みです（毎日6:10、ログは`logs/sync.log`に追記、`.gitignore`対象）。
 
 ```bash
-cd /home/tsutsui_kana/claude-docs && uv run python scripts/sync.py
+10 6 * * * /home/tsutsui_kana/.local/bin/uv --directory /home/tsutsui_kana/claude-docs run python scripts/sync.py >> /home/tsutsui_kana/claude-docs/logs/sync.log 2>&1
 ```
 
 `publish.py`は人手のトリガーを必要とする処理のため、cron登録の対象にはしません。
