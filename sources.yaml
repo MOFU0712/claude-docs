@@ -1,0 +1,10 @@
+# 同期対象の公式ドキュメントソース定義。
+# 新しいソースを追加する場合はここに1エントリ追加するのみとし、
+# scripts/ 配下のコード変更は発生させない。
+sources:
+  - name: claude-code
+    full_dump: https://code.claude.com/docs/llms-full.txt
+    page_base_url: https://code.claude.com/docs/en
+  - name: api-models
+    full_dump: https://platform.claude.com/docs/llms-full.txt
+    page_base_url: https://platform.claude.com/docs/en

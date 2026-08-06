@@ -1,0 +1,38 @@
+[project]
+name = "claude-docs"
+version = "0.1.0"
+description = "Anthropic公式ドキュメント（Claude Code / API・モデル）の忠実なMarkdownミラーを取得・同期・公開するツール"
+requires-python = ">=3.11"
+dependencies = [
+    "requests>=2.31",
+    "PyYAML>=6.0",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.6",
+    "mypy>=1.10",
+    "pytest>=8.0",
+    "types-PyYAML>=6.0",
+    "types-requests>=2.31",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["docs", ".steering"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.11"
+disallow_untyped_defs = true
+warn_unused_ignores = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

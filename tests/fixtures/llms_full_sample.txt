@@ -1,0 +1,17 @@
+# Getting Started
+Source: https://code.claude.com/docs/en/getting-started
+
+Claude Code is a command-line tool for agentic coding.
+It lets you delegate complex tasks to Claude directly from your terminal.
+
+# Agents
+Source: https://code.claude.com/docs/en/agents
+
+Agents allow Claude Code to work autonomously on multi-step tasks.
+Configure them in your project's settings.
+
+# Hooks
+Source: https://code.claude.com/docs/en/hooks
+
+Hooks let you run custom commands at specific points in Claude Code's lifecycle.
+Use PreToolUse and PostToolUse hooks to intercept tool calls.
