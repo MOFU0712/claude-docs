@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/web-quickstart
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: 2e3f8059be02e0d8b6a27eb90e717c1c95f24dd996e41143c89962c7591a7cf4
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 6ee06fd1c332985f70d10fb17719668d38614dad1027d2177b0e86f4fe6ca8f3
 ---
 
 Run Claude Code in the cloud from your browser or phone. Connect a GitHub repository, submit a task, and review the PR without local setup.
@@ -10,7 +10,7 @@ Run Claude Code in the cloud from your browser or phone. Connect a GitHub reposi
   Claude Code on the web is in research preview for Pro, Max, and Team users, and for Enterprise users with premium seats or Chat + Claude Code seats.
 </Note>
 
-Claude Code on the web runs on Anthropic-managed cloud infrastructure instead of your machine. Submit tasks from [claude.ai/code](https://claude.ai/code) in your browser or the Claude mobile app.
+Claude Code on the web runs on cloud infrastructure instead of your machine, Anthropic-managed by default. Submit tasks from [claude.ai/code](https://claude.ai/code) in your browser or the Claude mobile app.
 
 You'll need a GitHub repository to [get started](#connect-github). Claude clones it into an isolated virtual machine, makes changes, and pushes a branch for you to review. Sessions persist across devices, so a task you start on your laptop is ready to review from your phone later.
 
@@ -25,7 +25,7 @@ For work that needs your local config, tools, or environment, running Claude Cod
 
 ## How sessions run
 
-When you submit a task:
+The steps below describe Anthropic-hosted sessions. In a [self-hosted environment](/docs/en/self-hosted-environments), the clone and everything after it run on your organization's own runners, where network boundaries, setup, and push behavior are operator-configured. When you submit a task:
 
 1. **Clone and prepare**: your repository is cloned to an Anthropic-managed VM, and your [setup script](/docs/en/cloud-environments#setup-scripts) runs if configured.
 2. **Configure network**: internet access is set based on your environment's [access level](/docs/en/cloud-environments#access-levels).
@@ -40,7 +40,7 @@ Claude Code behaves the same everywhere. What changes is where code executes and
 
 |                                              | On the web                                                                                                     | Remote Control             | Terminal CLI           | Desktop app                 |
 | :------------------------------------------- | :------------------------------------------------------------------------------------------------------------- | :------------------------- | :--------------------- | :-------------------------- |
-| **Code runs on**                             | Anthropic cloud VM                                                                                             | Your machine               | Your machine           | Your machine or cloud VM    |
+| **Code runs on**                             | Cloud VM, Anthropic-managed by default                                                                         | Your machine               | Your machine           | Your machine or cloud VM    |
 | **You chat from**                            | claude.ai or mobile app                                                                                        | claude.ai or mobile app    | Your terminal          | The Desktop UI              |
 | **Uses your local config**                   | No, repo only                                                                                                  | Yes                        | Yes                    | Yes for local, no for cloud |
 | **Requires GitHub**                          | Yes, or [bundle a local repo](/docs/en/claude-code-on-the-web#send-local-repositories-without-github) via `--cloud` | No                         | No                     | Only for cloud sessions     |
@@ -112,7 +112,13 @@ With GitHub connected and an environment created, you're ready to submit tasks.
   </Step>
 
   <Step title="Choose a permission mode">
-    The mode dropdown next to the input defaults to **Accept edits**, where Claude makes changes and pushes a branch without stopping for approval. Switch to **Plan** if you want Claude to propose an approach and wait for you to approve it before editing files. Cloud sessions don't offer Manual or Bypass permissions. See the [full list of permission modes](/docs/en/permission-modes#available-modes) for what each one allows.
+    The mode dropdown next to the input shows the mode the session will run in:
+
+    * **Auto**: a classifier reviews Claude's actions instead of asking you. Appears when your organization allows auto mode and the selected model supports it
+    * **Accept edits**: Claude makes changes and pushes a branch without stopping for approval
+    * **Plan**: Claude proposes an approach and waits for you to approve it before editing files
+
+    Cloud sessions don't offer Manual or Bypass permissions. See the [full list of permission modes](/docs/en/permission-modes#available-modes) for what each one allows.
   </Step>
 
   <Step title="Describe the task and submit">

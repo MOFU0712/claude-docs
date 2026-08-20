@@ -1,14 +1,14 @@
 ---
 source_url: https://code.claude.com/docs/en/headless
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: bd4edbbd5bd8c7c01f24857653a585c63cc1305ce1e52f70ccd37450d7d87999
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: a4529a0d3b037f6dfa996d635f4d1f2a4613be09efeee9ae304fde8ab6e1ebc7
 ---
 
 Use the Agent SDK to run Claude Code programmatically from the CLI, Python, or TypeScript.
 
 The [Agent SDK](/docs/en/agent-sdk/overview) gives you the same tools, agent loop, and context management that power Claude Code. It's available as a CLI for scripts and CI/CD, or as [Python](/docs/en/agent-sdk/python) and [TypeScript](/docs/en/agent-sdk/typescript) packages for full programmatic control.
 
-To run Claude Code in non-interactive mode, pass `-p` with your prompt and any [CLI options](/docs/en/cli-reference):
+To run Claude Code in non-interactive mode, pass `-p` with your prompt and the [CLI options](/docs/en/cli-reference) you need:
 
 ```bash theme={null}
 claude -p "Find and fix the bug in auth.py" --allowedTools "Read,Edit,Bash"
@@ -18,7 +18,7 @@ This page covers using the Agent SDK via the CLI (`claude -p`). For the Python a
 
 ## Basic usage
 
-Add the `-p` (or `--print`) flag to any `claude` command to run it non-interactively. All [CLI options](/docs/en/cli-reference) work with `-p`, including:
+Add the `-p` (or `--print`) flag to any `claude` command to run it non-interactively. Not every [CLI option](/docs/en/cli-reference) combines with `-p`. Claude Code rejects `--bg`, and rejects `--cloud` with a task description, with an error naming the conflict; `--cloud` with a session ID and `-p` instead [queues a message into that cloud session](/docs/en/claude-code-on-the-web#send-follow-ups-from-the-cli) and exits. Options you'll combine with `-p` often include:
 
 * `--continue` for [continuing conversations](#continue-conversations)
 * `--allowedTools` for [auto-approving tools](#auto-approve-tools)
@@ -37,6 +37,8 @@ Claude Code exits with code 0 on success and a non-zero code when the run fails,
 Add `--bare` to reduce startup time by skipping auto-discovery of hooks, skills, plugins, MCP servers, auto memory, and CLAUDE.md. Without it, `claude -p` loads the same [context](/docs/en/how-claude-code-works#the-context-window) an interactive session would, including anything configured in the working directory or `~/.claude`.
 
 Bare mode is useful for CI and scripts where you need the same result on every machine. A hook in a teammate's `~/.claude` or an MCP server in the project's `.mcp.json` won't run, because bare mode never reads them.
+
+Without `--bare`, Claude Code runs the hooks in a project's `.claude/settings.json` even in a folder you've never trusted, because a `-p` session shows no workspace trust dialog. It also connects the servers in the project's `.mcp.json`, because a `-p` session can't show the per-server approval prompt either. [What runs before you trust a folder](/docs/en/permissions#what-runs-before-you-trust-a-folder) covers each kind of repository content under `-p` and how to keep it out.
 
 This example runs a one-off summarize task in bare mode and pre-approves the Read tool so the call completes without a permission prompt. Set `ANTHROPIC_API_KEY` before running it, because bare mode doesn't use your subscription login:
 
@@ -82,10 +84,10 @@ This example pipes a build log into Claude and writes the explanation to a file:
 cat build-error.txt | claude -p 'concisely explain the root cause of this build error' > output.txt
 ```
 
-With `--output-format json`, the response payload includes `total_cost_usd` and a per-model cost breakdown, so scripted callers can track spend per invocation without consulting the [usage dashboard](/docs/en/costs).
+With `--output-format json`, the response payload includes `total_cost_usd` and a per-model cost breakdown, so scripted callers can track spend per invocation without consulting the [usage dashboard](/docs/en/costs). Both figures are [client-side estimates](/docs/en/agent-sdk/cost-tracking) and can differ from your actual bill.
 
 <Note>
-  As of Claude Code v2.1.128, piped stdin is capped at 10MB. If you exceed the cap, Claude Code exits with a clear error and a non-zero status. To work with larger inputs, write the content to a file and reference the file path in your prompt instead of piping it.
+  Piped stdin is capped at 10MB. If you exceed the cap, Claude Code exits with a clear error and a non-zero status. To work with larger inputs, write the content to a file and reference the file path in your prompt instead of piping it.
 </Note>
 
 If Claude Code can't read stdin, for example because the process that started it disconnected its end, Claude Code prints a warning to stderr and continues with the prompt from the command line. Before v2.1.211, an unreadable stdin on Windows crashed the session or made it exit silently with no output.
@@ -210,7 +212,9 @@ Use the plugin fields in the `system/init` event to catch a plugin that didn't l
 | `plugins`       | array | plugins that loaded successfully, each with `name` and `path`                                                                                                                                                                                                                                |
 | `plugin_errors` | array | plugin load-time errors, each with `plugin`, `type`, and `message`. Includes unsatisfied dependency versions and `--plugin-dir` load failures such as a missing path or invalid archive. Affected plugins are demoted and absent from `plugins`. The key is omitted when there are no errors |
 
-Use the MCP server fields the same way. Claude Code validates each [`--mcp-config`](/docs/en/cli-reference#cli-flags) entry at startup and skips entries that fail validation, for example a `url` entry with no `type`; the run continues and exits cleanly, so check these fields to catch a server that never loaded:
+Use the MCP server fields the same way. When you pass [`--mcp-config`](/docs/en/cli-reference#cli-flags) with `-p`, Claude Code waits for still-pending servers before running the first turn, up to the [`MCP_TIMEOUT`](/docs/en/env-vars) startup timeout, 30 seconds by default. A remote server with a [cached tool list](/docs/en/agent-sdk/mcp#connection-timing) skips the wait, shows `pending` in `system/init`, and connects on its first tool call. The wait requires Claude Code v2.1.221 or later.
+
+Claude Code validates each `--mcp-config` entry at startup and skips entries that fail validation, for example a `url` entry with no `type`. The run continues and exits cleanly, so check these fields to catch a server that never loaded:
 
 | Field               | Type  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | ------------------- | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -242,9 +246,13 @@ claude -p "Run the test suite and fix any failures" \
   --allowedTools "Bash,Read,Edit"
 ```
 
-To set a baseline for the whole session instead of listing individual tools, pass a [permission mode](/docs/en/permission-modes). `dontAsk` denies anything not in your `permissions.allow` rules or the [read-only command set](/docs/en/permissions#read-only-commands), which is useful for locked-down CI runs. `AskUserQuestion`, connector tools [your organization set to `ask`](/docs/en/mcp#organization-controls-on-connector-tools), and MCP tools marked [`requiresUserInteraction`](/docs/en/mcp#require-approval-for-a-specific-tool) are denied even when an allow rule matches.
+To set a baseline for the whole session instead of listing individual tools, pass a [permission mode](/docs/en/permission-modes). For `-p`, the [built-in starting permission mode](/docs/en/permission-modes#which-mode-a-session-starts-in) is Manual on every plan, so pass the permission mode you want:
 
-`acceptEdits` lets Claude write files without prompting and also auto-approves common filesystem commands such as `mkdir`, `touch`, `mv`, and `cp`. Other shell commands and network requests still need an `--allowedTools` entry or a `permissions.allow` rule, otherwise the run aborts when one is attempted:
+* **`auto`**: pass `--permission-mode auto` to have a classifier review most actions instead of you
+* **`dontAsk`**: Claude Code denies anything not in your `permissions.allow` rules or the [read-only command set](/docs/en/permissions#read-only-commands), which is useful for locked-down CI runs. `AskUserQuestion`, connector tools [your organization set to `ask`](/docs/en/mcp#organization-controls-on-connector-tools), and MCP tools marked [`requiresUserInteraction`](/docs/en/mcp#require-approval-for-a-specific-tool) are denied even when an allow rule matches
+* **`acceptEdits`**: Claude writes files without prompting, and Claude Code auto-approves common filesystem commands such as `mkdir`, `touch`, `mv`, and `cp`. The [actions no mode auto-approves](/docs/en/permission-modes#actions-no-mode-auto-approves) still apply. Apart from the read-only command set, other shell commands and network requests still need an `--allowedTools` entry or a `permissions.allow` rule. See [what `acceptEdits` auto-approves](/docs/en/permission-modes#auto-approve-file-edits-with-acceptedits-mode) for the full list
+
+This example applies lint fixes with `acceptEdits` as the baseline:
 
 ```bash theme={null}
 claude -p "Apply the lint fixes" --permission-mode acceptEdits
@@ -299,7 +307,7 @@ session_id=$(claude -p "Start a review" --output-format json | jq -r '.session_i
 claude -p "Continue that review" --resume "$session_id"
 ```
 
-Run both commands from the same directory: session ID lookup is scoped to the current project directory and its git worktrees. See [Resume a session](/docs/en/sessions#resume-a-session) for the full scope rules.
+You can run the two commands from different directories: Claude Code [finds the session by its ID](/docs/en/sessions#resume-a-session) in any project on this machine. Before v2.1.223, Claude Code looked for the ID only in the current project directory and its git worktrees, so you had to run both commands from the same directory.
 
 ## Next steps
 

@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/communications-kit
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: b05b4cd63f19f9aaa74457fbca92ce3fb87954acffe05e4587d89fdf5987ca74
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 6aa520861a1dc4fe0f5b9ec6cd8776fb4df530300abe75791115a00808f25c7f
 ---
 
 Launch announcements, drip-campaign messages, and FAQ responses for rolling Claude Code out to your engineering organization.
@@ -196,8 +196,6 @@ Anthropic team. I can share a short playbook if you're in.
 ## Tips and tricks campaign
 
 Ready-to-paste Slack or Teams messages designed to drive feature activation after launch. Each follows the same pattern: a hook, the payoff, a "try it now" prompt, and a docs link. Drip them one or two a week in `#claude-code`, or pick the handful that match your team's gaps. They stand alone with no required order.
-
-Copy the message body from each block directly into Slack or Teams. Replace `[bracketed placeholders]` before sending.
 
 ### Get started
 

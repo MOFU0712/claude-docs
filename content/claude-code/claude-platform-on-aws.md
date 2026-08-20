@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/claude-platform-on-aws
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: a630c0520d60c67ab0ab1e8f4f462861e626eefc1a7d36718bbbbd04edde2fd1
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 1f0c4ad3b06a2011abeace3702fafccf902bc5c7a1a3f9bdcd1a199b4cdfa24d
 ---
 
 Configure Claude Code to use the Anthropic-operated Claude API with AWS authentication, IAM access control, and AWS Marketplace billing.
@@ -52,7 +52,7 @@ If your SSO credentials expire mid-session, configure [`awsAuthRefresh`](/docs/e
 }
 ```
 
-Claude Code also runs this command at startup when it can't validate your existing AWS credentials, and shows the command's output in an `Authentication` panel until the login completes. Before v2.1.212, the panel was titled `Cloud authentication`.
+Claude Code also runs this command at startup when it can't validate your existing AWS credentials, and shows the command's output in an `Authentication` panel until the login completes.
 
 With `awsAuthRefresh` configured, `/login` shows a **Claude Platform on AWS · refresh credentials** option under **Using 3rd-party platforms**. Selecting it runs the configured command and re-reads your AWS credentials without restarting Claude Code.
 
@@ -69,7 +69,7 @@ The key is sent as `x-api-key` and takes precedence over SigV4, so any AWS crede
 Treat workspace API keys like any other production credential. The [user settings file](/docs/en/settings) `env` block is a convenient way to scope the key to your machine without exporting it globally.
 
 <Note>
-  The `/login` and `/logout` commands don't sign you into a Claude.ai subscription for Claude Platform on AWS. Authentication runs through your AWS credentials or workspace API key. The exception is the **refresh credentials** option `/login` shows when `awsAuthRefresh` is configured, which re-reads your AWS credentials as described above.
+  The `/login` and `/logout` commands don't sign you into a Claude.ai subscription for Claude Platform on AWS. Authentication runs through your AWS credentials or workspace API key.
 </Note>
 
 ### 2. Configure Claude Code
@@ -82,7 +82,9 @@ export ANTHROPIC_AWS_WORKSPACE_ID=wrkspc_01ABCDEFGHIJKLMN
 export AWS_REGION=us-east-1
 ```
 
-`ANTHROPIC_AWS_WORKSPACE_ID` is required and is sent on every request as the `anthropic-workspace-id` header. Replace the example `wrkspc_01ABCDEFGHIJKLMN` value with your own workspace ID from your Claude Platform on AWS setup. The base URL is computed from `AWS_REGION` as `https://aws-external-anthropic.{region}.api.aws`. To override the URL directly, set `ANTHROPIC_AWS_BASE_URL`.
+`ANTHROPIC_AWS_WORKSPACE_ID` is required. Claude Code sends it on every request as the `anthropic-workspace-id` header. Replace the example `wrkspc_01ABCDEFGHIJKLMN` value with your own workspace ID from your Claude Platform on AWS setup.
+
+Claude Code computes the base URL as `https://aws-external-anthropic.{region}.api.aws` from the AWS region, which it resolves with the [same precedence as Amazon Bedrock](/docs/en/amazon-bedrock#3-configure-claude-code). To override the URL directly, set `ANTHROPIC_AWS_BASE_URL`.
 
 Claude Platform on AWS is opt-in even when AWS credentials are present in your environment. Amazon Bedrock and Microsoft Foundry take precedence in provider routing, so unset `CLAUDE_CODE_USE_BEDROCK` and `CLAUDE_CODE_USE_FOUNDRY` if they're set.
 

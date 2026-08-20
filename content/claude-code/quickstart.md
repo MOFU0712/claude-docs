@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/quickstart
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: ce2bc0865539223ebdb9145b5650182c6040f99eb2ec473a525fa830f7f493a1
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 8514dc306b7c098bd22b4db609cebae06c87d2ebbd0ca2031abc07fa00c077d3
 ---
 
 Welcome to Claude Code!
@@ -177,15 +177,12 @@ Now let's make Claude Code do some actual coding. Try a simple task:
 add a hello world function to the main file
 ```
 
-Claude Code will:
+Claude Code finds the appropriate file and shows you the change. In your first session after installing, it asks before each change. Select **Yes** to approve.
 
-1. Find the appropriate file
-2. Show you the proposed changes
-3. Ask for your approval before changing files, depending on your permission mode
-4. Make the edit
+After your first session, auto mode is the [built-in starting permission mode](/docs/en/permission-modes#eliminate-prompts-with-auto-mode) for interactive terminal and VS Code sessions on Pro, Max, and Team plans: a classifier reviews actions instead of you, and Claude edits most files and runs most commands without asking you. On other plans, Manual mode is the built-in starting permission mode.
 
 <Note>
-  Whether Claude Code asks before changing files depends on your [permission mode](/docs/en/permission-modes). In default mode, Claude asks for approval before each change. Press `Shift+Tab` to cycle through modes: `acceptEdits` auto-approves file edits, and `plan` lets Claude propose changes without editing. Some accounts also have an `auto` mode that runs a background safety check and blocks risky actions, returning to prompts only after repeated blocks.
+  Your settings or your organization can set a different starting permission mode. [Which permission mode a session starts in](/docs/en/permission-modes#which-mode-a-session-starts-in) lists what does. Press `Shift+Tab` at any time to switch the permission mode of the session you're in.
 </Note>
 
 ## Step 6: Use Git with Claude Code

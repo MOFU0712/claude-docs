@@ -1,14 +1,12 @@
 ---
 source_url: https://code.claude.com/docs/en/agent-sdk/custom-tools
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: 8fbe89695b337183393ea6e289df037a5ffa8c9463540519919c93572987f133
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 3e3de698a18cff6c5044feb23a921ad6cd9b2764ae1f9d86038837796f84fd8a
 ---
 
 Define custom tools with the Claude Agent SDK's in-process MCP server so Claude can call your functions, hit your APIs, and perform domain-specific operations.
 
 Custom tools extend the Agent SDK by letting you define your own functions that Claude can call during a conversation. Using the SDK's in-process MCP server, you can give Claude access to databases, external APIs, domain-specific logic, or any other capability your application needs.
-
-This guide covers how to define tools with input schemas and handlers, bundle them into an MCP server, pass them to `query`, and control which tools Claude can access. It also covers error handling, tool annotations, and returning non-text content like images.
 
 ## Quick reference
 
@@ -317,24 +315,17 @@ See `ToolAnnotations` in the [TypeScript](/docs/en/agent-sdk/typescript#toolanno
 
 ## Control tool access
 
-The [weather tool example](#weather-tool-example) registered a server and listed tools in `allowedTools`. This section covers how tool names are constructed and how to scope access when you have multiple tools or want to restrict built-ins.
-
-### Tool name format
-
-When MCP tools are exposed to Claude, their names follow a specific format:
-
-* Pattern: `mcp__{server_name}__{tool_name}`
-* Example: A tool named `get_temperature` in server `weather` becomes `mcp__weather__get_temperature`
+The [weather tool example](#weather-tool-example) registered a server and listed tools in `allowedTools`. This section covers how to scope access when you have multiple tools or want to restrict built-ins. For how tool names are constructed, see [Call a custom tool](#call-a-custom-tool).
 
 ### Configure allowed tools
 
-The `tools` option and the allowed/disallowed lists affect two layers: availability, which controls whether a tool appears in Claude's context, and permission, which controls whether a call is approved once Claude attempts it. `tools` and bare-name `disallowedTools` entries change availability. `allowedTools` and scoped `disallowedTools` rules change permission only.
+The `tools` option and the allowed/disallowed lists affect two layers: availability, which controls whether a tool appears in Claude's context, and permission, which controls whether a call is approved once Claude attempts it. `tools` and bare-name `disallowedTools` entries change availability. `allowedTools` and scoped `disallowedTools` rules change permission. If you name one of the [task-tracking tools](/docs/en/agent-sdk/todo-tracking#model-availability) in `allowedTools`, Claude Code also opts the session in.
 
 | Option                    | Layer        | Effect                                                                                                                                                                                                          |
 | :------------------------ | :----------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `tools: ["Read", "Grep"]` | Availability | Only the listed built-ins are in Claude's context. Unlisted built-ins are removed. MCP tools are unaffected.                                                                                                    |
 | `tools: []`               | Availability | All built-ins are removed. Claude can only use your MCP tools.                                                                                                                                                  |
-| allowed tools             | Permission   | Listed tools run without a permission prompt. Unlisted tools remain available; calls go through the [permission flow](/docs/en/agent-sdk/permissions).                                                               |
+| allowed tools             | Permission   | Listed tools run without a permission prompt. Other unlisted tools remain available; calls go through the [permission flow](/docs/en/agent-sdk/permissions).                                                         |
 | disallowed tools          | Both         | A bare tool name such as `"Bash"` removes the tool from Claude's context, the same as omitting it from `tools`. A scoped rule such as `"Bash(rm *)"` leaves the tool in context and denies only matching calls. |
 
 To remove a built-in entirely, omit it from `tools` or list its bare name in `disallowedTools` (Python: `disallowed_tools`); both keep the tool out of context so Claude never attempts it. A scoped `disallowedTools` rule blocks matching calls but leaves the tool visible, so Claude may waste a turn trying it. See [Configure permissions](/docs/en/agent-sdk/permissions) for the full evaluation order.
@@ -847,7 +838,7 @@ Because [tool search](/docs/en/agent-sdk/tool-search) is on by default, the outp
 
 ## Next steps
 
-Custom tools wrap async functions in a standard interface. You can mix the patterns on this page in the same server: a single server can hold a database tool, an API gateway tool, and an image renderer alongside each other.
+You can mix the patterns on this page in the same server: a single server can hold a database tool, an API gateway tool, and an image renderer alongside each other.
 
 From here:
 

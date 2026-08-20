@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/troubleshooting
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: 63079a71ccda9f73e43e8406e63f5edc389f01649433646bd9d8ebcd81f6f7be
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: aee660fd0398afb86c0f562d577bb94bf0c92587c6582b7cbd5c7265b44b88fc
 ---
 
 Fix high CPU or memory usage, hangs, auto-compact thrashing, and search problems in Claude Code, and find the right page for other issues.
@@ -14,6 +14,7 @@ This page covers performance, stability, and search problems once Claude Code is
 | Update or install download fails with `The connection dropped while downloading the update` or `aborted`                                             | [Error reference](/docs/en/errors#the-connection-dropped-while-downloading-the-update)        |
 | Login loops, OAuth errors, `403 Forbidden`, "organization disabled", Amazon Bedrock, Google Cloud's Agent Platform, or Microsoft Foundry credentials | [Troubleshoot installation and login](/docs/en/troubleshoot-install#login-and-authentication) |
 | Settings not applying, hooks not firing, MCP servers not loading                                                                                     | [Debug your configuration](/docs/en/debug-your-config)                                        |
+| Session started in auto mode, or Claude edits files and runs commands without asking                                                                 | [Which mode a session starts in](/docs/en/permission-modes#which-mode-a-session-starts-in)    |
 | `API Error: 5xx`, `529 Overloaded`, `429`, request validation errors                                                                                 | [Error reference](/docs/en/errors)                                                            |
 | `model not found` or `you may not have access to it`                                                                                                 | [Error reference](/docs/en/errors#theres-an-issue-with-the-selected-model)                    |
 | VS Code extension not connecting or detecting Claude                                                                                                 | [VS Code integration](/docs/en/vs-code#fix-common-issues)                                     |

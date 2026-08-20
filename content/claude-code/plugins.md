@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/plugins
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: c966396728b428cee8eea343c604073f760eed25489d933abc612cba22fb89f8
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 6003da8a90886df4f3b024ae5fc16f55ec1554a468c8b237d5dbcf7a64f77000
 ---
 
 Create custom plugins to extend Claude Code with skills, agents, hooks, and MCP servers.
@@ -19,21 +19,6 @@ Claude Code supports two ways to add custom skills, agents, and hooks:
 | **Standalone** (`.claude/` directory)                                                                           | `/hello`             | Personal workflows, project-specific customizations, quick experiments                          |
 | **Plugins** (self-contained directories with skills, agents, hooks, or a `.claude-plugin/plugin.json` manifest) | `/plugin-name:hello` | Sharing with teammates, distributing to community, versioned releases, reusable across projects |
 
-**Use standalone configuration when**:
-
-* You're customizing Claude Code for a single project
-* The configuration is personal and doesn't need to be shared
-* You're experimenting with skills or hooks before packaging them
-* You want short skill names like `/hello` or `/deploy`
-
-**Use plugins when**:
-
-* You want to share functionality with your team or community
-* You need the same skills/agents across multiple projects
-* You want version control and easy updates for your extensions
-* You're distributing through a marketplace
-* You're okay with namespaced skills like `/my-plugin:hello` (namespacing prevents conflicts between plugins)
-
 <Tip>
   Start with standalone configuration in `.claude/` for quick iteration, then [convert to a plugin](#convert-existing-configurations-to-plugins) when you're ready to share.
 </Tip>
@@ -45,10 +30,6 @@ This quickstart walks you through creating a plugin with a custom skill. You'll 
 ### Prerequisites
 
 * Claude Code [installed and authenticated](/docs/en/quickstart#step-1-install-claude-code)
-
-<Note>
-  If you don't see the `/plugin` command, update Claude Code to the latest version. See [Troubleshooting](/docs/en/troubleshooting) for upgrade instructions.
-</Note>
 
 ### Create your first plugin
 
@@ -85,12 +66,12 @@ This quickstart walks you through creating a plugin with a custom skill. You'll 
     }
     ```
 
-    | Field         | Purpose                                                                                                                                                                                                                                                        |
-    | :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-    | `name`        | Unique identifier and skill namespace. Skills are prefixed with this (e.g., `/my-first-plugin:hello`).                                                                                                                                                         |
-    | `description` | Shown in the plugin manager when browsing or installing plugins.                                                                                                                                                                                               |
-    | `version`     | Optional. If set, users only receive updates when you bump this field. If omitted and your plugin is distributed via git, the commit SHA is used and every commit counts as a new version. See [version management](/docs/en/plugins-reference#version-management). |
-    | `author`      | Optional. Helpful for attribution.                                                                                                                                                                                                                             |
+    | Field         | Purpose                                                                                                                                                                                                                                                                                                                                    |
+    | :------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | `name`        | Unique identifier and skill namespace. Skills are prefixed with this (e.g., `/my-first-plugin:hello`).                                                                                                                                                                                                                                     |
+    | `description` | Shown in the plugin manager when browsing or installing plugins.                                                                                                                                                                                                                                                                           |
+    | `version`     | Optional. If set, users only receive updates when you bump this field, except for a [`command` source](/docs/en/plugin-marketplaces#command-sources); see [version management](/docs/en/plugins-reference#version-management). If omitted, the version comes from the next source in [version management](/docs/en/plugins-reference#version-management). |
+    | `author`      | Optional. Helpful for attribution.                                                                                                                                                                                                                                                                                                         |
 
     For additional fields like `homepage`, `repository`, and `license`, see the [full manifest schema](/docs/en/plugins-reference#plugin-manifest-schema).
   </Step>
@@ -163,12 +144,6 @@ This quickstart walks you through creating a plugin with a custom skill. You'll 
   </Step>
 </Steps>
 
-You've successfully created and tested a plugin with these key components:
-
-* **Plugin manifest** (`.claude-plugin/plugin.json`): describes your plugin's metadata
-* **Skills directory** (`skills/`): contains your custom skills
-* **Skill arguments** (`$ARGUMENTS`): captures user input for dynamic behavior
-
 <Tip>
   The `--plugin-dir` flag is useful for development and testing. When you're ready to share your plugin with others, see [Create and distribute a plugin marketplace](/docs/en/plugin-marketplaces).
 </Tip>
@@ -209,10 +184,6 @@ You've created a plugin with a skill, but plugins can include much more: custom 
 | `settings.json`   | Plugin root | Default [settings](/docs/en/settings) applied when the plugin is enabled            |
 
 A plugin that ships exactly one skill can place `SKILL.md` directly at the plugin root instead of creating a `skills/` directory. Claude Code loads it as a single skill and uses the frontmatter `name` field for the invocation name. Use the `skills/` layout for plugins that may grow to more than one skill.
-
-<Note>
-  **Next steps**: Ready to add more features? Jump to [Develop more complex plugins](#develop-more-complex-plugins) to add agents, hooks, MCP servers, and LSP servers. For complete technical specifications of all plugin components, see [Plugins reference](/docs/en/plugins-reference).
-</Note>
 
 ## Develop more complex plugins
 
@@ -319,7 +290,7 @@ Use the `--plugin-dir` flag to test plugins during development. This loads your 
 claude --plugin-dir ./my-plugin
 ```
 
-The flag also accepts a `.zip` archive of the plugin directory, which requires Claude Code v2.1.128 or later.
+The flag also accepts a `.zip` archive of the plugin directory.
 
 ```bash theme={null}
 claude --plugin-dir ./my-plugin.zip
@@ -368,7 +339,7 @@ If your plugin isn't working as expected:
 When your plugin is ready to share:
 
 1. **Add documentation**: Include a `README.md` with installation and usage instructions
-2. **Choose a versioning strategy**: Decide whether to set an explicit `version` or rely on the git commit SHA. See [version management](/docs/en/plugins-reference#version-management)
+2. **Choose a versioning strategy**: Decide whether to set an explicit `version` or rely on the fallback described in [version management](/docs/en/plugins-reference#version-management).
 3. **Create or use a marketplace**: Distribute through [plugin marketplaces](/docs/en/plugin-marketplaces) for installation
 4. **Test with others**: Have team members test the plugin before wider distribution
 
@@ -395,10 +366,6 @@ Approved plugins are pinned to a specific commit SHA in the [`anthropics/claude-
 The official marketplace, `claude-plugins-official`, is curated separately. Anthropic decides which plugins to include at its discretion. There is no application process, and the submission form does not add plugins to the official marketplace.
 
 If Anthropic lists your plugin in the official marketplace, your CLI can prompt Claude Code users to install it. See [Recommend your plugin from your CLI](/docs/en/plugin-hints).
-
-<Note>
-  For complete technical specifications, debugging techniques, and distribution strategies, see [Plugins reference](/docs/en/plugins-reference).
-</Note>
 
 ## Convert existing configurations to plugins
 

@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/glossary
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: 6523167bf09d3d96de36c2b67908e1f481f86bdef5839729d5b9cc1d4cc48a3b
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 97db0bda62ecbbc44e4563c03676cce193d59479ea685c40954e9b213b1a4c09
 ---
 
 Definitions for Claude Code terminology. Learn what agentic loop, compaction, CLAUDE.md, hooks, subagents, MCP, and other core concepts mean.
@@ -12,7 +12,7 @@ This glossary defines Claude Code terminology. Each entry links to the page wher
 
 ### Agent teams
 
-Multiple independent Claude Code sessions coordinated by a team lead, with a shared task list and peer-to-peer messaging. Unlike [subagents](#subagent), which run within a single session and report only to the parent, teammates each have their own context window and you can interact with any of them directly. Agent teams are experimental and must be enabled by setting `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`.
+Multiple independent Claude Code sessions coordinated by a team lead, with a shared task list and peer-to-peer messaging. Unlike [subagents](#subagent), which run within a single session and report only to the parent, teammates each have their own context window and you can interact with any of them directly. Agent teams are experimental and disabled by default; see [Enable agent teams](/docs/en/agent-teams#enable-agent-teams).
 
 Learn more: [Run agent teams](/docs/en/agent-teams)
 
@@ -48,7 +48,7 @@ Learn more: [Auto memory](/docs/en/memory#auto-memory)
 
 ### Auto mode
 
-A [permission mode](#permission-mode) where a separate classifier model reviews actions in the background, so most run without approval prompts; explicit ask rules still prompt. The classifier blocks scope escalation, untrusted infrastructure, and [prompt injection](#prompt-injection). It never sees tool results, so injected instructions cannot influence its decisions.
+A [permission mode](#permission-mode) where a separate classifier model reviews actions instead of you, so Claude Code runs most of them without asking you. Claude Code still asks you before actions your explicit ask rules match. On Pro, Max, and Team plans, auto mode is the [built-in starting permission mode](/docs/en/permission-modes#which-mode-a-session-starts-in) for interactive terminal and VS Code sessions. The classifier blocks scope escalation, untrusted infrastructure, and [prompt injection](#prompt-injection). It never sees tool results, so injected instructions can't influence its decisions.
 
 Learn more: [Eliminate prompts with auto mode](/docs/en/permission-modes#eliminate-prompts-with-auto-mode)
 
@@ -228,7 +228,7 @@ Learn more: [Plugins](/docs/en/plugins)
 
 ### Project trust
 
-A dialog accepting a directory before Claude Code loads its configuration. Acceptance is saved per project directory, except your home directory, where trust is held for the current session only and the prompt reappears on each launch. Trust gates auto-installation of marketplace plugins and execution of project-defined hooks. Trusting a directory means its `.claude/settings.json`, `.mcp.json`, and other config files take effect.
+A dialog accepting a directory before Claude Code loads its configuration. Acceptance is saved per project directory, except your home directory, where trust is held for the current session only and the prompt reappears on each launch. Until you trust a directory, Claude Code holds back some of the content its repository supplies, such as project allow rules and marketplaces from `.claude/settings.json`. [What runs before you trust a folder](/docs/en/permissions#what-runs-before-you-trust-a-folder) lists each kind of content, including what a `-p` session runs without a dialog.
 
 Learn more: [The `.claude` directory](/docs/en/claude-directory)
 
@@ -268,7 +268,7 @@ Learn more: [Work with sessions](/docs/en/how-claude-code-works#work-with-sessio
 
 ### Settings layers
 
-The hierarchy Claude Code reads configuration from, in precedence order from highest to lowest: [managed policy](#managed-settings), command-line arguments, local settings at `.claude/settings.local.json`, project settings at `.claude/settings.json`, then user settings at `~/.claude/settings.json`. Arrays merge across layers; scalars at a higher layer override lower ones.
+The hierarchy Claude Code reads configuration from, in precedence order from highest to lowest: [managed policy](#managed-settings), command-line arguments, local settings at `.claude/settings.local.json`, project settings at `.claude/settings.json`, then user settings at `~/.claude/settings.json`. Arrays merge across layers; scalars at a higher layer override lower ones. See [Settings precedence](/docs/en/settings#settings-precedence).
 
 Learn more: [Settings files](/docs/en/settings#settings-files)
 

@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/troubleshoot-install
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: 4563064b67308268a193ecda79539478abfcda0fbb252a920dd851707e411060
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: c32aeaa97baca4d52bae0c523b32cf95fe98f67a32aaf79f7e85c30ce383d827
 ---
 
 Fix command not found, PATH, permission, network, and authentication errors when installing or signing in to Claude Code.
@@ -32,14 +32,17 @@ Match the error message or symptom you're seeing to a fix:
 | `Illegal instruction`                                                                                      | [Architecture or CPU instruction set mismatch](#illegal-instruction)                                                                          |
 | `cannot execute binary file: Exec format error` in WSL                                                     | [WSL1 native-binary regression](#exec-format-error-on-wsl1)                                                                                   |
 | PowerShell installer completes but `claude` is not found or shows an old version                           | [Add the install directory to your PATH](#verify-your-path), then open a new terminal                                                         |
-| `dyld: cannot load`, `dyld: Symbol not found`, or `Abort trap` on macOS                                    | [Binary incompatibility](#dyld-cannot-load-on-macos)                                                                                          |
+| `dyld: Symbol not found`, `dyld: cannot load`, or `Abort trap` on macOS                                    | [Binary incompatibility](#dyld-cannot-load-on-macos)                                                                                          |
 | `claude update` hangs after `Checking for updates`, or `claude doctor` hangs with no output                | [Move the directory at a shell config path](#claude-update-or-claude-doctor-hangs)                                                            |
 | `Invoke-Expression` or `iex` parse errors quoting HTML tags or CSS, or `ParserError` with `ParseException` | [Install script returns HTML](#install-script-returns-html-instead-of-a-shell-script)                                                         |
 | `running scripts is disabled on this system` or `PSSecurityException`                                      | [Allow the npm shims to run](#running-scripts-is-disabled-on-this-system)                                                                     |
 | `Error: claude native binary not installed`                                                                | [Complete the npm install](#native-binary-not-found-after-npm-install)                                                                        |
+| `npm error code ENOTEMPTY` during update or reinstall                                                      | [Remove the leftover package directory](#npm-enotempty-during-update-or-reinstall)                                                            |
+| On Windows, the install command prints script text and nothing installs                                    | [Run the complete install command](#wrong-install-command-on-windows)                                                                         |
 | `App unavailable in region`                                                                                | Claude Code is not available in your country. See [supported countries](https://www.anthropic.com/supported-countries).                       |
 | `unable to get local issuer certificate`                                                                   | [Configure corporate CA certificates](#tls-or-ssl-connection-errors)                                                                          |
 | `OAuth error` or `403 Forbidden`                                                                           | [Fix authentication](#login-and-authentication)                                                                                               |
+| `Unable to connect to Anthropic services` during setup                                                     | See [Unable to connect to Anthropic services](/docs/en/errors#unable-to-connect-to-anthropic-services) in the Error reference                      |
 | `Could not load the default credentials` or `Could not load credentials from any providers`                | [Amazon Bedrock, Google Cloud's Agent Platform, or Microsoft Foundry credentials](#bedrock-agent-platform-or-foundry-credentials-not-loading) |
 | `ChainedTokenCredential authentication failed` or `CredentialUnavailableError`                             | [Amazon Bedrock, Google Cloud's Agent Platform, or Microsoft Foundry credentials](#bedrock-agent-platform-or-foundry-credentials-not-loading) |
 | `API Error: 500`, `529 Overloaded`, `429`, or other 4xx and 5xx errors not listed above                    | See the [Error reference](/docs/en/errors)                                                                                                         |
@@ -242,15 +245,19 @@ npm uninstall -g @anthropic-ai/claude-code
 
 Remove the legacy local npm install:
 
-```bash theme={null}
-rm -rf ~/.claude/local
-```
+<Tabs>
+  <Tab title="macOS/Linux">
+    ```bash theme={null}
+    rm -rf ~/.claude/local
+    ```
+  </Tab>
 
-On Windows, use PowerShell:
-
-```powershell theme={null}
-Remove-Item -Recurse -Force "$env:USERPROFILE\.claude\local"
-```
+  <Tab title="Windows PowerShell">
+    ```powershell theme={null}
+    Remove-Item -Recurse -Force "$env:USERPROFILE\.claude\local"
+    ```
+  </Tab>
+</Tabs>
 
 Remove a Homebrew install on macOS. If you installed the `claude-code@latest` cask, substitute that name:
 
@@ -288,15 +295,19 @@ If `claude --version` prints a version but `claude` crashes or hangs on startup,
 
 Confirm the binary exists and is executable:
 
-```bash theme={null}
-ls -la "$(command -v claude)"
-```
+<Tabs>
+  <Tab title="macOS/Linux">
+    ```bash theme={null}
+    ls -la "$(command -v claude)"
+    ```
+  </Tab>
 
-On Windows, use PowerShell:
-
-```powershell theme={null}
-Get-Command claude | Select-Object Source
-```
+  <Tab title="Windows PowerShell">
+    ```powershell theme={null}
+    Get-Command claude | Select-Object Source
+    ```
+  </Tab>
+</Tabs>
 
 On Linux, check for missing shared libraries. If `ldd` shows missing libraries, you may need to install system packages. On Alpine Linux and other musl-based distributions, see [Alpine Linux setup](/docs/en/setup#alpine-linux-and-musl-based-distributions).
 
@@ -446,17 +457,47 @@ Errors like `curl: (35) TLS connect error`, `schannel: next InitializeSecurityCo
    irm https://claude.ai/install.ps1 | iex
    ```
 
-3. **Check for proxy or firewall interference**: corporate proxies that perform TLS inspection can cause these errors, including `unable to get local issuer certificate` and `SELF_SIGNED_CERT_IN_CHAIN`. For the install step, point curl at your corporate CA bundle with `--cacert`:
-   ```bash theme={null}
-   curl --cacert /path/to/corporate-ca.pem -fsSL https://claude.ai/install.sh | bash
-   ```
+3. **Check for proxy or firewall interference**: corporate proxies that perform TLS inspection can cause these errors, including `unable to get local issuer certificate` and `SELF_SIGNED_CERT_IN_CHAIN`. For the install step, make the install download trust your corporate proxy's CA:
+
+   <Tabs>
+     <Tab title="macOS/Linux">
+       ```bash theme={null}
+       curl --cacert /path/to/corporate-ca.pem -fsSL https://claude.ai/install.sh | bash
+       ```
+     </Tab>
+
+     <Tab title="Windows PowerShell">
+       The PowerShell installer downloads through .NET, which validates TLS against the Windows certificate store. Ask your IT team to add the proxy's CA certificate to the Windows store if it isn't already there, then run the installer:
+
+       ```powershell theme={null}
+       irm https://claude.ai/install.ps1 | iex
+       ```
+     </Tab>
+   </Tabs>
+
    For Claude Code itself once installed, set `NODE_EXTRA_CA_CERTS` so API requests trust the same bundle:
-   ```bash theme={null}
-   export NODE_EXTRA_CA_CERTS=/path/to/corporate-ca.pem
-   ```
+
+   <Tabs>
+     <Tab title="macOS/Linux">
+       ```bash theme={null}
+       export NODE_EXTRA_CA_CERTS=/path/to/corporate-ca.pem
+       ```
+     </Tab>
+
+     <Tab title="Windows PowerShell">
+       ```powershell theme={null}
+       $env:NODE_EXTRA_CA_CERTS = 'C:\path\to\corporate-ca.pem'
+       ```
+     </Tab>
+   </Tabs>
+
    Ask your IT team for the certificate file if you don't have it. You can also try on a direct connection to confirm the proxy is the cause.
 
-4. **On Windows, switch installers if your network blocks revocation checks**. The errors `CRYPT_E_NO_REVOCATION_CHECK (0x80092012)` and `CRYPT_E_REVOCATION_OFFLINE (0x80092013)` mean curl reached the server but your network blocks the certificate revocation lookup, which is common behind corporate firewalls. Adding curl's `--ssl-revoke-best-effort` flag doesn't fix this: the flag only applies to downloading `install.cmd` itself, and the script's own downloads run without it, so the install fails with the same error. Use an install method that tolerates the blocked lookup instead. Open PowerShell and run the PowerShell installer, which downloads through .NET and doesn't fail when the revocation server is unreachable:
+4. **On Windows, work around blocked revocation checks**. The errors `CRYPT_E_NO_REVOCATION_CHECK (0x80092012)` and `CRYPT_E_REVOCATION_OFFLINE (0x80092013)` mean curl reached the server but your network blocks the certificate revocation lookup, which is common behind corporate firewalls. If the failing command is the `curl` that downloads `install.cmd`, rerun it from a Command Prompt with `--ssl-revoke-best-effort` added:
+   ```batch theme={null}
+   curl --ssl-revoke-best-effort -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd
+   ```
+   When the script's own downloads hit the same errors, it retries them with best-effort revocation checking automatically, so the flag is only needed on the command you run yourself. Best-effort checking tolerates an unreachable revocation server but still rejects a certificate that is known to be revoked, matching how browsers handle revocation. You can also avoid curl's revocation check entirely by running the PowerShell installer from PowerShell, which downloads through .NET and doesn't fail when the revocation server is unreachable:
    ```powershell theme={null}
    irm https://claude.ai/install.ps1 | iex
    ```
@@ -464,46 +505,11 @@ Errors like `curl: (35) TLS connect error`, `schannel: next InitializeSecurityCo
 
 ### `Failed to fetch version from downloads.claude.ai`
 
-The installer couldn't reach the download server. This typically means `downloads.claude.ai` is blocked on your network.
-
-**Solutions:**
-
-1. **Test connectivity directly**:
-
-   ```bash theme={null}
-   curl -sI https://downloads.claude.ai/claude-code-releases/latest
-   ```
-
-   An `HTTP/2 200` line means the server is reachable. Other results point to the cause:
-
-   * `403`: usually a proxy or network filter blocking the host, or Claude Code is [not available in your region](https://www.anthropic.com/supported-countries)
-   * `5xx`: usually a temporary service issue; wait a few minutes and retry
-
-2. **If behind a proxy**, set `HTTPS_PROXY` so the installer can route through it. See [proxy configuration](/docs/en/network-config#proxy-configuration) for details.
-   ```bash theme={null}
-   export HTTPS_PROXY=http://proxy.example.com:8080
-   curl -fsSL https://claude.ai/install.sh | bash
-   ```
-
-3. **If on a restricted network**, try a different network or VPN, or use an alternative install method:
-
-   On macOS:
-
-   ```bash theme={null}
-   brew install --cask claude-code
-   ```
-
-   On Windows:
-
-   ```powershell theme={null}
-   winget install Anthropic.ClaudeCode
-   ```
-
-   Then run `claude --version` to confirm: the command prints a version number such as `2.1.211 (Claude Code)`. If the shell reports `claude` isn't found, open a new terminal window and retry: the session you installed from keeps its old `PATH`.
+The installer couldn't reach the download server. This typically means `downloads.claude.ai` is blocked on your network. See [Check network connectivity](#check-network-connectivity).
 
 ### Wrong install command on Windows
 
-If you see `'irm' is not recognized`, `The token '&&' is not valid`, `A parameter cannot be found that matches parameter name 'fsSL'`, or `'bash' is not recognized as the name of a cmdlet`, you copied the install command for a different shell or operating system.
+If you see `'irm' is not recognized`, `The token '&&' is not valid`, `A parameter cannot be found that matches parameter name 'fsSL'`, or `'bash' is not recognized as the name of a cmdlet`, you copied the install command for a different shell or operating system. If the command prints the script's text instead of installing anything, you ran only part of it.
 
 * **`irm` not recognized**: you're in CMD, not PowerShell. You have two options:
 
@@ -533,6 +539,20 @@ If you see `'irm' is not recognized`, `The token '&&' is not valid`, `A paramete
   ```powershell theme={null}
   irm https://claude.ai/install.ps1 | iex
   ```
+
+* **The command prints script text instead of installing**: you ran the download half of the command without the part that executes it. `irm https://claude.ai/install.ps1` on its own prints the downloaded script to the terminal. Pipe it to `iex` to run it:
+
+  ```powershell theme={null}
+  irm https://claude.ai/install.ps1 | iex
+  ```
+
+  In CMD, `curl -fsSL https://claude.ai/install.cmd` without `-o` prints the batch script instead of saving it. Run the complete command:
+
+  ```batch theme={null}
+  curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd
+  ```
+
+Whichever installer you use, confirm it worked: open a new terminal and run `claude --version`, which prints a version number such as `2.1.211 (Claude Code)`.
 
 <h3>
   `running scripts is disabled on this system`
@@ -579,8 +599,6 @@ Installation was killed before it could finish (exit code 137). This usually mea
 Claude Code needs roughly 512MB of free memory to install. Free up memory, then run this script again.
 ```
 
-Before v2.1.200, the script exited with only the shell's bare `Killed` line and no explanation.
-
 Installing needs roughly 512 MB of free memory, and running Claude Code needs more. See the [system requirements](/docs/en/setup#system-requirements).
 
 **Solutions:**
@@ -618,10 +636,7 @@ When installing Claude Code in a Docker container, installing as root into `/` c
    RUN curl -fsSL https://claude.ai/install.sh | bash
    ```
 
-2. **Increase Docker memory limits** if using Docker Desktop:
-   ```bash theme={null}
-   docker build --memory=4g .
-   ```
+2. **Give Docker more memory** if using Docker Desktop. Build containers share the memory allocated to the Docker Desktop virtual machine, so open **Settings > Resources** in Docker Desktop, raise the memory limit, and rerun the build.
 
 ### `claude update` or `claude doctor` hangs
 
@@ -649,7 +664,14 @@ Git for Windows is optional. Claude Code uses the [PowerShell tool](/docs/en/too
 
 **To install Git for Windows instead**, download it from [git-scm.com/downloads/win](https://git-scm.com/downloads/win). During setup, select "Add to PATH." Restart your terminal after installing. Installing it enables the Bash tool, useful when working with Bash-based scripts and tooling.
 
-**If Git is already installed** but Claude Code can't find it, set the path in your [settings.json file](/docs/en/settings):
+**If Git is already installed** but Claude Code can't find it, compare its location against the places Claude Code checks. When `CLAUDE_CODE_GIT_BASH_PATH` isn't set, Claude Code looks for `bash.exe` in this order:
+
+1. The default install locations `C:\Program Files\Git` and `C:\Program Files (x86)\Git`.
+2. The `git` on your `PATH`, using the `bin\bash.exe` from that Git installation.
+
+In step 2, Claude Code skips a `git` that sits in the folder you launched Claude Code from, or below it in a path that contains `node_modules` or a virtual-environment folder such as `.venv` or `env`, for example `C:\dev\env\myproject\Git` when you launched from `C:\dev\env\myproject`. This keeps Claude Code from running an executable that a project placed there. If your Git is in a location like that, point `CLAUDE_CODE_GIT_BASH_PATH` at it.
+
+**To point Claude Code at a specific Git installation**, find it by running `where.exe git` in PowerShell, then set the `bin\bash.exe` path from that installation as `CLAUDE_CODE_GIT_BASH_PATH` in your [settings.json file](/docs/en/settings):
 
 ```json theme={null}
 {
@@ -659,13 +681,9 @@ Git for Windows is optional. Claude Code uses the [PowerShell tool](/docs/en/too
 }
 ```
 
-If your Git is installed somewhere else, find the path by running `where.exe git` in PowerShell and use the `bin\bash.exe` path from that directory.
+**If `CLAUDE_CODE_GIT_BASH_PATH` is set to the correct path and the file exists** but Claude Code still doesn't use it, check the file's name first. Claude Code accepts only a file named `bash.exe`, `sh.exe`, `bash`, or `sh`; with any other name, such as Git for Windows' `git-bash.exe` launcher, it ignores the variable and auto-detects Git Bash as if it were unset, logging a warning visible with `--debug`. A path that doesn't exist gets the same fallback and warning. Before v2.1.219, Claude Code used any existing file as the shell without checking its name, and exited at startup with `Claude Code was unable to find CLAUDE_CODE_GIT_BASH_PATH path` when the path didn't exist.
 
-**If the path is correct and the file exists** but Claude Code still doesn't use it, check the file's name first. Claude Code accepts only a file named `bash.exe`, `sh.exe`, `bash`, or `sh`; with any other name, such as Git for Windows' `git-bash.exe` launcher, it ignores the variable and auto-detects Git Bash as if it were unset, logging a warning visible with `--debug`. A path that doesn't exist gets the same fallback and warning. Before v2.1.219, Claude Code used any existing file as the shell without checking its name, and exited at startup with `Claude Code was unable to find CLAUDE_CODE_GIT_BASH_PATH path` when the path didn't exist.
-
-If the file's name is right, endpoint security software such as AppLocker, Group Policy software restriction policies, or EDR agents may be interfering. On versions before v2.1.116, Claude Code spawned a `cmd.exe` child process to verify the path, which these policies can block. A common signal is that `cmd.exe /c dir "C:\Program Files\Git\bin\bash.exe"` works when you run it directly in PowerShell but fails silently when launched by `claude.exe`.
-
-Claude Code v2.1.116 and later check the filesystem directly, so update first. If the error persists on a current version, ask your IT team to allowlist `claude.exe` and the processes it spawns, including `cmd.exe` and `bash.exe`, in your endpoint protection policy.
+If the file's name is right, endpoint security software such as AppLocker, Group Policy software restriction policies, or EDR agents may be interfering. Ask your IT team to allowlist `claude.exe` and the processes it spawns, including `cmd.exe` and `bash.exe`, in your endpoint protection policy.
 
 ### Claude Code does not support 32-bit Windows
 
@@ -721,19 +739,21 @@ Alternative install methods download the same native binary and won't resolve ei
 
 ### `dyld: cannot load` on macOS
 
-If you see `dyld: cannot load`, `dyld: Symbol not found`, or `Abort trap: 6` during installation, the binary is incompatible with your macOS version or hardware.
+If you see `dyld: Symbol not found`, `dyld: cannot load`, or `Abort trap: 6` during installation, the binary is incompatible with your macOS version or hardware.
 
-```text theme={null}
-dyld: cannot load 'claude-2.1.42-darwin-x64' (load command 0x80000034 is unknown)
-Abort trap: 6
-```
-
-A `Symbol not found` error that references `libicucore` also indicates your macOS version is older than the binary supports:
+A `Symbol not found` error that references `libicucore` means your macOS version is older than the binary supports:
 
 ```text theme={null}
 dyld: Symbol not found: _ubrk_clone
   Referenced from: claude-darwin-x64 (which was built for Mac OS X 13.0)
   Expected in: /usr/lib/libicucore.A.dylib
+```
+
+The loader can instead reject the binary's load commands, which also means your macOS version is too old:
+
+```text theme={null}
+dyld: cannot load 'claude-2.1.42-darwin-x64' (load command 0x80000034 is unknown)
+Abort trap: 6
 ```
 
 **Solutions:**
@@ -830,7 +850,50 @@ Check the following causes:
 * **Unsupported platform.** Prebuilt binaries are published for `darwin-arm64`, `darwin-x64`, `linux-x64`, `linux-arm64`, `linux-x64-musl`, `linux-arm64-musl`, `win32-x64`, and `win32-arm64`. Claude Code does not ship a binary for other platforms; see the [system requirements](/docs/en/setup#system-requirements). On FreeBSD, the installer reports the platform as unsupported. Before v2.1.205, it treated FreeBSD as Linux and downloaded a binary that couldn't run.
 * **Corporate npm mirror is missing the platform packages.** Ensure your registry mirrors all eight `@anthropic-ai/claude-code-*` platform packages in addition to the meta package.
 
-Before v2.1.113, the npm package shipped Claude Code as JavaScript that ran directly in Node rather than as a native binary, so there was no download or postinstall step to skip and this error didn't exist.
+<h3>
+  npm `ENOTEMPTY` error during update or reinstall
+</h3>
+
+When you run `npm install -g @anthropic-ai/claude-code` over an existing installation, npm can fail while moving the old package directory aside:
+
+```text theme={null}
+npm error code ENOTEMPTY
+npm error syscall rename
+npm error path /home/you/.nvm/versions/node/v22.13.1/lib/node_modules/@anthropic-ai/claude-code
+npm error dest /home/you/.nvm/versions/node/v22.13.1/lib/node_modules/@anthropic-ai/.claude-code-tVWAnUUt
+npm error errno -39
+npm error ENOTEMPTY: directory not empty, rename '...'
+```
+
+The `npm error path` line names the directory npm couldn't move. Delete that directory and any leftover `.claude-code-*` directories next to it, which earlier interrupted runs can leave behind. The commands below find your global package directory with `npm root -g`; if the directory the `npm error path` line names is not under the directory `npm root -g` prints, for example because you switched Node versions with nvm, delete the directories the error names instead:
+
+<Tabs>
+  <Tab title="macOS/Linux">
+    ```bash theme={null}
+    rm -rf "$(npm root -g)/@anthropic-ai/claude-code"
+    ```
+
+    Then remove any leftover temp directories. If zsh prints `no matches found`, there were none to remove:
+
+    ```bash theme={null}
+    rm -rf "$(npm root -g)/@anthropic-ai/.claude-code-"*
+    ```
+  </Tab>
+
+  <Tab title="Windows PowerShell">
+    ```powershell theme={null}
+    Remove-Item -Recurse -Force "$(npm root -g)/@anthropic-ai/claude-code", "$(npm root -g)/@anthropic-ai/.claude-code-*"
+    ```
+  </Tab>
+</Tabs>
+
+Then reinstall:
+
+```bash theme={null}
+npm install -g @anthropic-ai/claude-code
+```
+
+Confirm with `claude --version`, which prints a version number such as `2.1.211 (Claude Code)`.
 
 ## Login and authentication
 
@@ -872,10 +935,21 @@ When `ANTHROPIC_API_KEY` is present and you have approved it, Claude Code uses t
 
 To use your subscription instead, unset the environment variable and remove it from your shell profile:
 
-```bash theme={null}
-unset ANTHROPIC_API_KEY
-claude
-```
+<Tabs>
+  <Tab title="macOS/Linux">
+    ```bash theme={null}
+    unset ANTHROPIC_API_KEY
+    claude
+    ```
+  </Tab>
+
+  <Tab title="Windows PowerShell">
+    ```powershell theme={null}
+    Remove-Item Env:ANTHROPIC_API_KEY
+    claude
+    ```
+  </Tab>
+</Tabs>
 
 Check `~/.zshrc`, `~/.bashrc`, or `~/.profile` for `export ANTHROPIC_API_KEY=...` lines and remove them to make the change permanent. On Windows, check your PowerShell profile at `$PROFILE` and your User environment variables for `ANTHROPIC_API_KEY`. Run `/status` inside Claude Code to confirm which authentication method is active.
 

@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/computer-use
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: 4fbd60d3d1d28ec3c5379ff90d29217604e7a8ee6d7b3f25c341e53a0bb59361
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 4ba64d6af896b47441e89c213d2436031ae2b9361507a15c3c4e05a14a50d0d8
 ---
 
 Enable computer use in the Claude Code CLI so Claude can open apps, click, type, and see your screen on macOS. Test native apps, debug visual issues, and automate GUI-only tools without leaving your terminal.
@@ -32,7 +32,7 @@ Claude has several ways to interact with an app or service. Computer use is the 
 * If the task is browser work and you have [Claude in Chrome](/docs/en/chrome) set up, Claude uses that.
 * If none of those apply, Claude uses computer use.
 
-Screen control is reserved for things nothing else can reach: native apps, simulators, and tools without an API. In the Desktop app, running or testing an iOS app opens the dedicated [iOS Simulator pane](/docs/en/desktop-ios-simulator) rather than screen control; from the CLI, computer use is how Claude reaches the iOS Simulator.
+Screen control is reserved for things nothing else can reach: native apps, simulators such as the iOS Simulator, and tools without an API.
 
 ## Enable computer use
 
@@ -98,7 +98,7 @@ Understanding the flow helps you anticipate what Claude will do and how to inter
 
 ### One session at a time
 
-Computer use holds a machine-wide lock from the first computer use action until the session that took it exits. As of v2.1.195, finishing the task doesn't release the lock; only exiting the session does. If another Claude Code session is already using your computer, new attempts fail with a message telling you which session holds the lock. Exit that session first.
+Only one session at a time can use your computer. Claude Code takes a machine-wide lock when a session performs its first computer use action. Claude Code releases it when that session exits, not when the task finishes. If another session is already using your computer, Claude Code rejects new attempts and tells you which session holds the lock. Exit that session first.
 
 ### Apps are hidden while Claude works
 

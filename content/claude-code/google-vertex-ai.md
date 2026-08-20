@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/google-vertex-ai
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: 09132c450641a1ec7c2914bf960d1fe27a0763fab1745ca947d0a2e4fdf9d640
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 21d45ee7db1d2881e50d4207c666b9c7e75d2c05ec900163e63b44d0c0eb0032
 ---
 
 Learn about configuring Claude Code through Google Cloud's Agent Platform, formerly Vertex AI, including setup, IAM configuration, and troubleshooting.
@@ -79,7 +79,7 @@ Claude Code uses standard Google Cloud authentication.
 
 For more information, see [Google Cloud authentication documentation](https://cloud.google.com/docs/authentication).
 
-Claude Code v2.1.121 or later supports [X.509 certificate-based Workload Identity Federation](https://cloud.google.com/iam/docs/workload-identity-federation-with-x509-certificates) through the same Application Default Credentials chain. Set `GOOGLE_APPLICATION_CREDENTIALS` to the path of your credential configuration file.
+Claude Code supports [X.509 certificate-based Workload Identity Federation](https://cloud.google.com/iam/docs/workload-identity-federation-with-x509-certificates) through the same Application Default Credentials chain. Set `GOOGLE_APPLICATION_CREDENTIALS` to the path of your credential configuration file.
 
 <Note>
   Claude Code uses `ANTHROPIC_VERTEX_PROJECT_ID` as the project ID for Google Cloud's Agent Platform requests. The `GCLOUD_PROJECT` and `GOOGLE_CLOUD_PROJECT` environment variables and the credential file referenced by `GOOGLE_APPLICATION_CREDENTIALS` take precedence over it. If none of these are set, the project ID is resolved from your `gcloud` configuration or the attached service account.
@@ -98,7 +98,7 @@ Claude Code supports automatic credential refresh for GCP through the `gcpAuthRe
 }
 ```
 
-Claude Code shows you the command's output, but can't send the command interactive input. This works well for browser-based authentication flows where the CLI shows a URL and you complete authentication in the browser. The refresh command times out after three minutes if authentication does not complete. If you set `gcpAuthRefresh` in project settings such as `.claude/settings.json`, the command runs only after you accept the workspace trust prompt.
+Claude Code shows you the command's output, but can't send the command interactive input. This works well for browser-based authentication flows where the CLI shows a URL and you complete authentication in the browser. The refresh command times out after three minutes if authentication does not complete. If you set `gcpAuthRefresh` in project settings such as `.claude/settings.json`, Claude Code runs it under the same [workspace trust rule as hooks in settings files](/docs/en/permissions#what-runs-before-you-trust-a-folder), which includes `-p` sessions in folders you've never trusted.
 
 ### 4. Configure Claude Code
 
@@ -113,18 +113,17 @@ export ANTHROPIC_VERTEX_PROJECT_ID=YOUR-PROJECT-ID
 # Optional: Override the Agent Platform endpoint URL for custom endpoints or gateways
 # export ANTHROPIC_VERTEX_BASE_URL=https://aiplatform.googleapis.com
 
-# Optional: Disable prompt caching if needed
-# export DISABLE_PROMPT_CACHING=1
-
-# Optional: Request 1-hour prompt cache TTL instead of the 5-minute default
-# export ENABLE_PROMPT_CACHING_1H=1
-
 # When CLOUD_ML_REGION=global, override region for models that don't support global endpoints
 export VERTEX_REGION_CLAUDE_HAIKU_4_5=us-east5
 export VERTEX_REGION_CLAUDE_4_6_SONNET=europe-west1
 ```
 
 Most model versions have a corresponding `VERTEX_REGION_CLAUDE_*` variable. See the [Environment variables reference](/docs/en/env-vars) for the full list. Check [Google Cloud's Agent Platform Model Garden](https://console.cloud.google.com/vertex-ai/model-garden) to determine which models support global endpoints versus regional only.
+
+If a region value isn't shaped like a region or location name, Claude Code treats it as unset. For example, Claude Code treats a value containing a slash, dot, or space as unset. Claude Code falls back to a different source for each variable:
+
+* `VERTEX_REGION_CLAUDE_*`: Claude Code falls back to `CLOUD_ML_REGION`.
+* `CLOUD_ML_REGION`: Claude Code falls back to `us-east5`.
 
 [Prompt caching](/docs/en/prompt-caching) is enabled automatically. To disable it, set `DISABLE_PROMPT_CACHING=1`. To request a 1-hour cache TTL instead of the 5-minute default, set `ENABLE_PROMPT_CACHING_1H=1`; cache writes with a 1-hour TTL are billed at a higher rate. For heightened rate limits, contact Google Cloud support. When using Google Cloud's Agent Platform, the `/logout` command is unavailable since authentication is handled through Google Cloud credentials.
 
@@ -194,13 +193,9 @@ When you start the session on a specific Sonnet or Opus version, with `--model`,
 
 Model aliases such as `opus` don't act as pins, and neither does a model ID Claude Code doesn't recognize.
 
-<Info>Before v2.1.211, Claude Code checked the default model's availability even when a session model was explicitly configured, and could show a fallback notice for a default the session didn't use.</Info>
-
 ## IAM configuration
 
-Assign the required IAM permissions:
-
-The `roles/aiplatform.user` role includes the required permissions:
+Assign the `roles/aiplatform.user` role, which includes the required permissions:
 
 * `aiplatform.endpoints.predict` - Required for model invocation and token counting
 

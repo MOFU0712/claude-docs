@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/costs
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: a68aefb31c9b12b6cf739013e0dbe786b774f8ceaec4ed29052ffb33f6d9e063
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 8f29ca7497694a44548e50b2fde5116de90dfcec17543d74fda6cab8af49bcfa
 ---
 
 Track token usage, set team spend limits, and reduce Claude Code costs with context management, model selection, extended thinking settings, and preprocessing hooks.
@@ -33,23 +33,42 @@ Usage by model:
 
 These totals reset when `/clear` starts a new session, so the next session's total cost starts at \$0. Before v2.1.211, they kept accumulating across `/clear` for the lifetime of the Claude Code process.
 
-On a Pro, Max, Team, or Enterprise plan, `/usage` also shows a breakdown of what counts against your plan limits. It attributes recent usage to skills, subagents, plugins, and individual MCP servers, with each shown as a percentage of the total. It also flags behaviors such as long context or cache misses when one accounts for 10% or more of recent usage. Press `d` or `w` to switch between the last 24 hours and the last 7 days. The figures are approximate and computed from local session history on this machine, so usage from other devices or claude.ai is not included.
+#### Plan usage breakdown
+
+On a Pro, Max, Team, or Enterprise plan, `/usage` also shows a breakdown of what counts against your plan limits:
+
+* **Attribution**: recent usage attributed to skills, subagents, plugins, and individual MCP servers, each shown as a percentage of the total. An MCP server's share counts only the requests that consumed one of its tool results. Before v2.1.222, after one call to an MCP server, Claude Code attributed every subsequent request to that server, overstating its share.
+* **Behavior flags**: behaviors such as long context or cache misses, flagged when one accounts for 10% or more of recent usage.
+
+Press `d` or `w` to switch between the last 24 hours and the last 7 days. The figures are approximate and computed from local session history on this machine, so usage from other devices or claude.ai is not included.
+
+In the [VS Code extension](/docs/en/vs-code#check-account-and-usage), the same breakdown appears in the Account & usage dialog with a Day and Week toggle. Requires Claude Code v2.1.174 or later.
+
+#### When the usage request fails
 
 When the request for your plan limits fails, most often because the usage endpoint is rate limited, `/usage` shows the last usage bars it loaded on this machine within the past 60 minutes, along with a `Showing last-known usage` note stating how long ago that data was fetched. Press `r` to retry; a successful retry replaces the last-known bars with fresh data. Without a snapshot from the past 60 minutes, `/usage` reports that the usage endpoint is rate limited and offers the same retry shortcut. Before v2.1.208, a rate-limited request in a session that hadn't loaded usage yet always showed the error with no bars.
 
-In the [VS Code extension](/docs/en/vs-code#check-account-and-usage), the same breakdown appears in the Account & usage dialog with a Day and Week toggle. Requires Claude Code v2.1.174 or later.
+### Analyze your usage patterns
+
+Run [`/insights`](/docs/en/commands#all-commands) for a report on how you work rather than how many tokens you've used. It analyzes your recent sessions on this machine and writes an HTML report covering what you work on, friction points such as misunderstood requests or buggy code, and suggestions for using Claude Code more effectively. A single run analyzes up to 200 sessions it hasn't seen before and skips very short ones. When sessions are left out, the report header shows the analyzed count with the total in parentheses, for example `200 sessions (412 total)`.
+
+Claude Code writes the latest report to `~/.claude/usage-data/report.html` and saves a timestamped copy of each run in the same directory, so earlier reports aren't overwritten. Claude Code deletes reports on the same schedule as the rest of your session data: at startup, it removes files older than [`cleanupPeriodDays`](/docs/en/claude-directory#cleaned-up-automatically), 30 days by default.
+
+You can run `/insights` on any plan and with any provider. The analysis runs through the same provider and account as your regular sessions, and the tokens count against your plan or API usage. Sessions from other devices and claude.ai aren't included.
 
 ### Add usage credits to your subscription
 
 [Usage credits](https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans) let you keep working past your plan's usage limit. To manage them, run `/usage-credits` after signing in with your claude.ai subscription through `/login`; the command isn't available with API key authentication. What it opens depends on your role:
 
-| Your role                                        | What `/usage-credits` does                                                                                                                         |
-| :----------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Pro or Max subscriber                            | Opens your billing settings in the browser                                                                                                         |
-| Team or Enterprise member with billing access    | Opens your organization's usage settings in the browser                                                                                            |
-| Team or Enterprise member without billing access | Asks you to confirm, then sends a request to your organization's admins. Before v2.1.211, Claude Code sent the request without a confirmation step |
+| Your role                                        | What `/usage-credits` does                                                                                                                                                                                                                        |
+| :----------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Pro or Max subscriber                            | Opens [**Settings > Usage**](https://claude.ai/settings/usage) on claude.ai in the browser. In its **Usage credits** section you can turn usage credits on or off and check your credit balance, this month's spend, and your monthly spend limit |
+| Team or Enterprise member with billing access    | Opens your organization's usage settings, [**Admin settings > Usage**](https://claude.ai/admin-settings/usage), in the browser                                                                                                                    |
+| Team or Enterprise member without billing access | Asks you to confirm, then sends a request to your organization's admins. Before v2.1.211, Claude Code sent the request without a confirmation step                                                                                                |
 
 For Team and Enterprise members without billing access, the confirmation appears only in interactive sessions: in non-interactive mode with the `-p` flag and from [Remote Control](/docs/en/remote-control), the command sends no request and tells you to run it in an interactive session instead.
+
+If you run `/usage-credits` again while your earlier request is waiting on an admin, Claude Code tells you a request has already been sent rather than sending a duplicate. After an admin dismisses your request, running the command again sends a new one. Before v2.1.222, a dismissed request also blocked new requests.
 
 On Pro and Max plans, when you reach your spend limit with usage credits still available, Claude Code prompts you to raise or remove the limit without leaving the CLI. If the server rejects the change, see [Could not update your spend limit](/docs/en/errors#could-not-update-your-spend-limit).
 
@@ -57,7 +76,7 @@ On Pro and Max plans, when you reach your spend limit with usage credits still a
 
 Which controls you have depends on how your organization accesses Claude Code: a Claude for Teams or Enterprise plan, the Claude Console, or a cloud provider. On Teams and Enterprise plans, usage draws from each member's seat allowance. On the Console and on cloud providers, usage is billed per token to your organization. If your organization mixes sign-in methods, each developer is metered according to the one they authenticated with.
 
-The table maps each setup to where you see spend, where you cap it, and how you pull per-user numbers.
+The table maps each setup to where you see spend, where you cap it, and how you pull per-user numbers. On an individual Pro or Max plan you have no organization to manage, so track your own usage-credit spend, including [fast mode](/docs/en/fast-mode#see-where-fast-mode-spend-appears), under [Add usage credits to your subscription](#add-usage-credits-to-your-subscription).
 
 | Your setup                                                                              | See spend                                                                                                                           | Cap spend                      | Per-user reporting                                                                                                                                                                                                        |
 | :-------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------- | :----------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -123,10 +142,11 @@ For per-user cost attribution, you have three options:
 
 ### When a developer asks about a limit
 
-Developers usually bring limit questions to their admin, so it helps to know which ceiling they hit. The three situations mean different things:
+Developers usually bring limit questions to their admin, so it helps to know which ceiling they hit. The four situations mean different things:
 
 * **"You've hit your session limit" or "You've hit your weekly limit"**: a seat-based usage window on a subscription plan. These windows are shared across all models, so switching models with `/model` doesn't restore access, though it does keep the developer working after the model-specific "You've hit your Opus limit" message. The message shows when the window resets, and the developer can run `/usage-credits` to request usage beyond the allowance if you have [usage credits](https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans) turned on. See [usage limit errors](/docs/en/errors#youve-hit-your-session-limit).
-* **A context or auto-compact warning**: not a usage limit. The conversation has grown close to the session's [auto-compact window](/docs/en/context-window#when-your-context-fills-up), the threshold where Claude Code summarizes older history to free space. Point the developer at [reduce token usage](#reduce-token-usage).
+* **A spend limit message from a [Claude apps gateway](/docs/en/claude-apps-gateway)**: the developer passed a spend cap you set on your self-hosted gateway, and the gateway blocks their requests until the period resets or you raise the cap. See [gateway spend limits](/docs/en/claude-apps-gateway-spend-limits) for caps, reset schedules, and the message the developer sees.
+* **A context or auto-compact warning**: not a usage limit. The conversation has grown close to the session's [auto-compact window](/docs/en/model-config#set-the-auto-compact-window), the threshold where Claude Code summarizes older history to free space. Point the developer at [reduce token usage](#reduce-token-usage).
 * **Unexpectedly high spend on an API or cloud-provider plan**: usually traces back to long sessions that were never cleared or to Opus left as the default model. The highest-impact habits to share are clearing between unrelated tasks and matching the model to the job, both covered in [reduce token usage](#reduce-token-usage).
 
 ### Agent team token costs
@@ -272,8 +292,9 @@ These background processes consume a small amount of tokens (typically under \$0
 A session that has been open for hours can use far more of your plan limits than your activity suggests, usually for one of these reasons:
 
 * **Long context**: Claude Code sends your full conversation with every request, and each time Claude uses tools it sends another request carrying that batch of tool results. With [prompt caching](/docs/en/prompt-caching), Claude Code re-reads that history at the [cached token rate](https://platform.claude.com/docs/en/about-claude/pricing), so a one-line question in a session that has been open all day still draws usage for the whole conversation. See [Manage context proactively](#manage-context-proactively) for ways to keep your context small
-* **Cache misses**: your first message after a break longer than the [cache lifetime](/docs/en/prompt-caching#cache-lifetime) misses the cache and reprocesses your full context. The lifetime is an hour on a subscription and drops to five minutes once you're drawing on [usage credits](https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans); on an API key or cloud provider, it's five minutes by default. On Pro and Max plans, when you resume a large session after a long break, Claude Code [offers to resume from a summary](/docs/en/sessions#resume-from-a-summary) so later requests don't carry the full history
+* **Cache misses**: your first message after a break longer than the [cache lifetime](/docs/en/prompt-caching#cache-lifetime) misses the cache and reprocesses your full context. The lifetime is an hour on a subscription and drops to five minutes once you're drawing on [usage credits](https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans); on an API key or cloud provider, it's five minutes by default. You can keep the one-hour lifetime while drawing on usage credits by setting [`ENABLE_PROMPT_CACHING_1H=1`](/docs/en/env-vars). On Pro and Max plans, when you resume a large session after a long break, Claude Code [offers to resume from a summary](/docs/en/sessions#resume-from-a-summary) so later requests don't carry the full history
 * **Scheduled tasks**: a [scheduled task](/docs/en/scheduled-tasks) fires on its interval even while the session is idle, sending your full context each time
+* **Cross-session messages**: Claude Code delivers a [message from another of your sessions](/docs/en/cross-session-messaging) as a new turn when this session sits idle, sending your full context each time. To hold inbound messages instead of delivering them, set [`crossSessionInbound`](/docs/en/settings#available-settings) to `hold`
 * **Agent teammates**: each active [teammate](#agent-team-token-costs) keeps consuming tokens until it exits
 * **Compaction**: `/compact` reads the conversation it summarizes, so [compacting a large context](/docs/en/prompt-caching#compacting-the-conversation) is itself a large request. When you want a fresh start instead of continuity, `/clear` costs nothing
 

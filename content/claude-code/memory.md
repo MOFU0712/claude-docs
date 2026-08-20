@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/memory
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: 6b62f9080ecadba224a2fc062501d91134d3582daa6ad62afcb9e82244a70f43
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 8c5bcc75f53f0638ee8ab6ba4200a648dca5651603b9df501ad5a35c43a56771
 ---
 
 Give Claude persistent instructions with CLAUDE.md files, and let Claude accumulate learnings automatically with auto memory.
@@ -147,6 +147,8 @@ The command prints no output on success. In your next session, run `/context` an
 On Windows, creating a symlink requires Administrator privileges or Developer Mode, so use the `@AGENTS.md` import instead.
 
 Running [`/init`](/docs/en/commands) reads Cursor rules, in `.cursor/rules/` or `.cursorrules`, and Copilot rules, in `.github/copilot-instructions.md`, and incorporates the relevant parts into the generated `CLAUDE.md`. With `CLAUDE_CODE_NEW_INIT=1` set, `/init` also reads `AGENTS.md`, `.devin/rules/`, `.windsurf/rules/` or `.windsurfrules`, and `.clinerules`.
+
+You can also run [`/import`](/docs/en/commands) to bring a supported coding agent's configuration into Claude Code, which appends a one-time copy of instruction files such as `AGENTS.md` to the matching `CLAUDE.md` and carries over MCP servers, commands, subagents, and skills. Requires Claude Code v2.1.213 or later.
 
 ### How CLAUDE.md files load
 
@@ -309,7 +311,7 @@ A managed CLAUDE.md and [managed settings](/docs/en/settings#settings-files) ser
 | Block specific tools, commands, or file paths  | Managed settings: `permissions.deny`                      |
 | Enforce sandbox isolation                      | Managed settings: `sandbox.enabled`                       |
 | Environment variables and API provider routing | Managed settings: `env`                                   |
-| Authentication method and organization lock    | Managed settings: `forceLoginMethod`, `forceLoginOrgUUID` |
+| Login method and organization restrictions     | Managed settings: `forceLoginMethod`, `forceLoginOrgUUID` |
 | Code style and quality guidelines              | Managed CLAUDE.md                                         |
 | Data handling and compliance reminders         | Managed CLAUDE.md                                         |
 | Behavioral instructions for Claude             | Managed CLAUDE.md                                         |
@@ -355,6 +357,8 @@ To disable auto memory via environment variable, set `CLAUDE_CODE_DISABLE_AUTO_M
 
 Each project gets its own memory directory at `~/.claude/projects/<project>/memory/`. The `<project>` path is derived from the git repository, so all worktrees and subdirectories within the same repo share one auto memory directory. Outside a git repo, the project root is used instead.
 
+If you set [`CLAUDE_CODE_PROJECT_DIR_NAME`](/docs/en/sessions#name-the-project-directory-yourself) beside `CLAUDE_CONFIG_DIR`, Claude Code uses that name as the `<project>` directory under `<config dir>/projects/` instead, whichever repository you launch it in, so projects launched with that config directory share one auto memory directory. Requires Claude Code v2.1.234 or later.
+
 To store auto memory in a different location, set `autoMemoryDirectory` in your `settings.json`. It is read from any [settings scope](/docs/en/settings#settings-precedence): user, project, local, policy, or `--settings`.
 
 ```json theme={null}
@@ -363,7 +367,7 @@ To store auto memory in a different location, set `autoMemoryDirectory` in your 
 }
 ```
 
-The value must be an absolute path or start with `~/`. When set in a project's `.claude/settings.json` or `.claude/settings.local.json`, the value is honored only after you accept the workspace trust dialog for that folder, the same gate that governs hooks.
+The value must be an absolute path or start with `~/`. When you set it in a project's `.claude/settings.json` or `.claude/settings.local.json`, Claude Code honors it under the same [workspace trust rule as hooks in settings files](/docs/en/permissions#what-runs-before-you-trust-a-folder).
 
 The directory contains a `MEMORY.md` entrypoint and optional topic files:
 
@@ -378,6 +382,8 @@ The directory contains a `MEMORY.md` entrypoint and optional topic files:
 `MEMORY.md` acts as an index of the memory directory. Claude reads and writes files in this directory throughout your session, using `MEMORY.md` to keep track of what's stored where.
 
 Auto memory is machine-local. All worktrees and subdirectories within the same git repository share one auto memory directory. Files are not shared across machines or cloud environments.
+
+Claude Code deletes old session transcripts after the [`cleanupPeriodDays`](/docs/en/settings#available-settings) retention period, but excludes the files in the memory directory from that [retention sweep](/docs/en/claude-directory#cleaned-up-automatically). `MEMORY.md` and topic files stay until you or Claude edits or deletes them.
 
 ### How it works
 
@@ -444,9 +450,9 @@ The [`/doctor`](/docs/en/commands#all-commands) checkup proposes trims for a che
 
 ### Instructions seem lost after `/compact`
 
-Project-root CLAUDE.md survives compaction: after `/compact`, Claude re-reads it from disk and re-injects it into the session. Nested CLAUDE.md files in subdirectories are not re-injected automatically; they reload the next time Claude reads a file in that subdirectory.
+Project-root CLAUDE.md survives compaction: after `/compact`, Claude re-reads it from disk and re-injects it into the session. Nested CLAUDE.md files in subdirectories and rules with [`paths:` frontmatter](#path-specific-rules) are not re-injected automatically; they reload the next time Claude reads a file in that subdirectory or a file matching the rule's patterns.
 
-If an instruction disappeared after compaction, it was either given only in conversation or lives in a nested CLAUDE.md that hasn't reloaded yet. Add conversation-only instructions to CLAUDE.md to make them persist. See [What survives compaction](/docs/en/context-window#what-survives-compaction) for the full breakdown.
+If an instruction disappeared after compaction, it was given only in conversation, lives in a nested CLAUDE.md that hasn't reloaded yet, or is a path-scoped rule that hasn't matched a file since. Add conversation-only instructions to CLAUDE.md to make them persist. See [What survives compaction](/docs/en/context-window#what-survives-compaction) for the full breakdown.
 
 See [Write effective instructions](#write-effective-instructions) for guidance on size, structure, and specificity.
 

@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/desktop-quickstart
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: db966ed3e82583fc19e02bb542c66ecce5814662e662977363c026f7b25b8d23
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 3c8908e1b93c632b30b9c5c0d6489af78c82f54f997b7bac09b8d252023a906f
 ---
 
 Install Claude Code on desktop and start your first coding session
@@ -34,7 +34,7 @@ The desktop app has three tabs:
 
 * **Chat**: General conversation with no file access, similar to claude.ai.
 * **Cowork**: An autonomous background agent that works on tasks in a sandboxed virtual machine with its own environment, running independently while you do other work. On-device Cowork sessions run the VM on your computer; remote Cowork sessions run on an Anthropic-managed VM instead.
-* **Code**: An interactive coding assistant with direct access to your local files. You review and approve each change in real time.
+* **Code**: An interactive coding assistant with direct access to your local files. Depending on the permission mode, you approve each change as Claude proposes it or review the changes after Claude makes them.
 
 Chat and Cowork are covered in the [Claude Help Center](https://support.claude.com/); installing and deploying the desktop app is covered in the [Claude Desktop support articles](https://support.claude.com/en/collections/16163169-claude-desktop). This page focuses on the **Code** tab.
 
@@ -66,7 +66,7 @@ With the Code tab open, choose a project and give Claude something to do.
 
     You can also select:
 
-    * **Cloud**: Run sessions on Anthropic's cloud infrastructure that continue even if you close the app. Cloud sessions use the same infrastructure as [Claude Code on the web](/docs/en/claude-code-on-the-web).
+    * **Cloud**: Run sessions in the cloud that continue even if you close the app. Cloud sessions use the same infrastructure as [Claude Code on the web](/docs/en/claude-code-on-the-web).
     * **SSH**: Connect to a remote machine over SSH, such as your own servers, cloud VMs, or dev containers. Desktop installs Claude Code on the remote machine automatically the first time you connect.
     * **WSL** (Windows): Run the session inside a [WSL 2 distribution](/docs/en/desktop-wsl); Claude Code, tools, and git execute on the Linux side with native paths.
   </Step>
@@ -86,13 +86,16 @@ With the Code tab open, choose a project and give Claude something to do.
   </Step>
 
   <Step title="Review and accept changes">
-    By default, the Code tab starts in [Manual mode](/docs/en/desktop#choose-a-permission-mode), where Claude proposes changes and waits for your approval before applying them. You'll see:
+    What happens next depends on the [permission mode](/docs/en/desktop#choose-a-permission-mode) shown in the selector next to the send button:
+
+    * **Auto or Accept edits**: Claude applies its file changes, and an indicator such as `+12 -1` appears so you can review them in the diff view
+    * **Manual**: Claude proposes each change and waits for your approval before applying it. Your files aren't modified until you accept, and if you reject a change, Claude asks how you'd like to proceed instead
+
+    In Manual mode, you'll see:
 
     1. A [diff view](/docs/en/desktop#review-changes-with-diff-view) showing exactly what will change in each file
     2. Accept/Reject buttons to approve or decline each change
     3. Real-time updates as Claude works through your request
-
-    If you reject a change, Claude will ask how you'd like to proceed differently. Your files aren't modified until you accept.
   </Step>
 </Steps>
 
@@ -110,7 +113,8 @@ You've made your first edit. For the full reference on everything Desktop can do
 
 **Adjust how much control you have.** Your [permission mode](/docs/en/desktop#choose-a-permission-mode) sets how much Claude can do without asking for approval:
 
-* **Manual**: the default. Claude asks before editing files or running commands.
+* **Auto**: a classifier reviews actions in the background and blocks the risky ones instead of asking you.
+* **Manual**: Claude asks before editing files or running commands.
 * **Accept edits**: Claude auto-accepts file edits for faster iteration.
 * **Plan**: Claude proposes an approach without editing any files, which is useful before a large refactor.
 

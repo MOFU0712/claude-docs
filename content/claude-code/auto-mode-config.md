@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/auto-mode-config
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: e105cc81741e1e50b7f1f873bbcc6aa0836f4bccdba5d1c508c4345b390f442a
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: d3fd1f5c41cc0946a367e7f1b7c1abbe2e1b170b3571227b55f011244ac4973b
 ---
 
 Tell the auto mode classifier which repos, buckets, and domains your organization trusts. Set environment context, override the default block and allow rules, and inspect your effective config with the auto-mode CLI subcommands.
@@ -14,7 +14,7 @@ Tell the auto mode classifier which repos, buckets, and domains your organizatio
 
 By default, the classifier trusts only the working directory and the current repo's configured remotes. Actions like pushing to your company's source-control org or writing to a team cloud bucket are blocked until you add them to `autoMode.environment`.
 
-For how to enable auto mode and what it blocks by default, see [Permission modes](/docs/en/permission-modes#eliminate-prompts-with-auto-mode). This page is the configuration reference.
+For how sessions end up in auto mode and what the classifier blocks by default, see [auto mode on the Permission modes page](/docs/en/permission-modes#eliminate-prompts-with-auto-mode). This page is the configuration reference.
 
 This page covers how to:
 
@@ -289,8 +289,6 @@ claude auto-mode critique
 
 Run `claude auto-mode config` after saving your settings to confirm the effective rules are what you expect, with `"$defaults"` expanded in place. If you've written custom rules, `claude auto-mode critique` reviews them and flags entries that are ambiguous, redundant, or likely to cause false positives.
 
-If you need to remove or rewrite a built-in rule rather than add alongside it, save the output of `claude auto-mode defaults` to a file, edit the lists, and paste the result into your settings file in place of `"$defaults"`.
-
 To discard your customizations and return to the built-in defaults, run the reset subcommand. It requires Claude Code v2.1.212 or later and removes the `autoMode` section from your user settings file:
 
 ```bash theme={null}
@@ -301,7 +299,9 @@ The command summarizes what it will remove and asks `Reset auto mode configurati
 
 ## Review denials
 
-When auto mode denies a tool call, Claude Code records the denial in `/permissions` under the **Recently denied** tab. Press `r` on a denied action to mark it for retry: when you exit the dialog, Claude Code sends a message telling the model it may retry that tool call and resumes the conversation.
+To review and retry actions the auto mode classifier denied, open `/permissions` and select the **Recently denied** tab, where Claude Code records each denial. Press `r` on a denied action to mark it for retry: when you exit the dialog, Claude Code sends a message telling the model it may retry that tool call and resumes the conversation.
+
+When the classifier produces [no verdict on the action](/docs/en/errors#auto-mode-cannot-determine-the-safety-of-an-action), because a safety check separate from auto mode refused the classifier's own request or its response didn't parse, Claude Code denies the action without recording it under **Recently denied**. The linked error entry covers what Claude is told and how to run the action if you need it.
 
 ### Fix a denial with an allow rule, an environment entry, or a retry
 
@@ -321,7 +321,7 @@ To react to denials programmatically, use the [`PermissionDenied` hook](/docs/en
 
 ## See also
 
-* [Permission modes](/docs/en/permission-modes#eliminate-prompts-with-auto-mode): what auto mode is, what it blocks by default, and how to enable it
+* [Permission modes](/docs/en/permission-modes#eliminate-prompts-with-auto-mode): what auto mode is, what it blocks by default, and which sessions start in it
 * [Managed settings](/docs/en/server-managed-settings): deploy `autoMode` configuration across your organization
 * [Permissions](/docs/en/permissions): allow, ask, and deny rules that apply before the classifier runs
 * [Settings](/docs/en/settings): the full settings reference, including the `autoMode` key

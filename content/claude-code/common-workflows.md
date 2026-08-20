@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/common-workflows
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: 37452a5fcd435dd657f060649ca02ba787bca9b0fb436eaad32371c3a99b2d2e
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 9d979a4f797e5b5368a8b197a27d7a6fddb5c32280207050d5a55fa2e3a62531
 ---
 
 Step-by-step guides for exploring codebases, fixing bugs, refactoring, testing, and other everyday tasks with Claude Code.
@@ -405,12 +405,12 @@ Suppose you want Claude to handle a task automatically on a recurring basis, lik
 
 Pick a scheduling option based on where you want the task to run:
 
-| Option                                                 | Where it runs                     | Best for                                                                                                                                                                                                 |
-| :----------------------------------------------------- | :-------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Routines](/docs/en/routines)                               | Anthropic-managed infrastructure  | Tasks that should run even when your computer is off. Can also trigger on API calls or GitHub events in addition to a schedule. Configure at [claude.ai/code/routines](https://claude.ai/code/routines). |
-| [Desktop scheduled tasks](/docs/en/desktop-scheduled-tasks) | Your machine, via the desktop app | Tasks that need direct access to local files, tools, or uncommitted changes.                                                                                                                             |
-| [GitHub Actions](/docs/en/github-actions)                   | Your CI pipeline                  | Tasks tied to repo events like opened PRs, or cron schedules that should live alongside your workflow config.                                                                                            |
-| [`/loop`](/docs/en/scheduled-tasks)                         | The current CLI session           | Quick polling while a session is open. Tasks stop when you start a new conversation; `--resume` and `--continue` restore unexpired ones.                                                                 |
+| Option                                                 | Where it runs                       | Best for                                                                                                                                                                                                 |
+| :----------------------------------------------------- | :---------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Routines](/docs/en/routines)                               | Cloud, Anthropic-managed by default | Tasks that should run even when your computer is off. Can also trigger on API calls or GitHub events in addition to a schedule. Configure at [claude.ai/code/routines](https://claude.ai/code/routines). |
+| [Desktop scheduled tasks](/docs/en/desktop-scheduled-tasks) | Your machine, via the desktop app   | Tasks that need direct access to local files, tools, or uncommitted changes.                                                                                                                             |
+| [GitHub Actions](/docs/en/github-actions)                   | Your CI pipeline                    | Tasks tied to repo events like opened PRs, or cron schedules that should live alongside your workflow config.                                                                                            |
+| [`/loop`](/docs/en/scheduled-tasks)                         | The current CLI session             | Quick polling while a session is open. Tasks stop when you start a new conversation; `--resume` and `--continue` restore unexpired ones.                                                                 |
 
 <Tip>
   When writing prompts for scheduled tasks, be explicit about what success looks like and what to do with results. The task runs autonomously, so it can't ask clarifying questions. For example: "Review open PRs labeled `needs-review`, leave inline comments on any issues, and post a summary in the `#eng-reviews` Slack channel."
@@ -490,7 +490,7 @@ For changes you want to review before they touch disk, switch to plan mode. Clau
 claude --permission-mode plan
 ```
 
-You can also press `Shift+Tab` mid-session to cycle to plan mode. The cycle runs `default` → `acceptEdits` → `plan`. See [Plan mode](/docs/en/permission-modes#analyze-before-you-edit-with-plan-mode) for the approval flow and editing the plan in your text editor.
+You can also press `Shift+Tab` mid-session until the status bar shows `⏸ plan mode on`. See [Plan mode](/docs/en/permission-modes#analyze-before-you-edit-with-plan-mode) for the approval flow and editing the plan in your text editor.
 
 ## Delegate research to subagents
 

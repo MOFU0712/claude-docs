@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/channels-reference
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: 3c7290aab3013944104f0d6f886b26dac29c61da082a29313ce3040b19a036dc
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 946134fd8a3ee3a28c01dbd7100aa0c9729de19f6bec00e10fe96972f6940f53
 ---
 
 Build an MCP server that pushes webhooks, alerts, and chat messages into a Claude Code session. Reference for the channel contract: capability declaration, notification events, reply tools, sender gating, and permission relay.
@@ -46,7 +46,7 @@ Your server needs to:
 
 1. Declare the `claude/channel` capability so Claude Code registers a notification listener
 2. Emit `notifications/claude/channel` events when something happens
-3. Connect over [stdio transport](https://modelcontextprotocol.io/docs/concepts/transports#standard-io) (Claude Code spawns your server as a subprocess)
+3. Connect over [stdio transport](https://modelcontextprotocol.io/docs/concepts/transports#standard-io)
 
 The [Server options](#server-options) and [Notification format](#notification-format) sections cover each of these in detail. See [Example: build a webhook receiver](#example-build-a-webhook-receiver) for a full walkthrough.
 
@@ -113,7 +113,7 @@ This example uses [Bun](https://bun.sh) as the runtime for its built-in HTTP ser
     The file does three things in order:
 
     * **Server configuration**: creates the MCP server with `claude/channel` in its capabilities, which is what tells Claude Code this is a channel. The [`instructions`](#server-options) string goes into Claude's system prompt: tell Claude what events to expect, whether to reply, and how to route replies if it should.
-    * **Stdio connection**: connects to Claude Code over stdin/stdout. This is standard for any [MCP server](https://modelcontextprotocol.io/docs/concepts/transports#standard-io): Claude Code spawns it as a subprocess.
+    * **Stdio connection**: connects to Claude Code over stdin/stdout. This is standard for any [MCP server](https://modelcontextprotocol.io/docs/concepts/transports#standard-io).
     * **HTTP listener**: starts a local web server on port 8788. Every POST body gets forwarded to Claude as a channel event via `mcp.notification()`. The `content` becomes the event body, and each `meta` entry becomes an attribute on the `<channel>` tag. The listener needs access to the `mcp` instance, so it runs in the same process. You could split it into separate modules for a larger project.
   </Step>
 
@@ -193,12 +193,12 @@ The bypass is per-entry. Combining this flag with `--channels` doesn't extend th
 
 A channel sets these options in the [`Server`](https://modelcontextprotocol.io/docs/learn/server-concepts) constructor. The `instructions` and `capabilities.tools` fields are [standard MCP](https://modelcontextprotocol.io/docs/learn/server-concepts); `capabilities.experimental['claude/channel']` and `capabilities.experimental['claude/channel/permission']` are the channel-specific additions:
 
-| Field                                                    | Type     | Description                                                                                                                                                                                                                                                             |
-| :------------------------------------------------------- | :------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `capabilities.experimental['claude/channel']`            | `object` | Required. Always `{}`. Presence registers the notification listener.                                                                                                                                                                                                    |
-| `capabilities.experimental['claude/channel/permission']` | `object` | Optional. Always `{}`. Declares that this channel can receive permission relay requests. When declared, Claude Code forwards tool approval prompts to your channel so you can approve or deny them remotely. See [Relay permission prompts](#relay-permission-prompts). |
-| `capabilities.tools`                                     | `object` | Two-way only. Always `{}`. Standard MCP tool capability. See [Expose a reply tool](#expose-a-reply-tool).                                                                                                                                                               |
-| `instructions`                                           | `string` | Recommended. Added to Claude's system prompt. Tell Claude what events to expect, what the `<channel>` tag attributes mean, whether to reply, and if so which tool to use and which attribute to pass back (like `chat_id`).                                             |
+| Field                                                    | Type                | Description                                                                                                                                                                                                                                                                                                                                                                          |
+| :------------------------------------------------------- | :------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `capabilities.experimental['claude/channel']`            | `object`            | Required. Always `{}`. Presence registers the notification listener.                                                                                                                                                                                                                                                                                                                 |
+| `capabilities.experimental['claude/channel/permission']` | `object` or `false` | Optional. Set it to `{}` to declare that this channel can receive permission relay requests. When declared, Claude Code forwards tool approval prompts to your channel so you can approve or deny them remotely. To opt out, omit the key or set it to `false`. Before v2.1.234, Claude Code treated `false` as declared. See [Relay permission prompts](#relay-permission-prompts). |
+| `capabilities.tools`                                     | `object`            | Two-way only. Always `{}`. Standard MCP tool capability. See [Expose a reply tool](#expose-a-reply-tool).                                                                                                                                                                                                                                                                            |
+| `instructions`                                           | `string`            | Recommended. Added to Claude's system prompt. Tell Claude what events to expect, what the `<channel>` tag attributes mean, whether to reply, and if so which tool to use and which attribute to pass back (like `chat_id`).                                                                                                                                                          |
 
 To create a one-way channel, omit `capabilities.tools`. This example shows a two-way setup with the channel capability, tools, and instructions set:
 
@@ -217,8 +217,6 @@ const mcp = new Server(
   },
 )
 ```
-
-To push an event, call `mcp.notification()` with method `notifications/claude/channel`. The params are in the next section.
 
 ## Notification format
 
@@ -435,13 +433,15 @@ await mcp.notification({ ... })
 
 Gate on the sender's identity, not the chat or room identity: `message.from.id` in the example, not `message.chat.id`. In group chats, these differ, and gating on the room would let anyone in an allowlisted group inject messages into the session.
 
-The [Telegram](https://github.com/anthropics/claude-plugins-official/tree/main/external_plugins/telegram) and [Discord](https://github.com/anthropics/claude-plugins-official/tree/main/external_plugins/discord) channels gate on a sender allowlist the same way. They bootstrap the list by pairing: the user DMs the bot, the bot replies with a pairing code, the user approves it in their Claude Code session, and their platform ID is added. See either implementation for the full pairing flow. The [iMessage](https://github.com/anthropics/claude-plugins-official/tree/main/external_plugins/imessage) channel takes a different approach: it detects the user's own addresses from the Messages database at startup and lets them through automatically, with other senders added by handle.
+The [Telegram](https://github.com/anthropics/claude-plugins-official/tree/main/external_plugins/telegram) and [Discord](https://github.com/anthropics/claude-plugins-official/tree/main/external_plugins/discord) channels gate on a sender allowlist the same way. They bootstrap the list by [pairing](/docs/en/channels#security). See either implementation for the full pairing flow. The [iMessage](https://github.com/anthropics/claude-plugins-official/tree/main/external_plugins/imessage) channel takes a different approach: it detects the user's own addresses from the Messages database at startup and lets them through automatically, with other senders added by handle.
 
 ## Relay permission prompts
 
 When Claude calls a tool that needs approval, the local terminal dialog opens and the session waits. A two-way channel can opt in to receive the same prompt in parallel and relay it to you on another device. Both stay live: you can answer in the terminal or on your phone, and Claude Code applies whichever answer arrives first and closes the other.
 
 Relay covers tool-use approvals like `Bash`, `Write`, and `Edit`. Project trust and MCP server consent dialogs don't relay; those only appear in the local terminal.
+
+Claude Code v2.1.234 and later sends permission requests only to servers it registered as channels for the session, so relay sits behind the same [session opt-in and organization controls](/docs/en/channels#security) as message delivery. Relay also requires you to opt the server in with `--channels` or the development flag, and requires the server to declare the permission capability.
 
 ### How relay works
 
@@ -469,7 +469,23 @@ The outbound notification from Claude Code is `notifications/claude/channel/perm
 | `description`   | Human-readable summary of what this specific tool call does, never the command itself. For a Bash call this is Claude's description of the command; when the model gives no description, the field is the constant `Run shell command` and carries zero command detail. Render `input_preview` when you have room.                                             |
 | `input_preview` | The tool's arguments as JSON-shaped display text, keyed per top-level field. For Bash this is the command; for Write, the file path and the content. Omit it from your prompt if you only have room for a one-line message. Your server decides what to show.                                                                                                  |
 
-Clients on Claude Code v2.1.211 or later sanitize both fields before relaying them: they neutralize direction-override and invisible characters and quote and angle-bracket lookalikes, fold whitespace runs to a single space, and relay text whole up to 3,500 code points, applied per top-level field for `input_preview`, which also keeps the JSON's own structural quotes. A longer value keeps its start and end visible around a counted `⋯ N code points elided ⋯` marker, so the end of a long command still reaches the approver. Earlier clients relay `description` raw and cut `input_preview` to 200 UTF-16 units with a trailing ellipsis. Treat both fields as untrusted unless you control the client fleet.
+Clients on Claude Code v2.1.211 or later sanitize `description` and `input_preview` before relaying them. Expect three changes in the text you receive:
+
+* Claude Code neutralizes direction-override characters, invisible characters, and quote and angle-bracket lookalikes.
+* Claude Code folds each run of whitespace to a single space.
+* Claude Code relays text whole up to 3,500 code points. For a longer value, you receive its start and its end around a counted `⋯ N code points elided ⋯` marker. The end of a long command still reaches the approver.
+
+For `input_preview`, Claude Code applies the 3,500 limit to each top-level field of the arguments separately and keeps the JSON's own structural quotes. Clients before v2.1.211 relay `description` raw and cut `input_preview` to 200 UTF-16 units with a trailing ellipsis.
+
+Clients on Claude Code v2.1.234 or later relay the marker `(value unserializable)` in place of an `input_preview` field value they can't serialize safely, such as a circular structure or an extremely large array. You still receive the field's key, and the preview's other fields are unchanged.
+
+Clients on Claude Code v2.1.234 or later also mask credentials in `description` and `input_preview`. You receive `[REDACTED]` in place of a recognizable provider credential token, such as an API key or a personal access token. Expect three effects of the masking when you render the fields:
+
+* Claude Code masks key names inside `input_preview` as well as their values. A key name you display may not match the key name in the input.
+* Claude Code never masks a span that contains shell syntax, path characters, or URL characters. A mask can't hide the command, file path, or destination being approved.
+* Claude Code doesn't mask a secret that lacks a recognizable prefix, or a secret that spans whitespace, such as a private-key block. Both reach your server unmasked.
+
+Masking doesn't change who receives the fields. Whatever stays unmasked goes only to servers you opted in with `--channels` or the development flag. Treat both fields as untrusted unless you control the client fleet.
 
 The verdict your server sends back is `notifications/claude/channel/permission` with two fields: `request_id` echoing the ID above, and `behavior` set to `'allow'` or `'deny'`. Allow lets the tool call proceed; deny rejects it, the same as answering No in the local dialog. Neither verdict affects future calls.
 
@@ -572,7 +588,7 @@ To add these to a two-way chat bridge like the one assembled in [Expose a reply 
   </Step>
 </Steps>
 
-Claude Code also keeps the local terminal dialog open, so you can answer in either place, and the first answer to arrive is applied. A remote reply that doesn't exactly match the expected format fails in one of two ways, and in both cases the dialog stays open:
+A remote reply that doesn't exactly match the expected format fails in one of two ways, and in both cases the local terminal dialog stays open:
 
 * **Different format**: your inbound handler's regex fails to match, so text like `approve it` or `yes` without an ID falls through as a normal message to Claude.
 * **Right format, wrong ID**: your server emits a verdict, but Claude Code finds no open request with that ID and drops it silently.
@@ -727,6 +743,8 @@ Test the verdict path in three terminals. The first is your Claude Code session,
 ```bash theme={null}
 claude --dangerously-load-development-channels server:webhook
 ```
+
+This walkthrough tests the permission dialog itself, so once the session is open, press `Shift+Tab` until the status bar shows `⏸ manual mode on`. In auto mode the classifier would decide the `reply` call instead of you, and no dialog would open for the remote side to answer.
 
 In the second, stream the outbound side so you can see Claude's replies and any permission prompts as they fire:
 

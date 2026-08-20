@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/security
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: 3c6444418e20825d3e8f87f2542ee17ae06c8580de56790947bf4a68f0edaf2f
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: a96e06763595bb31f5df642d5de7c76896c1cde02362683b34d5e4af73f2e2d6
 ---
 
 Learn about Claude Code's security safeguards and best practices for safe usage.
@@ -14,9 +14,13 @@ Your code's security is paramount. Claude Code is built with security at its cor
 
 ### Permission-based architecture
 
-Claude Code uses strict read-only permissions by default. When additional actions are needed (editing files, running tests, executing commands), Claude Code requests explicit permission. Users control whether to approve actions once or allow them automatically.
+In Manual mode, Claude Code starts with read-only permissions. When Claude Code needs to edit files, run tests, or execute commands, it asks you first, and you choose whether to approve the action once or allow it from then on.
 
-Claude Code requires approval before running Bash commands that can modify your system. A built-in set of [read-only commands](/docs/en/permissions#read-only-commands) such as `ls`, `cat`, and `git status` runs without a prompt. This approach lets users and organizations configure permissions directly.
+In Manual mode, Claude Code also asks before running Bash commands that can modify your system. It runs a built-in set of [read-only commands](/docs/en/permissions#read-only-commands) such as `ls`, `cat`, and `git status` without asking. You and your organization configure these permissions directly.
+
+In [auto mode](/docs/en/permission-modes#eliminate-prompts-with-auto-mode), a separate classifier model reviews actions instead of you and blocks the ones it judges unsafe. [How the classifier evaluates actions](/docs/en/permission-modes#how-the-classifier-evaluates-actions) lists which actions Claude Code approves outright, which it sends to the classifier, and which Claude Code still asks you about. Your explicit ask and deny rules still apply, and your organization can [turn auto mode off](/docs/en/permission-modes#eliminate-prompts-with-auto-mode).
+
+Which permission mode a session starts in depends on your plan, the surface you start it from, and your settings and your organization's; see [Permission modes](/docs/en/permission-modes#which-mode-a-session-starts-in).
 
 For detailed permission configuration, see [Permissions](/docs/en/permissions).
 
@@ -25,7 +29,7 @@ For detailed permission configuration, see [Permissions](/docs/en/permissions).
 To mitigate risks in agentic systems:
 
 * **Sandboxed bash tool**: [Sandbox](/docs/en/sandboxing) bash commands with filesystem and network isolation, reducing permission prompts while maintaining security. Configure with `/sandbox` to define boundaries where Claude Code can work autonomously
-* **Working directory boundary**: Claude Code can only write to the folder where it was started and its subfolders, and cannot modify files in parent directories without explicit permission. Reading paths outside this boundary with the Read, Grep, and Glob tools is possible after an approval prompt. Extend the boundary with [additional directories](/docs/en/permissions#working-directories) to skip the prompt, or restrict the broader read access available to read-only Bash commands with [sandbox `denyRead` rules](/docs/en/sandboxing#filesystem-isolation), which apply only when sandboxing is enabled
+* **Working directory boundary**: In Manual mode, Claude Code can only write to the folder where it was started and its subfolders, and can't modify files in parent directories without explicit permission. In Manual mode, Claude Code also asks you before reading paths outside this boundary with the Read, Grep, and Glob tools. In auto mode it reads them without asking. Extend the boundary with [additional directories](/docs/en/permissions#working-directories) to skip the prompt, or restrict the broader read access available to read-only Bash commands with [sandbox `denyRead` rules](/docs/en/sandboxing#filesystem-isolation), which apply only when sandboxing is enabled
 * **Prompt fatigue mitigation**: Support for allowlisting frequently used safe commands per-user, per-codebase, or per-organization
 * **Accept Edits mode**: Auto-approves file edits and a fixed set of filesystem Bash commands like `mkdir`, `touch`, `rm`, `mv`, `cp`, and `sed` for paths in the working directory. Other Bash commands and out-of-scope paths still prompt
 
@@ -39,10 +43,10 @@ Prompt injection is a technique where an attacker attempts to override or manipu
 
 ### Core protections
 
-* **Permission system**: Sensitive operations require explicit approval
+* **Permission system**: In Manual mode, sensitive operations require explicit approval
 * **Context-aware analysis**: Detects potentially harmful instructions by analyzing the full request
 * **Input sanitization**: Prevents command injection by processing user inputs
-* **Network command approval**: Commands that fetch content from the web such as `curl` and `wget` are not auto-approved by default. They prompt like any other non-read-only Bash command, so you can still approve once or add an explicit allow rule like `Bash(curl *)`. To block them entirely, add them to [`permissions.deny`](/docs/en/permissions#tool-specific-permission-rules)
+* **Network command approval**: Commands that fetch content from the web such as `curl` and `wget` are not auto-approved by default. In Manual mode they prompt like any other non-read-only Bash command, so you can still approve once or add an explicit allow rule like `Bash(curl *)`. To block them entirely, add them to [`permissions.deny`](/docs/en/permissions#tool-specific-permission-rules)
 
 ### Privacy safeguards
 
@@ -56,13 +60,13 @@ For full details, please review our [Commercial Terms of Service](https://www.an
 
 ### Additional safeguards
 
-* **Network request approval**: Tools that make network requests require user approval by default
+* **Network request approval**: In Manual mode, most tools that make network requests require user approval by default
 * **Isolated context windows**: Web fetch uses a separate context window to avoid injecting potentially malicious prompts
 * **Trust verification**: First-time codebase runs and new MCP servers require trust verification
   * Note: Trust verification is disabled when running non-interactively with the `-p` flag
   * Note: When you start Claude Code directly in your home directory, trust acceptance is held for the current session only and is not written to disk, so the prompt reappears on each launch. There is no setting to persist it. Start Claude Code from a project subdirectory instead, where trust acceptance is saved per directory
-* **Command injection detection**: Suspicious bash commands require manual approval even if previously allowlisted
-* **Fail-closed matching**: Unmatched commands default to requiring manual approval
+* **Command injection detection**: In Manual mode, suspicious bash commands require manual approval even if previously allowlisted
+* **Fail-closed matching**: In Manual mode, unmatched commands require approval by default
 * **Natural language descriptions**: Complex bash commands include explanations for user understanding
 * **Secure credential storage**: API keys and tokens are stored in the macOS Keychain when available, and protected by file permissions on Windows and Linux. See [Credential Management](/docs/en/authentication#credential-management)
 
@@ -96,7 +100,7 @@ See [VS Code security and privacy](/docs/en/vs-code#security-and-privacy) for mo
 
 ## Cloud execution security
 
-When using [Claude Code on the web](/docs/en/claude-code-on-the-web), additional security controls are in place:
+When using [Claude Code on the web](/docs/en/claude-code-on-the-web), additional security controls are in place. Sessions your organization routes to a [self-hosted environment](/docs/en/self-hosted-environments) run on your own infrastructure, where isolation, network egress, and git credentials are your deployment's responsibility. In Anthropic-hosted environments:
 
 * **Isolated virtual machines**: Each cloud session runs in an isolated, Anthropic-managed VM
 * **Network access controls**: Network access is limited by default and can be configured to be disabled or allow only specific domains

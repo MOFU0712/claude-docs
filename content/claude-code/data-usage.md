@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/data-usage
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: a737c02e5b94fd2eff19e7fc5b47e7c13e6205e6a332b04581ee7eee7d1adeeb
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 7f4da9a0879ebbb57dcb7f121fe091fe360d00ab5f899c3f013d5497322a00c2
 ---
 
 Learn about Anthropic's data usage policies for Claude
@@ -86,7 +86,7 @@ Claude Code is built on Anthropic's APIs. For details on API security controls, 
 
 ### Cloud execution: Data flow and dependencies
 
-When using [Claude Code on the web](/docs/en/claude-code-on-the-web), sessions run in Anthropic-managed virtual machines instead of locally. In cloud sessions:
+When using [Claude Code on the web](/docs/en/claude-code-on-the-web), sessions run in Anthropic-managed virtual machines by default instead of locally. Sessions your organization routes to a [self-hosted environment](/docs/en/self-hosted-environments) run on infrastructure you control; for what stays on your machines and what still goes to Anthropic, see [What stays on your infrastructure](/docs/en/self-hosted-environments#what-stays-on-your-infrastructure). In Anthropic-hosted cloud sessions:
 
 * **Code and data storage:** Your repository is cloned to an isolated VM. Code and session data are subject to the retention and usage policies for your account type (see Data retention section above)
 * **Credentials:** GitHub authentication is handled through a secure proxy; your GitHub credentials never enter the sandbox
@@ -128,10 +128,10 @@ By default, error reporting, telemetry, and bug reporting are disabled when usin
 
 All environment variables can be checked into `settings.json` (see [settings reference](/docs/en/settings)).
 
-As of v2.1.126, when a host platform sets `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST`, metrics default to on for Google Cloud's Agent Platform, Amazon Bedrock, and Microsoft Foundry, and follow the standard `DISABLE_TELEMETRY` opt-out. Error reporting and `/feedback` reports remain off by default on those providers.
+When a host platform sets `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST`, metrics default to on for Google Cloud's Agent Platform, Amazon Bedrock, Microsoft Foundry, and Claude Platform on AWS, and follow the standard `DISABLE_TELEMETRY` opt-out. Error reporting and `/feedback` reports remain off by default on those providers.
 
 ### WebFetch domain safety check
 
-Before fetching a URL, the WebFetch tool sends the requested hostname to `api.anthropic.com` to check it against a safety blocklist maintained by Anthropic. Only the hostname is sent, not the full URL, path, or page contents. Results are cached per hostname for five minutes.
+Before fetching a URL, the WebFetch tool sends the requested hostname to `api.anthropic.com` to check it against a safety blocklist maintained by Anthropic. Only the hostname is sent, not the full URL, path, or page contents. Claude Code caches a hostname that passes the check for five minutes, and re-checks a blocked or failed hostname on the next request.
 
 This check runs regardless of which model provider you use and is not affected by `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC`. If your network blocks `api.anthropic.com`, WebFetch requests fail until you either allowlist the domain or set `skipWebFetchPreflight: true` in [settings](/docs/en/settings). Disabling the check means WebFetch attempts to retrieve any URL without consulting the blocklist, so combine it with [`WebFetch` permission rules](/docs/en/permissions#webfetch) if you need to restrict which domains Claude can reach.

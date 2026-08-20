@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/claude-security
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: 0f8e1a72423c7726300b6e138294e82df428fa117303c9163a6d8f2ddc9447e8
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: d2f2e32f1bec7eb828b9ed02381d8dbd99cc67a231e1887cb2ae566e7bbd4777
 ---
 
 Install the Claude Security plugin to scan your codebase for vulnerabilities in a Claude Code session and turn findings into patches you review and apply.
@@ -32,7 +32,7 @@ In a Claude Code session, install from the [official Anthropic marketplace](/doc
 If the install fails, the fix depends on which message Claude Code reports:
 
 * If it reports `Marketplace "claude-plugins-official" not found`, add the marketplace with `/plugin marketplace add anthropics/claude-plugins-official`, then retry the install.
-* If it reports that it can't find the plugin in the marketplace, check the plugin name for a typo. Claude Code [refreshes a stale marketplace catalog and retries](/docs/en/discover-plugins#install-plugins) before reporting this. If you turned off [marketplace auto-update](/docs/en/discover-plugins#configure-auto-updates), refresh manually with `/plugin marketplace update claude-plugins-official` and retry the install.
+* If it reports that it [can't find the plugin in the marketplace](/docs/en/discover-plugins#install-plugins), check the plugin name for a typo.
 
 Check the install summary. If it reports `Run /reload-plugins to activate.`, apply the pending change without a restart:
 
@@ -76,7 +76,7 @@ The plugin adds one command, `/claude-security`, which opens a menu of its three
   </Step>
 </Steps>
 
-You don't have to start from the menu: ask for a job directly, as arguments to the command, such as `/claude-security scan my branch`, or in plain language, such as "scan commit abc1234". The plugin works best in [auto mode](/docs/en/permission-modes), which lets the scan's agents proceed without a permission prompt at each step; the plugin reminds you how to enable it when a job starts.
+You don't have to start from the menu: ask for a job directly, as arguments to the command, such as `/claude-security scan my branch`, or in plain language, such as "scan commit abc1234". The plugin works best in [auto mode](/docs/en/permission-modes), which lets the scan's agents proceed without a permission prompt at each step.
 
 ### Scan only your changes
 

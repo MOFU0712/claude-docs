@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/sandbox-environments
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: 0c94dcebf58d832b25211f806560b51af7283c68031d708595dfdd08da3152f0
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 5b29fe73e36d587863774929bcf2eab7cab3effe63bdd30bbd1224bf310e955b
 ---
 
 Compare Claude Code sandbox options: the built-in sandboxed Bash tool, sandbox runtime, dev containers, Docker, and VMs. Choose the right isolation for your threat model.
@@ -54,9 +54,11 @@ Match your goal to a row below, then read the detail section that follows.
 
 [Permission modes](/docs/en/permission-modes) decide whether a tool call runs and whether you are prompted first. Isolation restricts what a command can access once it runs. The two work together: when a permission mode lets actions run without asking you, an isolation boundary limits what those actions can reach.
 
-When you pass `--dangerously-skip-permissions`, Claude acts without asking you first; you're only prompted for explicit [ask rules](/docs/en/permissions#manage-permissions), connector tools [your organization set to `ask`](/docs/en/mcp#organization-controls-on-connector-tools), MCP tools marked [`requiresUserInteraction`](/docs/en/mcp#require-approval-for-a-specific-tool), and removals targeting `/` or your home directory. With no prompts to catch mistakes, the isolation boundary you choose is what protects your system. Always run `--dangerously-skip-permissions` sessions inside a container, a VM, or the [sandbox runtime](#sandbox-runtime), so that file tools, MCP servers, and hooks are also inside the boundary. On Linux and macOS, Claude Code refuses to start with this flag when running as root, so run the container, VM, or sandbox runtime as a non-root user.
+When you pass `--dangerously-skip-permissions`, Claude acts without asking you first. The [actions no mode auto-approves](/docs/en/permission-modes#actions-no-mode-auto-approves) still apply.
 
-[Auto mode](/docs/en/permission-modes#eliminate-prompts-with-auto-mode) replaces the prompt with a classifier that reviews actions and blocks ones that escalate beyond the request, target unrecognized infrastructure, or appear driven by hostile content Claude read. The classifier is a per-action control, not an isolation boundary, so an isolation boundary still adds defense in depth for unattended runs, and is not required the way it is for `--dangerously-skip-permissions`.
+With no prompts to catch mistakes, the isolation boundary you choose is what protects your system. Always run `--dangerously-skip-permissions` sessions inside a container, a VM, or the [sandbox runtime](#sandbox-runtime), so that file tools, MCP servers, and hooks are also inside the boundary. On Linux and macOS, Claude Code refuses to start with this flag when running as root, so run the container, VM, or sandbox runtime as a non-root user.
+
+[Auto mode](/docs/en/permission-modes#eliminate-prompts-with-auto-mode) replaces the prompt with a classifier that reviews actions. The classifier is a per-action control, not an isolation boundary, so an isolation boundary still adds defense in depth for unattended runs, and is not required the way it is for `--dangerously-skip-permissions`.
 
 The [sandboxed Bash tool](#sandboxed-bash-tool) on its own constrains only Bash, so it is not sufficient for fully unattended runs in either mode. You can layer approaches: running the sandboxed Bash tool inside a container or VM gives you OS-level command restrictions on top of the outer environment boundary. For how the Bash sandbox itself interacts with permission rules and modes, see [How sandboxing relates to permissions and permission modes](/docs/en/sandboxing#how-sandboxing-relates-to-permissions-and-permission-modes).
 
@@ -66,7 +68,7 @@ The [sandboxed Bash tool](#sandboxed-bash-tool) on its own constrains only Bash,
   This option does not support native Windows. On Windows hosts, use WSL2 or one of the container or VM approaches below.
 </Note>
 
-The sandboxed Bash tool is built into Claude Code. It uses operating system primitives to restrict the filesystem and network access of every Bash command Claude runs: Seatbelt, the built-in macOS sandbox, and [bubblewrap](https://github.com/containers/bubblewrap) on Linux and WSL2. By default it allows writes to the working directory and prompts the first time a command needs a new network domain.
+The sandboxed Bash tool is built into Claude Code. It uses operating system primitives to restrict the filesystem and network access of every Bash command Claude runs.
 
 Run the `/sandbox` command to open the sandbox panel and choose a mode. The [Sandboxing](/docs/en/sandboxing) guide covers the approval modes, the default boundary, and how to widen or narrow it.
 
@@ -147,19 +149,19 @@ You can layer the built-in Bash sandbox inside the container for per-command res
 
 ## Virtual machine
 
-A dedicated virtual machine provides the strongest separation, with its own kernel and, in cloud or microVM deployments, its own virtualized hardware. Options include cloud instances, local hypervisors, and microVMs such as Firecracker.
+A dedicated virtual machine provides the strongest separation, with its own kernel and, in cloud or microVM deployments, its own virtualized hardware. Options include cloud instances, local hypervisors, and microVMs such as Firecracker. Use this approach when you are evaluating untrusted code, when your security policy requires kernel-level separation between the agent and the host, or when no host-level approach meets your compliance requirements.
 
-Use this approach when you are evaluating untrusted code, when your security policy requires kernel-level separation between the agent and the host, or when no host-level approach meets your compliance requirements. Docker Desktop's [sandboxes feature](https://docs.docker.com/ai/sandboxes/) provides a microVM with its own Docker daemon and workspace sync, which can run Claude Code on hosts that already have Docker Desktop.
+[Docker Sandboxes](https://docs.docker.com/ai/sandboxes/) provides a microVM with its own Docker daemon and workspace sync, which can run Claude Code on any host with Docker Sandboxes installed. It is a free, standalone product from Docker that does not require Docker Desktop.
 
 ## Claude Code on the web
 
-[Claude Code on the web](/docs/en/claude-code-on-the-web) runs each session in an isolated, Anthropic-managed virtual machine. A network proxy enforces a default allowlist, and a separate proxy holds your GitHub token outside the sandbox while issuing scoped credentials for repository access inside it.
+[Claude Code on the web](/docs/en/claude-code-on-the-web) runs each session in an isolated, Anthropic-managed virtual machine. A network proxy enforces a default allowlist, and a separate proxy holds your GitHub token outside the sandbox while issuing scoped credentials for repository access inside it. Sessions your organization routes to a [self-hosted environment](/docs/en/self-hosted-environments) run on infrastructure you provision instead, where isolation, egress control, and git credentials are your deployment's responsibility.
 
 Use this approach when you want full VM isolation without provisioning infrastructure yourself, or when you are delegating tasks from a device that does not have a local development environment. It requires a Claude subscription. When you launch a session from the web interface, you also need a connected GitHub account so the sandbox can clone your repository. When you launch from the CLI with `--cloud`, Claude Code can [bundle and upload your local repository](/docs/en/claude-code-on-the-web#send-local-repositories-without-github) instead if GitHub isn't connected. See [Claude Code on the web](/docs/en/claude-code-on-the-web) for plan availability and GitHub authentication options.
 
 ## Enforce isolation across an organization
 
-Individual developers can opt into any approach above. What an organization can enforce, and with which tools, depends on the approach:
+Individual developers can opt into any of the sandboxing approaches on this page. What an organization can enforce, and with which tools, depends on the approach:
 
 * **Built-in Bash sandbox**: the only approach Claude Code enforces itself. Deliver the `sandbox` settings keys through [managed settings](/docs/en/settings#settings-files), either as a file managed by your MDM or through [server-managed settings](/docs/en/server-managed-settings) on Claude.ai. See [Enforce sandboxing with managed settings](/docs/en/sandboxing#enforce-sandboxing-with-managed-settings) for the keys to deploy and how to keep developers from widening the policy.
 * **Dev containers**: commit the [example dev container](/docs/en/devcontainer) to your repositories to standardize the environment across a team. This is a convention rather than an enforcement boundary, because Claude Code does not require a container. If developers should not be able to run Claude Code outside it, enforce that with your organization's device management or software allowlisting tools.
@@ -167,7 +169,7 @@ Individual developers can opt into any approach above. What an organization can 
 
 ## See also
 
-These pages cover configuration and policy details for the approaches above.
+These pages cover configuration and policy details for the sandboxing approaches on this page.
 
 * [Sandboxing](/docs/en/sandboxing): configure the built-in sandboxed Bash tool
 * [Dev container](/docs/en/devcontainer): the preconfigured Docker development container

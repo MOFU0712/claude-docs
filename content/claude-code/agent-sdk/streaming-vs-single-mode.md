@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/agent-sdk/streaming-vs-single-mode
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: 8deebebfdae0495bc9828ce14e29ebd3d8cbf5c9a2ed9e4c660139501d505eeb
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: e12675cb46260970c69679db3f6348068dec5050d119ad890db24dc27512fe19
 ---
 
 Understanding the two input modes for Claude Agent SDK and when to use each
@@ -12,8 +12,6 @@ The Claude Agent SDK supports two distinct input modes for interacting with agen
 
 * **Streaming Input Mode**: a persistent, interactive session
 * **Single Message Input**: one-shot queries that use session state and resuming
-
-This guide explains the differences, benefits, and use cases for each mode to help you choose the right approach for your application.
 
 ## Streaming Input Mode (Recommended)
 
@@ -61,27 +59,13 @@ sequenceDiagram
 
 ### Benefits
 
-<CardGroup>
-  <Card title="Image Uploads" icon="image">
-    Attach images directly to messages for visual analysis and understanding
-  </Card>
+In streaming input mode, you work in a persistent session with these capabilities:
 
-  <Card title="Queued Messages" icon="stack">
-    Send multiple messages that process sequentially, with ability to interrupt
-  </Card>
-
-  <Card title="Tool Integration" icon="wrench">
-    Full access to all tools and custom MCP servers during the session
-  </Card>
-
-  <Card title="Real-time Feedback" icon="lightning">
-    See responses as they're generated, not just final results
-  </Card>
-
-  <Card title="Context Persistence" icon="database">
-    Maintain conversation context across multiple turns naturally
-  </Card>
-</CardGroup>
+* **Image uploads**: attach images directly to messages for visual analysis and understanding
+* **Queued messages**: send multiple messages that process sequentially, with ability to interrupt
+* **Tool integration**: full access to all tools and custom MCP servers during the session
+* **Real-time feedback**: see responses as they're generated, not just final results
+* **Context persistence**: maintain conversation context across multiple turns naturally
 
 ### Implementation Example
 

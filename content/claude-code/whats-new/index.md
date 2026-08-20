@@ -1,12 +1,28 @@
 ---
 source_url: https://code.claude.com/docs/en/whats-new/index
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: ba4320fd12695322fde7e9624eefbf1083d7686455638bd6e478a44583f03347
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 620aad675a55d79275295ddabe573d1d2e57e36d34be3127295020c6c5f52c5e
 ---
 
 A weekly digest of notable Claude Code features, with code snippets, demos, and context on why they matter.
 
 The weekly dev digest highlights the features most likely to change how you work. Each entry includes runnable code, a short demo, and a link to the full docs. For every bug fix and minor improvement, see the [changelog](/docs/en/changelog).
+
+<Update label="Week 32" description="August 3–7, 2026">
+  **Cross-session messaging**: on macOS and Linux, your Claude Code sessions can now message each other, so Claude passes a finding or a decision from one session to another instead of you re-explaining it.
+
+  Also this week: **self-hosted environments** run Claude Code cloud sessions on infrastructure your organization operates, in public beta on Team and Enterprise plans; **auto mode** becomes the default permission mode for new sessions on Pro, Max, and Team plans starting August 14; and the **VS Code extension** gets Focus view.
+
+  [Read the Week 32 digest →](/docs/en/whats-new/2026-w32)
+</Update>
+
+<Update label="Week 30" description="July 20–24, 2026">
+  **Claude Opus 5**: the new default Opus model in Claude Code, with a 1M-token context window and fast mode at \$10/\$50 per MTok.
+
+  Also this week: **Claude Code Desktop** opens an iOS Simulator pane in public beta so Claude can run your app and tap through it while you watch; the **Claude Security plugin** runs a multi-agent vulnerability scan of your codebase and turns the findings you pick into patches you apply yourself; and **`/code-review`** runs as a background subagent.
+
+  [Read the Week 30 digest →](/docs/en/whats-new/2026-w30)
+</Update>
 
 <Update label="Week 29" description="July 13–17, 2026">
   **Artifacts call your MCP connectors**: a published artifact can pull live data and take actions through each viewer's own MCP connectors when they open the page, and this week also adds public sharing links, editor roles on Team and Enterprise, and artifacts created from Claude Tag sessions.

@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/agent-sdk/file-checkpointing
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: fc51e4e9cfb1d1566df201c1047b027fcec48ab5f0cf93af83f64dc2b4c1698c
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 563138e7ceb30729138b4f648d5244fb736bcba434ae14b72dc428e469e10d61
 ---
 
 Track file changes during agent sessions and restore files to any previous state
@@ -21,14 +21,6 @@ With checkpointing, you can:
 ## How checkpointing works
 
 When you enable file checkpointing, the SDK creates backups of files before modifying them through the Write, Edit, or NotebookEdit tools. User messages in the response stream include a checkpoint UUID that you can use as a restore point.
-
-Checkpoint works with these built-in tools that the agent uses to modify files:
-
-| Tool         | Description                                                        |
-| ------------ | ------------------------------------------------------------------ |
-| Write        | Creates a new file or overwrites an existing file with new content |
-| Edit         | Makes targeted edits to specific parts of an existing file         |
-| NotebookEdit | Modifies cells in Jupyter notebooks (`.ipynb` files)               |
 
 <Note>
   File rewinding restores files on disk to a previous state. It does not rewind the conversation itself. The conversation history and context remain intact after calling `rewindFiles()` (TypeScript) or `rewind_files()` (Python).
@@ -686,13 +678,6 @@ Before you begin, make sure you have the [Claude Agent SDK installed](/docs/en/a
       main();
       ```
     </CodeGroup>
-
-    This example demonstrates the complete checkpointing workflow:
-
-    1. **Enable checkpointing**: configure the SDK with `enable_file_checkpointing=True` and `permission_mode="acceptEdits"` to auto-approve file edits
-    2. **Capture checkpoint data**: as the agent runs, store the first user message UUID (your restore point) and the session ID
-    3. **Prompt for rewind**: after the agent finishes, check your utility file to see the doc comments, then decide if you want to undo the changes
-    4. **Resume and rewind**: if yes, resume the session with an empty prompt and call `rewind_files()` to restore the original file
   </Step>
 
   <Step title="Run the example">
@@ -751,7 +736,7 @@ If `message.uuid` is `undefined` or missing, you're not receiving checkpoint UUI
 
 **Solution**: Add `extra_args={"replay-user-messages": None}` (Python) or `extraArgs: { 'replay-user-messages': null }` (TypeScript) to your options.
 
-### "No file checkpoint found for message" error
+### "No file checkpoint found for this message" error
 
 This error occurs when the checkpoint data doesn't exist for the specified user message UUID.
 

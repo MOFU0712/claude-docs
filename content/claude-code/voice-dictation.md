@@ -1,16 +1,12 @@
 ---
 source_url: https://code.claude.com/docs/en/voice-dictation
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: a05c972a545ba42e63678bdd146721458424eeb6108bf244749b5db56786a3a7
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 44354c8fc924fa29b9e11011c738232396f4c72a6284275d0ae03020c745764f
 ---
 
 Speak your prompts in the Claude Code CLI with hold-to-record or tap-to-record voice dictation.
 
 Speak your prompts instead of typing them in the Claude Code CLI. Your speech is transcribed live into the prompt input, so you can mix voice and typing in the same message. Enable dictation with `/voice`, then either hold a key while you speak or tap once to start and again to send.
-
-<Note>
-  Tap mode requires Claude Code v2.1.116 or later. Check your version with `claude --version`.
-</Note>
 
 Dictation also works in [agent view](/docs/en/agent-view#peek-and-reply). Hold or tap your push-to-talk key while the dispatch input or a peek-panel reply is focused to dictate to a background session.
 
@@ -92,7 +88,7 @@ Enable tap mode with `/voice tap`. With the prompt input empty, tap `Space` to s
 
 Claude Code inserts the transcript and submits the prompt automatically when the transcript is at least three words long. Shorter transcripts are inserted but not submitted, so an accidental tap does not send a stray word.
 
-The three-word threshold counts words for languages written without spaces. As of v2.1.195, Japanese, Chinese, and Thai transcripts count individual words, so they auto-submit in tap mode and in hold mode with `autoSubmit`. Earlier versions counted a transcript with no spaces as one word and never submitted it automatically.
+The three-word threshold counts words for languages written without spaces. Japanese, Chinese, and Thai transcripts count individual words, so they auto-submit in tap mode and in hold mode with `autoSubmit`.
 
 The first tap only starts recording when the prompt input is empty, so you can still type spaces normally while composing a message. The second tap stops recording regardless of input contents. Recording also stops automatically after 15 seconds of silence or two minutes total.
 
@@ -174,6 +170,7 @@ Common issues when voice dictation does not activate or record:
 * **Tapping `Space` types a space instead of recording in tap mode**: the first tap only starts recording when the prompt input is empty. Clear the input first, or check that you are in tap mode by running `/voice tap`.
 * **`No audio detected from microphone`**: recording started but captured silence. Confirm the correct input device is set as the system default and that its input level is not muted or near zero. On Windows, open Settings → System → Sound → Input and select your microphone. On macOS, open System Settings → Sound → Input.
 * **`Voice connection failed`**: your recording never reached the transcription service because the connection failed. Check your network and try again. A recording that captures no audio reports `No audio detected from microphone` instead of this message. Before v2.1.200, a silent microphone could report a connection failure, which suggested a network problem when the actual issue was the input device.
+* **`Voice stream error: WebSocket upgrade rejected with HTTP <status>`**: a server refused your connection with the HTTP status shown, so this isn't a network outage. A status in the 400 range usually means a stale sign-in, or a proxy or bot-protection service answering in place of the transcription service. Run `/login` to refresh your sign-in, and check for a VPN or proxy on your network path if the status persists. If you're still recording when the rejection arrives, Claude Code retries a status outside the 400 range once before showing this message; it doesn't retry a status in the 400 range. In v2.1.229 through v2.1.231, native builds didn't show this message: Claude Code kept recording, the hold-mode footer still showed `listening…`, and it reported `Voice connection failed` after you stopped recording.
 * **`No speech detected`**: audio reached the transcription service but no words were recognized. Speak closer to the microphone, reduce background noise, and confirm your [dictation language](#change-the-dictation-language) matches the language you are speaking.
 * **Transcription is garbled or in the wrong language**: dictation defaults to English. If you are dictating in another language, set it in `/config` first. See [Change the dictation language](#change-the-dictation-language).
 

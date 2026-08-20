@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/security-guidance
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: aad8ccd15589e1516d7a11116e112e7df9e6657d09e04b8b017863a3aeb62eef
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 3ad1f4cdde1aa13f772f2b107db9f1019dbfec5c4aaa0283a6d074cbd05c273d
 ---
 
 Install the security-guidance plugin to have Claude review its own code changes for vulnerabilities and fix them in the same session.
@@ -38,7 +38,7 @@ The terminal install prompts for a scope. Choose user scope to write the plugin 
 If the install fails, match the message Claude Code reports:
 
 * `Marketplace "claude-plugins-official" not found`: add the marketplace with `/plugin marketplace add anthropics/claude-plugins-official`, then retry the install.
-* The plugin is not found in the marketplace: check the plugin name. Claude Code [refreshes a stale marketplace catalog and retries](/docs/en/discover-plugins#install-plugins) before reporting this, so if you turned off [marketplace auto-update](/docs/en/discover-plugins#configure-auto-updates), refresh manually with `/plugin marketplace update claude-plugins-official` and retry the install.
+* The plugin is [not found in the marketplace](/docs/en/discover-plugins#install-plugins): check the plugin name.
 
 Check the install summary. If it reports `Run /reload-plugins to activate.`, apply the pending change without a restart:
 
@@ -48,7 +48,7 @@ Check the install summary. If it reports `Run /reload-plugins to activate.`, app
 
 ### Enable in cloud sessions and shared repositories
 
-User-scoped plugins do not carry into [Claude Code on the web](/docs/en/claude-code-on-the-web), because those sessions run on Anthropic infrastructure rather than your machine. To enable the plugin there, or to turn it on for everyone who clones a repository, declare it in the project's checked-in settings:
+User-scoped plugins do not carry into [Claude Code on the web](/docs/en/claude-code-on-the-web), because those sessions run in the cloud rather than on your machine. To enable the plugin there, or to turn it on for everyone who clones a repository, declare it in the project's checked-in settings:
 
 ```json .claude/settings.json theme={null}
 {
@@ -171,7 +171,7 @@ The plugin loads all locations that exist and concatenates them, with a combined
 
 ## Usage cost
 
-The [per-edit pattern check](#on-each-file-edit) makes no model call and adds no cost. The [end-of-turn](#at-the-end-of-each-turn) and [commit](#on-each-commit-or-push-claude-makes) reviews each spend additional model usage that counts toward your [usage](/docs/en/costs) like any other Claude request. The commit review is agentic and may take several model turns per commit, capped at 20 reviews per rolling hour. Expect roughly one review call per turn that changes files and one deeper review per commit, both subject to the caps above.
+The [per-edit pattern check](#on-each-file-edit) makes no model call and adds no cost. The [end-of-turn](#at-the-end-of-each-turn) and [commit](#on-each-commit-or-push-claude-makes) reviews each spend additional model usage that counts toward your [usage](/docs/en/costs) like any other Claude request. The commit review is agentic and may take several model turns per commit. Expect roughly one review call per turn that changes files and one deeper review per commit, both subject to the caps above.
 
 Both model-backed reviews use Claude Opus 4.7 by default. Set `SECURITY_REVIEW_MODEL` to choose a different model for the end-of-turn review and `SG_AGENTIC_MODEL` for the commit review.
 
@@ -201,7 +201,7 @@ To remove it from your user scope:
 /plugin uninstall security-guidance@claude-plugins-official
 ```
 
-If the plugin was enabled through a project's `.claude/settings.json`, disabling it from `/plugin` writes an override to your `.claude/settings.local.json` rather than editing the checked-in file, so the plugin stays off for you while teammates are unaffected. The same dialog also offers to uninstall the plugin for everyone by removing it from the shared `.claude/settings.json`; that option requires Claude Code v2.1.203 or later. If it was enabled through [managed settings](/docs/en/admin-setup), only an administrator can disable it.
+If the plugin was enabled through a project's `.claude/settings.json`, disabling it from `/plugin` writes an override to your `.claude/settings.local.json` rather than editing the checked-in file, so the plugin stays off for you while teammates are unaffected. The same dialog also offers to uninstall the plugin for everyone by removing it from the shared `.claude/settings.json`. If it was enabled through [managed settings](/docs/en/admin-setup), only an administrator can disable it.
 
 ## How the plugin integrates with Claude Code
 
@@ -228,8 +228,6 @@ The plugin is one layer in a defense-in-depth approach. It catches issues earlie
 | On demand, deep scan   | [Claude Security plugin](/docs/en/claude-security)             | Multi-agent vulnerability scan of a repository or diff, with independently reviewed findings and patches |
 | On pull request        | [Code Review](/docs/en/code-review), Team and Enterprise plans | Multi-agent correctness and security review with full codebase context                                   |
 | In CI                  | Your existing static analysis and dependency scanners     | Language-specific rules, supply-chain checks, and policy enforcement the plugin does not attempt         |
-
-Each later stage catches what earlier ones miss. The plugin's value is reducing the volume that reaches them, not eliminating the need for them.
 
 To find security issues in code you already have, rather than in changes Claude is writing, ask Claude in a session to review a specific file or directory for vulnerabilities, or use the [Claude Security plugin](/docs/en/claude-security) for a deeper multi-agent scan of the whole repository; [`/security-review`](/docs/en/commands#all-commands) covers only the changes on your current branch. Either way, the review reads the source code in your checkout, not a running site or deployed service.
 

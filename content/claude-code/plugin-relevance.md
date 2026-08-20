@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/plugin-relevance
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: c0261513a62b212a62d7854c00c23dd5902f6542de99c5f3b9866ab778743029
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 5cddec4f50a61fbcdeed604ade07257c3085cf43ac1ef3da6428f313ac15d908
 ---
 
 Add a relevance block to marketplace plugin entries so Claude Code suggests them when a user's work matches.
@@ -76,7 +76,7 @@ A plugin with a `relevance` block but no matching signal behaves like any other 
 | `filesRead`    | array of strings | Glob patterns matched against the paths of files Claude has read this session, for example `["**/*.tf"]`. Forward-slash normalized and case-insensitive. Maximum 10 patterns of 256 characters each.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | `manifestDeps` | array of objects | Dependencies declared in package manifests Claude has read this session. Each entry is `{ "file": "...", "pattern": "..." }`, where `file` is a regular expression matched against the manifest file's path as recorded in session state, typically an absolute path, and `pattern` is a regular expression matched against that file's contents. Anchor `file` at the end, for example `[/\\\\]package\\.json$` in JSON-escaped form, because a start-anchored pattern never matches an absolute path. Paths are not separator-normalized for this signal, so Windows paths use backslashes. Manifest files larger than 512 KB are skipped. Both values are JavaScript `RegExp` source strings of at most 256 characters. `file` matches case-insensitively. `pattern` is case-sensitive. Maximum 10 entries. |
 
-The `cli`, `hosts`, `filesRead`, and `manifestDeps` signals need session history, so they can only match on the spinner tip and the Discover tab. Only `cwd` can match at session start. The `filesRead` and `manifestDeps` signals test the session's recorded file state, which also includes files Claude has written or edited and auto-loaded `CLAUDE.md` memory files.
+The `cli`, `hosts`, `filesRead`, and `manifestDeps` signals need session history, so they can only match on the spinner tip and the Discover tab. The `filesRead` and `manifestDeps` signals test the session's recorded file state, which also includes files Claude has written or edited and auto-loaded `CLAUDE.md` memory files.
 
 The following example uses `manifestDeps` to suggest a Stripe plugin once Claude has read a `package.json` that depends on `stripe`. The `file` pattern uses `[/\\\\]` so it matches both forward-slash and backslash path separators, and `\\.` so the dot is literal. In JSON, each backslash in the regular expression is written twice.
 
@@ -99,7 +99,7 @@ The following example uses `manifestDeps` to suggest a Stripe plugin once Claude
 ```
 
 <Note>
-  Claude Code ignores unknown fields under `relevance` and `relevance.signals` at load time, so older clients continue to load your marketplace. Run `claude plugin validate` against your marketplace directory, for example `claude plugin validate ./my-marketplace`, to surface them as warnings.
+  Claude Code ignores unknown fields under `relevance` and `relevance.signals` at load time, so older clients continue to load your marketplace.
 </Note>
 
 ## Enable suggestions in managed settings
@@ -132,8 +132,6 @@ The official marketplace is exempt from the source-declaration requirement becau
 }
 ```
 
-See the [settings reference](/docs/en/settings) for `pluginSuggestionMarketplaces` and [`extraKnownMarketplaces`](/docs/en/settings#extraknownmarketplaces) for full configuration details.
-
 ## What the user sees
 
 When a signal matches during a session, the spinner tip reads:
@@ -151,7 +149,7 @@ plugin suggestion: terraform-helpers@acme-corp-plugins · /plugin
 
 A given plugin's suggestion appears at most once every three sessions across the spinner tip and the session-start notification combined, and neither repeats once the plugin is installed. The session-start notification additionally stops appearing after the suggestion has been shown twice.
 
-In the `/plugin` Discover tab, the plugin is pinned above the other results with an annotation that names the matching signal, such as `suggested for this directory` or `suggested for terraform commands`. The Discover tab pins a given plugin once; later visits list it in normal order. The Discover-tab pin requires Claude Code v2.1.154 or later. On v2.1.152 only the spinner tip appears; the session-start notification is added in v2.1.153.
+In the `/plugin` Discover tab, the plugin is pinned above the other results with an annotation that names the matching signal, such as `suggested for this directory` or `suggested for terraform commands`. The Discover tab pins a given plugin once; later visits list it in normal order.
 
 ## Validate your marketplace
 

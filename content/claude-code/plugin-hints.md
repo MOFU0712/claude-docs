@@ -1,14 +1,14 @@
 ---
 source_url: https://code.claude.com/docs/en/plugin-hints
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: 64bf920028784b6c83ce602e01088463a2eead931fc4f5dc23cbe1d8051b0772
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 37f9a3fd61e66032ffea42d4674ee4ef707dde1d1b1b2e49f2612106f45a47dc
 ---
 
 Emit a one-line marker from your CLI so Claude Code prompts users to install your official plugin.
 
 If you maintain a CLI or SDK and have a plugin in the official Anthropic marketplace, your tool can prompt Claude Code users to install that plugin. Your CLI writes a one-line marker to stderr when it detects it is running inside Claude Code. Claude Code reads the marker, strips it from the output, and shows the user a one-time install prompt.
 
-Claude Code strips the hint line from the command output before sending it to the model, so the marker never appears in the conversation and is not counted toward token usage. The protocol requires no extra commands and does not change what your CLI prints for users outside Claude Code.
+The protocol requires no extra commands and does not change what your CLI prints for users outside Claude Code.
 
 This page is for CLI and SDK maintainers. If you are looking to install plugins, see [Discover and install plugins](/docs/en/discover-plugins).
 

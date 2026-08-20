@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/keybindings
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: 8310b0b11e97adfddd7fd923333eb99848b78cd5bb3d0f8a650a6d5875765a6c
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: a4c6803fb442644a5a78d4ec1c8e4676590a72a2fe2a474c988a2448f1f0f1da
 ---
 
 Customize keyboard shortcuts in Claude Code with a keybindings configuration file.
@@ -337,7 +337,7 @@ Actions available in the `Scroll` context when [fullscreen rendering](/docs/en/f
 | `scroll:fullPageUp`         | (unbound)            | Scroll up the full viewport height                                                                        |
 | `scroll:fullPageDown`       | (unbound)            | Scroll down the full viewport height                                                                      |
 | `selection:copy`            | Ctrl+Shift+C / Cmd+C | Copy the selected text to the clipboard                                                                   |
-| `selection:clear`           | (unbound)            | Clear the active text selection                                                                           |
+| `selection:clear`           | (unbound)            | Clear the active text selection. Requires v2.1.234 or later                                               |
 | `selection:extendLeft`      | Shift+Left           | Extend the active selection one column left                                                               |
 | `selection:extendRight`     | Shift+Right          | Extend the active selection one column right                                                              |
 | `selection:extendUp`        | Shift+Up             | Extend the active selection one row up. Scrolls the viewport when the selection reaches the top edge      |

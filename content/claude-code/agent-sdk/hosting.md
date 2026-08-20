@@ -1,14 +1,14 @@
 ---
 source_url: https://code.claude.com/docs/en/agent-sdk/hosting
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: ea35f2ac3937463ae12bde8eec4314d5edd794c561f0bb84be811ce8c3c6ba8b
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 3600ae936dfc3637115ab8aeb13e43532dee0bc24de8e5f3b38772ed36c0d19b
 ---
 
 Deploy the Agent SDK in production: subprocess architecture, session persistence, scaling, observability, and multi-tenant isolation for Docker, Kubernetes, and sandbox providers.
 
 The Agent SDK spawns and supervises a `claude` CLI subprocess that owns a shell, a working directory, and session files on disk. Hosting it is not like hosting a stateless API wrapper. Every running agent is a long-lived process tied to local state, which shapes how you allocate resources, persist sessions, and scale across tenants.
 
-This page covers self-hosting on your own infrastructure: understand [the subprocess model](#the-subprocess-model), [choose a session pattern](#choose-a-session-pattern), [provision the container](#provision-the-container), and [handle production concerns](#handle-production-concerns) like persistence, observability, auth, and multi-tenant isolation. For deployable Dockerfiles and Kubernetes manifests, see the [hosting cookbook](https://github.com/anthropics/claude-cookbooks/tree/main/claude_agent_sdk/hosting).
+This page covers self-hosting on your own infrastructure. For deployable Dockerfiles and Kubernetes manifests, see the [hosting cookbook](https://github.com/anthropics/claude-cookbooks/tree/main/claude_agent_sdk/hosting).
 
 If you do not need infrastructure control, custom isolation, or your own data plane, consider [Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview) instead: a hosted REST API where Anthropic runs the agent and the sandbox, so your application sends events and streams back results with no hosting infrastructure to operate.
 
@@ -212,8 +212,8 @@ Default local disk is lost on restart, scale-down, or a move to a different node
 Three things to know about how `SessionStore` behaves:
 
 * **Transcripts only**: `SessionStore` mirrors transcripts, not `CLAUDE.md` memory files or other working-directory artifacts. Mount a shared volume or sync those separately.
-* **Mirror, not replacement**: the subprocess writes to local disk first, and the store receives a copy of each batch. Local writes remain authoritative.
-* **`mirror_error` messages**: a batch the store rejects is sent up to three times in total, with a short backoff before each retry; a timed-out call isn't retried. If the batch still fails, the SDK drops it, emits a `{ type: "system", subtype: "mirror_error" }` message, and continues the query. Alert on these if store durability matters.
+* **Mirror, not replacement**: the subprocess writes to local disk first, and the SDK forwards a copy of each batch to the store. A fresh session's local transcript outlives the run; a run resumed from the store deletes its local copy at the end, so the store holds the only durable copy. See [Dual-write architecture](/docs/en/agent-sdk/session-storage#dual-write-architecture).
+* **`mirror_error` messages**: when the SDK can't deliver a batch to the store, it drops the batch, emits a `{ type: "system", subtype: "mirror_error" }` message, and continues the query. Alert on these if store durability matters. See [Mirror writes are best-effort](/docs/en/agent-sdk/session-storage#mirror-writes-are-best-effort) for the retry and timeout behavior.
 
 ### Observability
 
@@ -255,8 +255,6 @@ Measure the per-session ceiling by running a representative session to your targ
 
 Horizontal-scale routing depends on your pattern. For long-running sessions, where containers hold many sessions, run a pool of containers behind a load balancer and pin each session to one container using consistent hashing on `sessionId`. A pinned session keeps hitting the same container, and therefore the same running subprocess, until it is evicted or the container restarts.
 
-Large fanouts of concurrent [subagents](/docs/en/agent-sdk/subagents) from a single session can hit API rate limits. Break the work into smaller batches rather than issuing one wide dispatch.
-
 ### Cost
 
 Anthropic token cost typically dominates container infrastructure cost by an order of magnitude or more. A minimally provisioned container runs roughly \$0.05 per hour, while a single long agent session can spend dollars in tokens. See [Cost tracking](/docs/en/agent-sdk/cost-tracking) for per-session token accounting.
@@ -269,11 +267,11 @@ To isolate tenants inside a shared container:
 
 * Pass `settingSources: []` in TypeScript or `setting_sources=[]` in Python so no filesystem settings load.
 * Set `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1` in `env`. [Auto memory](/docs/en/memory#auto-memory) at `~/.claude/projects/<project>/memory/` loads into the system prompt regardless of `settingSources`. See [What settingSources does not control](/docs/en/agent-sdk/claude-code-features#what-settingsources-does-not-control) for the other inputs that load unconditionally.
-* Point `CLAUDE_CONFIG_DIR` at a per-tenant directory so tenants do not share the `~/.claude.json` global config.
+* Point `CLAUDE_CONFIG_DIR` at a per-tenant directory so tenants do not share the `~/.claude.json` global config. When each config directory serves one working directory, you can also set [`CLAUDE_CODE_PROJECT_DIR_NAME`](/docs/en/sessions#name-the-project-directory-yourself) in `env` to keep the transcript paths under it short. Requires TypeScript Agent SDK v0.3.234 or later.
 * Use a per-tenant working directory. Pass `cwd` explicitly on every `query()` call.
 * Apply per-tenant egress rules at your proxy, such as distinct outbound IPs, credentials, or domain allowlists, so a compromised tenant cannot exfiltrate data via another tenant's outbound policy.
 
-The example below applies the four SDK-level options together. Construct `tenantDir` and `configDir` so each tenant gets a path no other tenant can read. In TypeScript, `env` replaces the subprocess environment, so spread `...process.env` to keep inherited variables like `PATH` and `ANTHROPIC_API_KEY`. In Python, `env` is merged on top of the inherited environment.
+The example below applies the settings, auto memory, config directory, and working directory options together. Construct `tenantDir` and `configDir` so each tenant gets a path no other tenant can read. In TypeScript, `env` replaces the subprocess environment, so spread `...process.env` to keep inherited variables like `PATH` and `ANTHROPIC_API_KEY`. In Python, `env` is merged on top of the inherited environment.
 
 <CodeGroup>
   ```typescript TypeScript theme={null}

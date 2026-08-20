@@ -1,16 +1,14 @@
 ---
 source_url: https://code.claude.com/docs/en/agent-sdk/secure-deployment
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: 6402be5d1ec5bce2a39638793bfea3ebe2a1ed10bcb22a7fbb135d8f78bbe167
+fetched_at: '2026-08-20T06:51:05+00:00'
+content_hash: 54362465b1b92eb5da04d6d81dd83d1f6fd294ad98a97fc70382ab6a582399f9
 ---
 
 A guide to securing Claude Code and Agent SDK deployments with isolation, credential management, and network controls
 
-Claude Code and the Agent SDK are powerful tools that can execute code, access files, and interact with external services on your behalf. Like any tool with these capabilities, deploying them thoughtfully ensures you get the benefits while maintaining appropriate controls.
+Claude Code and the Agent SDK are powerful tools that can execute code, access files, and interact with external services on your behalf.
 
 Unlike traditional software that follows predetermined code paths, these tools generate their actions dynamically based on context and goals. This flexibility is what makes them useful, but it also means their behavior can be influenced by the content they process: files, webpages, or user input. This is sometimes called prompt injection. For example, if a repository's README contains unusual instructions, Claude Code might incorporate those into its actions in ways the operator didn't anticipate. This guide covers practical ways to reduce this risk.
-
-The good news is that securing an agent deployment doesn't require exotic infrastructure. The same principles that apply to running any semi-trusted code apply here: isolation, least privilege, and defense in depth. Claude Code includes several security features that help with common concerns, and this guide walks through these along with additional hardening options for those who need them.
 
 Not every deployment needs maximum security. A developer running Claude Code on their laptop has different requirements than a company processing customer data in a multi-tenant environment. This guide presents options ranging from Claude Code's built-in security features to hardened production architectures, so you can choose what fits your situation.
 
@@ -25,7 +23,7 @@ Defense in depth is still good practice though. For example, if an agent process
 Claude Code includes several security features that address common concerns. See the [security documentation](/docs/en/security) for full details.
 
 * **Permissions system**: Every tool and bash command can be configured to allow, block, or prompt the user for approval. Use glob patterns to create rules like "allow all npm commands" or "block any command with sudo". Organizations can set policies that apply across all users. See [permissions](/docs/en/permissions).
-* **Command parsing for permissions**: Before executing bash commands, Claude Code parses them into an AST and matches the result against your permission rules. Commands that cannot be parsed cleanly, or that do not match an allow rule, require explicit approval. A small set of constructs such as `eval` always require approval regardless of allow rules. This is a permission gate, not a sandbox; it does not infer whether a command is dangerous from its target path or effects.
+* **Command parsing for permissions**: Before executing bash commands, Claude Code parses them into an AST and matches the result against your permission rules. Commands that cannot be parsed cleanly, or that do not match an allow rule, require explicit approval. A small set of constructs such as `eval` always require approval regardless of allow rules. This is a permission gate, not a sandbox; apart from built-in safety checks such as the [critical-path check](/docs/en/permission-modes#critical-paths) on `rm` and `rmdir` and the [protected paths](/docs/en/permission-modes#protected-paths) list, it does not infer whether a command is dangerous from its target path or effects.
 * **Web search summarization**: Search results are summarized rather than passing raw content directly into the context, reducing the risk of prompt injection from malicious web content.
 * **Sandbox mode**: Bash commands can run in a sandboxed environment that restricts filesystem and network access. See the [sandboxing documentation](/docs/en/sandboxing) for details.
 
@@ -80,7 +78,7 @@ Different isolation technologies offer different tradeoffs between security stre
 
 For lightweight isolation without containers, [sandbox-runtime](https://github.com/anthropic-experimental/sandbox-runtime) enforces filesystem and network restrictions at the OS level.
 
-The main advantage is simplicity: no Docker configuration, container images, or networking setup required. The proxy and filesystem restrictions are built in. You provide a settings file specifying allowed domains and paths.
+The main advantage is simplicity: no Docker configuration, container images, or networking setup required. The proxy and filesystem restrictions are built in.
 
 **How it works:**
 
