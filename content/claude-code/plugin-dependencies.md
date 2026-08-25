@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/plugin-dependencies
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: b0e9525ab8e3098f3853598c99b4c0cb29093f083924035cdcbc0433cd30729f
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: 2670391f0abbd97c39ebc353f0f7a1c6f44c715bb20d0dfdaa0e28e88c0664e6
 ---
 
 Declare version constraints on plugin dependencies, and bundle a curated plugin set behind one install.
@@ -74,7 +74,7 @@ To add a tool to the standard set later, publish a new `backend-standard` versio
 * Enable auto-update for the marketplace in `/plugin`. The next auto-update moves the bundle to the new version and installs any dependencies it adds.
 * Run `claude plugin update backend-standard`, then `/reload-plugins` to install the newly added dependencies.
 
-To roll bundles out across an organization, add the bundle plugin to `enabledPlugins` in [managed settings](/docs/en/settings#enabledplugins).
+To roll bundles out across an organization, add the bundle plugin to `enabledPlugins` in [managed settings](/docs/en/settings-reference#enabledplugins).
 
 ## Depend on a plugin from another marketplace
 

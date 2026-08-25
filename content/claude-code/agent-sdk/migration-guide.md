@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/agent-sdk/migration-guide
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: a192ac5fed440d0a99419435cc914ee8aade5c2b8698014016085be69d6bd3e5
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: cacbcad08619f767e6ece11451176a6f18800e7afeb987ff98209b741650fbff
 ---
 
 Guide for migrating the Claude Code TypeScript and Python SDKs to the Claude Agent SDK
@@ -12,10 +12,10 @@ The Claude Code SDK has been renamed to the **Claude Agent SDK** and its documen
 
 ## What's Changed
 
-| Aspect                     | Old                         | New                                                                      |
-| :------------------------- | :-------------------------- | :----------------------------------------------------------------------- |
-| **Package Name (TS/JS)**   | `@anthropic-ai/claude-code` | `@anthropic-ai/claude-agent-sdk`                                         |
-| **Python Package**         | `claude-code-sdk`           | `claude-agent-sdk`                                                       |
+| Aspect                     | Old                         | New                                                                           |
+| :------------------------- | :-------------------------- | :---------------------------------------------------------------------------- |
+| **Package Name (TS/JS)**   | `@anthropic-ai/claude-code` | `@anthropic-ai/claude-agent-sdk`                                              |
+| **Python Package**         | `claude-code-sdk`           | `claude-agent-sdk`                                                            |
 | **Documentation Location** | Claude Code docs            | Claude Code docs → dedicated [Agent SDK](/docs/en/agent-sdk/overview) section |
 
 ## Migration Steps

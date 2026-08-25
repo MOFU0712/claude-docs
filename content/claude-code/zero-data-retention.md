@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/zero-data-retention
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: d54f2b6672fa5992aa8611b7f3eed857b2a26069fa6d3829ad0d12ea34a8ec55
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: b2691b6e12d6bddcb2416857865c23395bdce124403a2f4aee70ac28c8150f60
 ---
 
 Learn about Zero Data Retention (ZDR) for Claude Code, available to qualified accounts on Claude for Enterprise, including scope, disabled features, and how to request enablement.
@@ -41,24 +41,24 @@ ZDR covers model inference calls made through Claude Code on Claude for Enterpri
 
 ZDR does not extend to the following, even for organizations with ZDR enabled. These features follow [standard data retention policies](/docs/en/data-usage#data-retention):
 
-| Feature                  | Details                                                                                                                                                                                                                                                     |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Chat on claude.ai        | Chat conversations through the Claude for Enterprise web interface are not covered by ZDR.                                                                                                                                                                  |
-| Cowork                   | Cowork sessions are not covered by ZDR.                                                                                                                                                                                                                     |
+| Feature                  | Details                                                                                                                                                                                                                                                          |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Chat on claude.ai        | Chat conversations through the Claude for Enterprise web interface are not covered by ZDR.                                                                                                                                                                       |
+| Cowork                   | Cowork sessions are not covered by ZDR.                                                                                                                                                                                                                          |
 | Claude Code Analytics    | Does not store prompts or model responses, but collects productivity metadata such as account emails and usage statistics. Contribution metrics are not available for ZDR organizations; the [analytics dashboard](/docs/en/analytics) shows usage metrics only. |
-| User and seat management | Administrative data such as account emails and seat assignments is retained under standard policies.                                                                                                                                                        |
-| Third-party integrations | Data processed by third-party tools, MCP servers, or other external integrations is not covered by ZDR. Review those services' data handling practices independently.                                                                                       |
+| User and seat management | Administrative data such as account emails and seat assignments is retained under standard policies.                                                                                                                                                             |
+| Third-party integrations | Data processed by third-party tools, MCP servers, or other external integrations is not covered by ZDR. Review those services' data handling practices independently.                                                                                            |
 
 ## Features disabled under ZDR
 
 When ZDR is enabled for a Claude Code organization on Claude for Enterprise, certain features that require storing prompts or completions are automatically disabled at the backend level:
 
-| Feature                                                           | Reason                                                                                      |
-| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Feature                                                                | Reason                                                                                      |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | [Claude Code on the Web](/docs/en/claude-code-on-the-web)              | Requires server-side storage of conversation history.                                       |
 | [Cloud sessions](/docs/en/desktop#cloud-sessions) from the Desktop app | Requires persistent session data that includes prompts and completions.                     |
 | [Artifacts](/docs/en/artifacts)                                        | Requires storing published page content on Anthropic-operated infrastructure.               |
-| Feedback submission (`/feedback`, `/bug`, `/share`)               | Submitting feedback sends conversation data to Anthropic.                                   |
+| Feedback submission (`/feedback`, `/bug`, `/share`)                    | Submitting feedback sends conversation data to Anthropic.                                   |
 | [Remote Control](/docs/en/remote-control)                              | Stores the session transcript on Anthropic servers to sync the conversation across devices. |
 
 These features are blocked in the backend regardless of client-side display. If you see a disabled feature in the Claude Code terminal during startup, attempting to use it returns an error indicating the organization's policies do not allow that action.

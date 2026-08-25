@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/computer-use
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: 4ba64d6af896b47441e89c213d2436031ae2b9361507a15c3c4e05a14a50d0d8
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: 4f8261f15beb1d93162d27ce2825b6929b2c9816f2074b0fc9034e0281bfb9c9
 ---
 
 Enable computer use in the Claude Code CLI so Claude can open apps, click, type, and see your screen on macOS. Test native apps, debug visual issues, and automate GUI-only tools without leaving your terminal.
@@ -98,7 +98,7 @@ Understanding the flow helps you anticipate what Claude will do and how to inter
 
 ### One session at a time
 
-Only one session at a time can use your computer. Claude Code takes a machine-wide lock when a session performs its first computer use action. Claude Code releases it when that session exits, not when the task finishes. If another session is already using your computer, Claude Code rejects new attempts and tells you which session holds the lock. Exit that session first.
+Only one session at a time can use your computer. A session takes a machine-wide lock at its first computer use action and releases it when the session exits, not when the task finishes. A second session's computer use fails with an error naming the session that holds the lock. Exit that session first.
 
 ### Apps are hidden while Claude works
 

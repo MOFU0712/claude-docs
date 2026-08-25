@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/slack
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: b72ebd961c5d6d23ea4dcf47b5d27d2740cb076f68b10b55266dff0e364dd836
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: 4140afa2668c003f9eec9b4a1d39646e21f69c8a842cb1f60c559d311b5a75e3
 ---
 
 Delegate coding tasks directly from your Slack workspace. Anthropic is retiring this earlier version for Team and Enterprise workspaces in favor of Claude Tag; it remains the setup path on Pro and Max plans.
@@ -31,7 +31,7 @@ Before using Claude Code in Slack, ensure you have the following:
 | Requirement            | Details                                                                                           |
 | :--------------------- | :------------------------------------------------------------------------------------------------ |
 | Claude Plan            | Pro, Max, Team, or Enterprise with Claude Code access (premium seats or Chat + Claude Code seats) |
-| Claude Code on the web | Access to [Claude Code on the web](/docs/en/claude-code-on-the-web) must be enabled                    |
+| Claude Code on the web | Access to [Claude Code on the web](/docs/en/claude-code-on-the-web) must be enabled               |
 | GitHub Account         | Connected to Claude Code on the web with at least one repository authenticated                    |
 | Slack Authentication   | Your Slack account linked to your Claude account via the Claude app                               |
 
@@ -81,7 +81,7 @@ Before using Claude Code in Slack, ensure you have the following:
 
 ### Automatic detection
 
-When you mention @Claude in a Slack channel or thread, Claude automatically analyzes your message to determine if it's a coding task. If Claude detects coding intent, it will route your request to Claude Code on the web instead of responding as a regular chat assistant.
+In Code + Chat routing mode, when you mention @Claude in a Slack channel or thread, Claude automatically detects whether your message is a coding task. Coding tasks go to Claude Code on the web. Anything else gets a regular chat reply. In Code only mode, every @mention goes to Claude Code.
 
 You can also explicitly tell Claude to handle a request as a coding task, even if it doesn't automatically detect it.
 
@@ -189,12 +189,12 @@ This error means your Claude account has no cloud environment yet, not that an a
 
 This entry applies to workspaces using [Claude Tag](https://claude.com/docs/claude-tag/overview), where Claude works in channels as your organization's shared identity, not as any member's account. If you created the channel's cloud environment at [claude.ai/code](https://claude.ai/code), it belongs to your personal account, and Claude can't start channel sessions in a personal environment. Claude Code fails the session immediately, and retrying doesn't help.
 
-If you're an Owner or admin, recreate the environment as an [organization-shared environment](/docs/en/cloud-environments#organization-shared-environments) from the **Cloud environments** page in [admin settings](https://claude.ai/admin-settings). You can apply it in two ways:
+If you're an Owner, recreate the environment as an [organization-shared environment](/docs/en/cloud-environments#organization-shared-environments) from the **Cloud environments** page in [admin settings](https://claude.ai/admin-settings). You can apply it in two ways:
 
 * Set it as the organization default at [claude.ai/admin-settings/claude-code](https://claude.ai/admin-settings/claude-code).
 * [Set it on the channel](https://claude.com/docs/claude-tag/admins/troubleshooting#channel-sessions-use-the-wrong-environment-or-can%E2%80%99t-find-one) in the Claude Tag admin settings.
 
-If you're not an Owner or admin, send this entry to one.
+If you're not an Owner, send this entry to one.
 
 ### Repository not showing
 
@@ -222,7 +222,7 @@ If you're not an Owner or admin, send this entry to one.
 ## Related resources
 
 <CardGroup>
-  <Card title="Claude Code on the web" icon="globe" href="/en/claude-code-on-the-web">
+  <Card title="Claude Code on the web" icon="globe" href="/docs/en/claude-code-on-the-web">
     Learn more about Claude Code on the web
   </Card>
 

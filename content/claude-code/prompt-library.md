@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/prompt-library
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: edd0e140a455ea66a6a91da6f06ebf22b64724dc4c9ea04daa7ade8c4ddd68c6
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: 527a311f7d0d3939c136646f7df7a73543cca85b7a63e27446b4f0bddd4f96ae
 ---
 
 Copy-paste prompts for Claude Code, tagged by task and role.
@@ -22,7 +22,7 @@ The prompts above share a few patterns. Recognizing them helps you adapt any pro
 add rate limiting to the public API and make sure existing tests still pass
 ```
 
-**Give it a way to check its own work.** Ask for run, test, compare, or verify in the same prompt so Claude iterates instead of stopping after one attempt.
+**Give it a way to check its own work.** Ask for run, test, compare, or verify in the same prompt so Claude iterates instead of stopping after one attempt. To check the finished change against the running app, run [`/verify`](/docs/en/skills#run-and-verify-your-app).
 
 ```text wrap theme={null}
 write the migration, run it against the dev database, and confirm the schema matches

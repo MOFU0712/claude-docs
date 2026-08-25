@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/setup
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: d82c4a795fe9624081c191f0da0bca190a177661cf1798983963bc3b21e5bf82
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: fa9e18969d27b00950104d17412c6ea3a572c8b04315cf9c803b1ad229544d1b
 ---
 
 System requirements, platform-specific installation, version management, and uninstallation for Claude Code.
@@ -108,10 +108,10 @@ If you encounter any issues during installation, see [Troubleshoot installation 
 You can run Claude Code natively on Windows or inside WSL. Pick based on where your projects are located and which features you need:
 
 | Option         | Requires                                                               | [Sandboxing](/docs/en/sandboxing) | When to use                                     |
-| -------------- | ---------------------------------------------------------------------- | ---------------------------- | ----------------------------------------------- |
-| Native Windows | None; [Git for Windows](https://git-scm.com/downloads/win) is optional | Not supported                | Windows-native projects and tools               |
-| WSL 2          | WSL 2 enabled                                                          | Supported                    | Linux toolchains or sandboxed command execution |
-| WSL 1          | WSL 1 enabled                                                          | Not supported                | If WSL 2 is unavailable                         |
+| -------------- | ---------------------------------------------------------------------- | --------------------------------- | ----------------------------------------------- |
+| Native Windows | None; [Git for Windows](https://git-scm.com/downloads/win) is optional | Not supported                     | Windows-native projects and tools               |
+| WSL 2          | WSL 2 enabled                                                          | Supported                         | Linux toolchains or sandboxed command execution |
+| WSL 1          | WSL 1 enabled                                                          | Not supported                     | If WSL 2 is unavailable                         |
 
 **Option 1: Native Windows**
 
@@ -132,7 +132,7 @@ After installation, launch `claude` from any terminal.
   }
   ```
 
-When Git for Windows is installed, the PowerShell tool is rolling out progressively as an additional option alongside Bash. Set `CLAUDE_CODE_USE_POWERSHELL_TOOL=1` to opt in or `0` to opt out. See [PowerShell tool](/docs/en/tools-reference#powershell-tool) for setup and limitations.
+When Git for Windows is installed, the PowerShell tool is available alongside Bash: on by default for claude.ai and Console accounts, and enabled with `CLAUDE_CODE_USE_POWERSHELL_TOOL=1` in Amazon Bedrock, Google Cloud's Agent Platform, and Microsoft Foundry sessions. Set it to `0` to turn the tool off. See [PowerShell tool](/docs/en/tools-reference#powershell-tool) for setup and limitations.
 
 **Option 2: WSL**
 
@@ -156,7 +156,7 @@ echo "https://dl-cdn.alpinelinux.org/alpine/v3.22/community" >> /etc/apk/reposit
 
 Run `apk update` to refresh the package index, and retry the `apk add` command.
 
-Then set `USE_BUILTIN_RIPGREP` to `0` in your [`settings.json`](/docs/en/settings#available-settings) file:
+Then set `USE_BUILTIN_RIPGREP` to `0` in your [`settings.json`](/docs/en/settings-reference#all-settings) file:
 
 ```json theme={null}
 {
@@ -237,7 +237,7 @@ Configure this via `/config` → **Auto-update channel**, or add it to your [set
 }
 ```
 
-For enterprise deployments, you can enforce a consistent release channel across your organization using [managed settings](/docs/en/permissions#managed-settings).
+For enterprise deployments, you can enforce a consistent release channel across your organization using [managed settings](/docs/en/managed-settings).
 
 Homebrew installations choose a channel by cask name instead of this setting: `claude-code` tracks stable and `claude-code@latest` tracks latest.
 
@@ -256,13 +256,13 @@ Add it to your [settings.json file](/docs/en/settings) to pin a floor explicitly
 }
 ```
 
-In [managed settings](/docs/en/permissions#managed-settings), this enforces an organization-wide minimum that user and project settings cannot override.
+In [managed settings](/docs/en/managed-settings), this enforces an organization-wide minimum that user and project settings cannot override.
 
-The `minimumVersion` pin only constrains updates. To make Claude Code refuse to start outside a version range, use the managed settings `requiredMinimumVersion` and `requiredMaximumVersion` instead. Updates also respect the `requiredMaximumVersion` ceiling. See [available settings](/docs/en/settings#available-settings).
+The `minimumVersion` pin only constrains updates. To make Claude Code refuse to start outside a version range, use the managed settings `requiredMinimumVersion` and `requiredMaximumVersion` instead. Updates also respect the `requiredMaximumVersion` ceiling. See [`requiredMinimumVersion`](/docs/en/settings-reference#requiredminimumversion) and [`requiredMaximumVersion`](/docs/en/settings-reference#requiredmaximumversion).
 
 ### Disable auto-updates
 
-Set `DISABLE_AUTOUPDATER` to `"1"` in the `env` key of your [`settings.json`](/docs/en/settings#available-settings) file:
+Set `DISABLE_AUTOUPDATER` to `"1"` in the `env` key of your [`settings.json`](/docs/en/settings-reference#all-settings) file:
 
 ```json theme={null}
 {

@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/desktop-scheduled-tasks
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: 4502565feccb00eabb2fafd8ec9de5439657017ae49c189eedbf9838b6778c6f
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: 3d82220d288be636bbb53f2cdc0ac90c7ba11e43fa7fd67892efcf7ec4f37425
 ---
 
 Set up scheduled tasks in Claude Code Desktop to run Claude automatically on a recurring basis for daily code reviews, dependency audits, or morning briefings.
@@ -14,17 +14,17 @@ The Desktop app's **Routines** page lets you create both local scheduled tasks a
 
 Claude Code offers three ways to schedule recurring or one-off work:
 
-|                            | [Cloud](/docs/en/routines)               | [Desktop](/docs/en/desktop-scheduled-tasks) | [`/loop`](/docs/en/scheduled-tasks)      |
-| :------------------------- | :---------------------------------- | :------------------------------------- | :---------------------------------- |
-| Runs on                    | Cloud, Anthropic-managed by default | Your machine                           | Your machine                        |
-| Requires machine on        | No                                  | Yes                                    | Yes                                 |
-| Requires open session      | No                                  | No                                     | Yes                                 |
-| Persistent across restarts | Yes                                 | Yes                                    | Restored on `--resume` if unexpired |
-| Access to local files      | No (fresh clone)                    | Yes                                    | Yes                                 |
+|                            | [Cloud](/docs/en/routines)          | [Desktop](/docs/en/desktop-scheduled-tasks) | [`/loop`](/docs/en/scheduled-tasks) |
+| :------------------------- | :---------------------------------- | :------------------------------------------ | :---------------------------------- |
+| Runs on                    | Cloud, Anthropic-managed by default | Your machine                                | Your machine                        |
+| Requires machine on        | No                                  | Yes                                         | Yes                                 |
+| Requires open session      | No                                  | No                                          | Yes                                 |
+| Persistent across restarts | Yes                                 | Yes                                         | Restored on `--resume` if unexpired |
+| Access to local files      | No (fresh clone)                    | Yes                                         | Yes                                 |
 | MCP servers                | Connectors configured per task      | [Config files](/docs/en/mcp) and connectors | Inherits from session               |
-| Permission prompts         | No (runs autonomously)              | Configurable per task                  | Inherits from session               |
-| Customizable schedule      | Via `/schedule` in the CLI          | Yes                                    | Yes                                 |
-| Minimum interval           | 1 hour                              | 1 minute                               | 1 minute                            |
+| Permission prompts         | No (runs autonomously)              | Configurable per task                       | Inherits from session               |
+| Customizable schedule      | Via `/schedule` in the CLI          | Yes                                         | Yes                                 |
+| Minimum interval           | 1 hour                              | 1 minute                                    | 1 minute                            |
 
 <Tip>
   Use **cloud tasks** for work that should run reliably without your machine. Use **Desktop tasks** when you need access to local files and tools. Use **`/loop`** for quick polling during a session.
@@ -36,7 +36,7 @@ Claude Code offers three ways to schedule recurring or one-off work:
 
 ## Create a scheduled task
 
-Click **Routines** in the sidebar, then click **New routine** and choose **Local**. Configure these fields:
+On Claude Desktop before 1.1.5368, local scheduled tasks aren't available. In the [**Code** tab](/docs/en/desktop), click **Routines** in the sidebar, then click **New routine** and choose **Local**. If **Routines** is missing from the sidebar, update the Desktop app, and check whether [routines are turned off for your organization](/docs/en/routines#routines-are-disabled-by-your-organizations-policy). Configure these fields:
 
 | Field        | Description                                                                                                                                                                                                                                                                    |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -85,7 +85,7 @@ Connector tools [your organization set to `ask`](/docs/en/mcp#organization-contr
 
 ## Manage scheduled tasks
 
-Click a task in the **Routines** list to open its detail page. From here you can:
+In the **Code** tab, click a task in the **Routines** list to open its detail page. From here you can:
 
 * **Run now**: start the task immediately without waiting for the next scheduled time
 * **Status**: toggle between Active and Paused to pause or resume scheduled runs without deleting the task

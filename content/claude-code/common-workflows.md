@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/common-workflows
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: 9d979a4f797e5b5368a8b197a27d7a6fddb5c32280207050d5a55fa2e3a62531
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: bb845d0ba7db860da877565f1bbb9edc1fb2617e43a1222d476e0cb2112dfdb5
 ---
 
 Step-by-step guides for exploring codebases, fixing bugs, refactoring, testing, and other everyday tasks with Claude Code.
@@ -243,7 +243,7 @@ You can create pull requests by asking Claude directly ("create a pr for my chan
   </Step>
 </Steps>
 
-When you create a PR using `gh pr create`, the session is automatically linked to that PR. To find it later, run `claude --from-pr 1234` with your own PR number, which opens the session picker filtered to sessions linked to that PR, or paste the PR URL into the [`/resume` picker](/docs/en/sessions#use-the-session-picker) search.
+To find the session later, run `claude --from-pr 1234` with your own PR number, which opens the session picker filtered to sessions linked to that PR, or paste the PR URL into the [`/resume` picker](/docs/en/sessions#use-the-session-picker) search. Claude Code links the session to the PR when Claude creates it with `gh pr create` or `glab mr create`, and when Claude [works on an existing PR](/docs/en/agent-view#pull-request-status).
 
 <Tip>
   Review Claude's generated PR before submitting and ask Claude to highlight potential risks or considerations.
@@ -306,7 +306,7 @@ Suppose you need to work with images in your codebase, and you want Claude's hel
     You can use any of these methods:
 
     1. Drag and drop an image into the Claude Code window
-    2. Copy an image and paste it into the CLI with Ctrl+V. On macOS, Cmd+V also works in iTerm2.
+    2. Copy an image and paste it into the CLI with `Ctrl+V`, or with [`Alt+V` on Windows and WSL](/docs/en/interactive-mode#general-controls)
     3. Provide an image path to Claude. E.g., "Analyze this image: /path/to/your/image.png"
   </Step>
 
@@ -374,8 +374,6 @@ Use @ to quickly include files or directories without waiting for Claude to read
     ```text wrap theme={null}
     What's the structure of @src/components?
     ```
-
-    This provides a directory listing with file information.
   </Step>
 
   <Step title="Reference MCP resources">
@@ -405,8 +403,8 @@ Suppose you want Claude to handle a task automatically on a recurring basis, lik
 
 Pick a scheduling option based on where you want the task to run:
 
-| Option                                                 | Where it runs                       | Best for                                                                                                                                                                                                 |
-| :----------------------------------------------------- | :---------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Option                                                      | Where it runs                       | Best for                                                                                                                                                                                                 |
+| :---------------------------------------------------------- | :---------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Routines](/docs/en/routines)                               | Cloud, Anthropic-managed by default | Tasks that should run even when your computer is off. Can also trigger on API calls or GitHub events in addition to a schedule. Configure at [claude.ai/code/routines](https://claude.ai/code/routines). |
 | [Desktop scheduled tasks](/docs/en/desktop-scheduled-tasks) | Your machine, via the desktop app   | Tasks that need direct access to local files, tools, or uncommitted changes.                                                                                                                             |
 | [GitHub Actions](/docs/en/github-actions)                   | Your CI pipeline                    | Tasks tied to repo events like opened PRs, or cron schedules that should live alongside your workflow config.                                                                                            |
@@ -515,19 +513,19 @@ See [Non-interactive mode](/docs/en/headless) for output formats, permission fla
 ## Next steps
 
 <CardGroup>
-  <Card title="Best practices" icon="lightbulb" href="/en/best-practices">
+  <Card title="Best practices" icon="lightbulb" href="/docs/en/best-practices">
     Patterns for getting the most out of Claude Code
   </Card>
 
-  <Card title="Manage sessions" icon="rotate-left" href="/en/sessions">
+  <Card title="Manage sessions" icon="rotate-left" href="/docs/en/sessions">
     Resume, name, and branch conversations
   </Card>
 
-  <Card title="Worktrees" icon="code-branch" href="/en/worktrees">
+  <Card title="Worktrees" icon="code-branch" href="/docs/en/worktrees">
     Run isolated parallel sessions
   </Card>
 
-  <Card title="Extend Claude Code" icon="puzzle-piece" href="/en/features-overview">
+  <Card title="Extend Claude Code" icon="puzzle-piece" href="/docs/en/features-overview">
     Add skills, hooks, MCP, subagents, and plugins
   </Card>
 </CardGroup>

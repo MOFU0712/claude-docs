@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/web-quickstart
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: 6ee06fd1c332985f70d10fb17719668d38614dad1027d2177b0e86f4fe6ca8f3
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: e7cf3b7e513694d5b64154c7270999f8dbdab8e6f372f13cd6f4fb8e8696b84a
 ---
 
 Run Claude Code in the cloud from your browser or phone. Connect a GitHub repository, submit a task, and review the PR without local setup.
@@ -38,15 +38,15 @@ The session doesn't close when the branch is pushed. PR creation and further edi
 
 Claude Code behaves the same everywhere. What changes is where code executes and whether your local config is available. The Desktop app offers both local and cloud sessions, so its answers below depend on which you choose:
 
-|                                              | On the web                                                                                                     | Remote Control             | Terminal CLI           | Desktop app                 |
-| :------------------------------------------- | :------------------------------------------------------------------------------------------------------------- | :------------------------- | :--------------------- | :-------------------------- |
-| **Code runs on**                             | Cloud VM, Anthropic-managed by default                                                                         | Your machine               | Your machine           | Your machine or cloud VM    |
-| **You chat from**                            | claude.ai or mobile app                                                                                        | claude.ai or mobile app    | Your terminal          | The Desktop UI              |
-| **Uses your local config**                   | No, repo only                                                                                                  | Yes                        | Yes                    | Yes for local, no for cloud |
-| **Requires GitHub**                          | Yes, or [bundle a local repo](/docs/en/claude-code-on-the-web#send-local-repositories-without-github) via `--cloud` | No                         | No                     | Only for cloud sessions     |
-| **Keeps running if you disconnect**          | Yes                                                                                                            | While terminal stays open  | No                     | Depends on session type     |
-| **[Permission modes](/docs/en/permission-modes)** | Accept edits, Plan, Auto                                                                                       | Manual, Accept edits, Plan | All modes              | Depends on session type     |
-| **Network access**                           | Configurable per environment                                                                                   | Your machine's network     | Your machine's network | Depends on session type     |
+|                                                   | On the web                                                                                                          | Remote Control             | Terminal CLI           | Desktop app                 |
+| :------------------------------------------------ | :------------------------------------------------------------------------------------------------------------------ | :------------------------- | :--------------------- | :-------------------------- |
+| **Code runs on**                                  | Cloud VM, Anthropic-managed by default                                                                              | Your machine               | Your machine           | Your machine or cloud VM    |
+| **You chat from**                                 | claude.ai or mobile app                                                                                             | claude.ai or mobile app    | Your terminal          | The Desktop UI              |
+| **Uses your local config**                        | No, repo only                                                                                                       | Yes                        | Yes                    | Yes for local, no for cloud |
+| **Requires GitHub**                               | Yes, or [bundle a local repo](/docs/en/claude-code-on-the-web#send-local-repositories-without-github) via `--cloud` | No                         | No                     | Only for cloud sessions     |
+| **Keeps running if you disconnect**               | Yes                                                                                                                 | While terminal stays open  | No                     | Depends on session type     |
+| **[Permission modes](/docs/en/permission-modes)** | Accept edits, Plan, Auto                                                                                            | Manual, Accept edits, Plan | All modes              | Depends on session type     |
+| **Network access**                                | Configurable per environment                                                                                        | Your machine's network     | Your machine's network | Depends on session type     |
 
 See the [terminal quickstart](/docs/en/quickstart), [Desktop app](/docs/en/desktop), or [Remote Control](/docs/en/remote-control) docs to set those up.
 
@@ -64,7 +64,7 @@ Setup is a one-time process. If you already use the GitHub CLI, you can [do this
   </Step>
 
   <Step title="Confirm your Default environment">
-    When you finish connecting GitHub, onboarding creates a [cloud environment](/docs/en/cloud-environments) named **Default** for you; if onboarding shows an environment form instead, keep its defaults to create the same **Default** environment. The environment controls what network access Claude has during sessions and what runs when a new session is created. **Default** uses [`Trusted` network access](/docs/en/cloud-environments#access-levels): sessions reach [common package registries](/docs/en/cloud-environments#default-allowed-domains) and other allowlisted domains, and nothing else through the session's network. See [Installed tools](/docs/en/cloud-environments#installed-tools) for what's available without any configuration.
+    If you don't have an environment yet, onboarding creates a [cloud environment](/docs/en/cloud-environments) named **Default** for you when you finish connecting GitHub; if onboarding shows an environment form instead, keep its defaults to create the same **Default** environment. The environment controls what network access Claude has during sessions and what runs when a new session is created. **Default** uses [`Trusted` network access](/docs/en/cloud-environments#access-levels): sessions reach [common package registries](/docs/en/cloud-environments#default-allowed-domains) and other allowlisted domains, and nothing else through the session's network. See [Installed tools](/docs/en/cloud-environments#installed-tools) for what's available without any configuration.
 
     For a first project, the **Default** environment works as is. To change its network access, add environment variables, or run a [setup script](/docs/en/cloud-environments#setup-scripts) before sessions start, [edit it or create additional environments](/docs/en/cloud-environments#configure-your-environment).
   </Step>

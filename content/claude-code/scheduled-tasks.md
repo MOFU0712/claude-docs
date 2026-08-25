@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/scheduled-tasks
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: ee64eb0bc4b91ee6ebbd95404552970c6ff70ffb440fdc4be8ad344ae6d22c77
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: 83ca343e2fbdf94b925e1e47f7564de5a60cf810b6276f13de418a7ac4ce10dd
 ---
 
 Use /loop and the cron scheduling tools to run prompts repeatedly, poll for status, or set one-time reminders within a Claude Code session.
@@ -14,17 +14,17 @@ Tasks are session-scoped: they live in the current conversation and stop when yo
 
 Claude Code offers three ways to schedule recurring or one-off work:
 
-|                            | [Cloud](/docs/en/routines)               | [Desktop](/docs/en/desktop-scheduled-tasks) | [`/loop`](/docs/en/scheduled-tasks)      |
-| :------------------------- | :---------------------------------- | :------------------------------------- | :---------------------------------- |
-| Runs on                    | Cloud, Anthropic-managed by default | Your machine                           | Your machine                        |
-| Requires machine on        | No                                  | Yes                                    | Yes                                 |
-| Requires open session      | No                                  | No                                     | Yes                                 |
-| Persistent across restarts | Yes                                 | Yes                                    | Restored on `--resume` if unexpired |
-| Access to local files      | No (fresh clone)                    | Yes                                    | Yes                                 |
+|                            | [Cloud](/docs/en/routines)          | [Desktop](/docs/en/desktop-scheduled-tasks) | [`/loop`](/docs/en/scheduled-tasks) |
+| :------------------------- | :---------------------------------- | :------------------------------------------ | :---------------------------------- |
+| Runs on                    | Cloud, Anthropic-managed by default | Your machine                                | Your machine                        |
+| Requires machine on        | No                                  | Yes                                         | Yes                                 |
+| Requires open session      | No                                  | No                                          | Yes                                 |
+| Persistent across restarts | Yes                                 | Yes                                         | Restored on `--resume` if unexpired |
+| Access to local files      | No (fresh clone)                    | Yes                                         | Yes                                 |
 | MCP servers                | Connectors configured per task      | [Config files](/docs/en/mcp) and connectors | Inherits from session               |
-| Permission prompts         | No (runs autonomously)              | Configurable per task                  | Inherits from session               |
-| Customizable schedule      | Via `/schedule` in the CLI          | Yes                                    | Yes                                 |
-| Minimum interval           | 1 hour                              | 1 minute                               | 1 minute                            |
+| Permission prompts         | No (runs autonomously)              | Configurable per task                       | Inherits from session               |
+| Customizable schedule      | Via `/schedule` in the CLI          | Yes                                         | Yes                                 |
+| Minimum interval           | 1 hour                              | 1 minute                                    | 1 minute                            |
 
 <Tip>
   Use **cloud tasks** for work that should run reliably without your machine. Use **Desktop tasks** when you need access to local files and tools. Use **`/loop`** for quick polling during a session.

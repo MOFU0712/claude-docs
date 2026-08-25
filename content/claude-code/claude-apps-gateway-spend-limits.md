@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/claude-apps-gateway-spend-limits
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: 6b3cea46ac34c55051f5c527b9453cf471334adb70f3bc33d0d23fa130d9cf54
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: 6ae00457c251072f8ff42663d4c294372acfa702de8e7d7cb6b1ca8ffdf71fda
 ---
 
 Cap each developer's spend through the Claude apps gateway by day, week, or month. Set limits with an Admin API and the gateway enforces them live on every request.
@@ -32,11 +32,11 @@ curl -sS https://claude-gateway.internal.example.com/v1/organizations/spend_limi
   -d '{"scope": {"type": "rbac_group", "rbac_group_id": "contractors"}, "amount": "10000", "period": "daily"}'
 ```
 
-| Field        | Values                                      | Description                                                                                                                                                                                                                                                                                                                                                                                   |
-| ------------ | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Field        | Values                                      | Description                                                                                                                                                                                                                                                                                                                                                                                        |
+| ------------ | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `scope.type` | `user`, `rbac_group`, `organization`        | `user` targets one developer by their OpenID Connect (OIDC) `sub`, the stable user ID your identity provider assigns; pass it as `scope.user_id`. `rbac_group` targets an [IdP group](/docs/en/claude-apps-gateway-config#managed) by name; pass it as `scope.rbac_group_id`. `organization` is the org-wide default. The gateway accepts all three; Anthropic's public `POST` is user-only today. |
-| `amount`     | Whole-number string of USD cents, or `null` | `null` is unlimited. `"0"` is a zero cap, which blocks every request.                                                                                                                                                                                                                                                                                                                         |
-| `period`     | `daily`, `weekly`, `monthly`                | A scope can hold one cap per period, and each enforces independently: a developer is blocked if over any of them.                                                                                                                                                                                                                                                                             |
+| `amount`     | Whole-number string of USD cents, or `null` | `null` is unlimited. `"0"` is a zero cap, which blocks every request.                                                                                                                                                                                                                                                                                                                              |
+| `period`     | `daily`, `weekly`, `monthly`                | A scope can hold one cap per period, and each enforces independently: a developer is blocked if over any of them.                                                                                                                                                                                                                                                                                  |
 
 A group or organization cap is a per-seat default that each member inherits, not a shared pool. Per period, a developer's effective cap resolves in this order: a per-user override, then the most restrictive of their group caps, then the org default, then unlimited. [`admin.group_limit_mode: max`](/docs/en/claude-apps-gateway-config#admin) flips the multi-group tie-break to least-restrictive instead.
 
@@ -147,10 +147,10 @@ The raw list pages by `after_id` and `before_id`, which are mutually exclusive `
 
 The gateway holds four spend-related tables; an hourly sweep enforces the retention windows:
 
-| Table              | Contents                                                                      | Retention                                                                                               |
-| ------------------ | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Table              | Contents                                                                      | Retention                                                                                                    |
+| ------------------ | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | `spend`            | Per-principal period-to-date counters in cents                                | [`admin.spend_retention_months`](/docs/en/claude-apps-gateway-config#admin), default 13                      |
-| `spend_limits`     | The configured caps                                                           | Until deleted via the API                                                                               |
+| `spend_limits`     | The configured caps                                                           | Until deleted via the API                                                                                    |
 | `admin_audit`      | The mutation trail                                                            | [`admin.audit_retention_days`](/docs/en/claude-apps-gateway-config#admin), default 365                       |
 | `principal_emails` | Each principal's last-seen email, display name, and IdP groups. Contains PII. | [`admin.identity_retention_days`](/docs/en/claude-apps-gateway-config#admin) since last activity, default 90 |
 

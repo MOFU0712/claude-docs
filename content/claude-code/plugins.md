@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/plugins
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: 6003da8a90886df4f3b024ae5fc16f55ec1554a468c8b237d5dbcf7a64f77000
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: 8921d2169d3d8ca1017dd5a5cb7836dba2718eaf3a6d43c870528d14b432c194
 ---
 
 Create custom plugins to extend Claude Code with skills, agents, hooks, and MCP servers.
@@ -66,12 +66,12 @@ This quickstart walks you through creating a plugin with a custom skill. You'll 
     }
     ```
 
-    | Field         | Purpose                                                                                                                                                                                                                                                                                                                                    |
-    | :------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-    | `name`        | Unique identifier and skill namespace. Skills are prefixed with this (e.g., `/my-first-plugin:hello`).                                                                                                                                                                                                                                     |
-    | `description` | Shown in the plugin manager when browsing or installing plugins.                                                                                                                                                                                                                                                                           |
+    | Field         | Purpose                                                                                                                                                                                                                                                                                                                                                   |
+    | :------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | `name`        | Unique identifier and skill namespace. Skills are prefixed with this (e.g., `/my-first-plugin:hello`).                                                                                                                                                                                                                                                    |
+    | `description` | Shown in the plugin manager when browsing or installing plugins.                                                                                                                                                                                                                                                                                          |
     | `version`     | Optional. If set, users only receive updates when you bump this field, except for a [`command` source](/docs/en/plugin-marketplaces#command-sources); see [version management](/docs/en/plugins-reference#version-management). If omitted, the version comes from the next source in [version management](/docs/en/plugins-reference#version-management). |
-    | `author`      | Optional. Helpful for attribution.                                                                                                                                                                                                                                                                                                         |
+    | `author`      | Optional. Helpful for attribution.                                                                                                                                                                                                                                                                                                                        |
 
     For additional fields like `homepage`, `repository`, and `license`, see the [full manifest schema](/docs/en/plugins-reference#plugin-manifest-schema).
   </Step>
@@ -181,7 +181,7 @@ You've created a plugin with a skill, but plugins can include much more: custom 
 | `.lsp.json`       | Plugin root | LSP server configurations for code intelligence                                |
 | `monitors/`       | Plugin root | Background monitor configurations in `monitors.json`                           |
 | `bin/`            | Plugin root | Executables added to the Bash tool's `PATH` while the plugin is enabled        |
-| `settings.json`   | Plugin root | Default [settings](/docs/en/settings) applied when the plugin is enabled            |
+| `settings.json`   | Plugin root | Default [settings](/docs/en/settings) applied when the plugin is enabled       |
 
 A plugin that ships exactly one skill can place `SKILL.md` directly at the plugin root instead of creating a `skills/` directory. Claude Code loads it as a single skill and uses the frontmatter `name` field for the invocation name. Use the `skills/` layout for plugins that may grow to more than one skill.
 

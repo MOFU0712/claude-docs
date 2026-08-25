@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/champion-kit
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: 2531845bb09a3c2a8fc963a077c28dc4fe54212709ee657901625c27504998fe
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: e2d5fe194ee99c0f8a02c658c2e03ccb9554ce03af48f5f36777b2c52db3e442
 ---
 
 A playbook for engineers advocating Claude Code internally: what to share, how to answer questions, and how to grow adoption on your team.
@@ -24,11 +24,11 @@ The role consists of three behaviors that reinforce one another.
 
 Set expectations with yourself and with your lead. The activities below are intended to fit inside a normal working week, and the role should remain a multiplier on your existing work rather than an additional support responsibility.
 
-| Activity                                | Time per week    | Guidance                                                                                                                       |
-| --------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| Posting wins and prompts                | About 15 minutes | Capture these in the moment with a screenshot and one or two sentences; avoid turning them into formal write-ups.              |
-| Answering questions in a shared channel | About 20 minutes | Answer publicly once, then link back to that answer when the question recurs.                                                  |
-| Hosting a weekly show-and-tell thread   | About 5 minutes  | You post the opening prompt; the team supplies the content.                                                                    |
+| Activity                                | Time per week    | Guidance                                                                                                                            |
+| --------------------------------------- | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Posting wins and prompts                | About 15 minutes | Capture these in the moment with a screenshot and one or two sentences; avoid turning them into formal write-ups.                   |
+| Answering questions in a shared channel | About 20 minutes | Answer publicly once, then link back to that answer when the question recurs.                                                       |
+| Hosting a weekly show-and-tell thread   | About 5 minutes  | You post the opening prompt; the team supplies the content.                                                                         |
 | Optional pairing or walkthroughs        | 0 to 30 minutes  | Reserve this for colleagues who are genuinely blocked, and offer the [Quickstart](/docs/en/quickstart) link before scheduling time. |
 
 ## Share what you discover
@@ -103,14 +103,14 @@ A response such as "Try plan mode, press `Shift+Tab` until you see it" is more u
 
 ### Questions you are likely to hear
 
-| Question                                           | Suggested response                                                                                                                                                                                                           | Follow-up resource                                      |
-| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| "What should I try it on first?"                   | Recommend a real but contained task, ideally a bug or chore the person has been postponing because it is tedious rather than difficult.                                                                                      | [Common workflows](/docs/en/common-workflows)                |
-| "How do I trust it with my code?"                  | Introduce plan mode: pressing `Shift+Tab` cycles into it, Claude proposes exactly what it intends to change, and nothing is modified until the user approves.                                                                | [Permissions](/docs/en/permissions)                          |
-| "Is the setup worth the effort?"                   | Installation takes roughly two minutes, runs in the terminal, and requires no IDE extension. Running `/init` once is sufficient to begin working.                                                                            | [Quickstart](/docs/en/quickstart)                            |
-| "It produced an incorrect result."                 | Encourage them to provide the failure back to Claude. Pasting the error message or failing test is far more effective than rephrasing the original request.                                                                  | [Common workflows](/docs/en/common-workflows)                |
-| "It does not understand our codebase conventions." | Suggest running `/init` to generate a `CLAUDE.md` file, then adding the team's conventions, test commands, and any directories that should be avoided.                                                                       | [Memory](/docs/en/memory)                                    |
-| "Is this just autocomplete?"                       | Offer a brief demonstration in which Claude explains an unfamiliar file, traces a bug across services, or drafts a migration plan. These tasks require reasoning across the repository rather than completing a single line. | A two-minute live demonstration                         |
+| Question                                           | Suggested response                                                                                                                                                                                                           | Follow-up resource                                                |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| "What should I try it on first?"                   | Recommend a real but contained task, ideally a bug or chore the person has been postponing because it is tedious rather than difficult.                                                                                      | [Common workflows](/docs/en/common-workflows)                     |
+| "How do I trust it with my code?"                  | Introduce plan mode: pressing `Shift+Tab` cycles into it, Claude proposes exactly what it intends to change, and nothing is modified until the user approves.                                                                | [Permissions](/docs/en/permissions)                               |
+| "Is the setup worth the effort?"                   | Installation takes roughly two minutes, runs in the terminal, and requires no IDE extension. Running `/init` once is sufficient to begin working.                                                                            | [Quickstart](/docs/en/quickstart)                                 |
+| "It produced an incorrect result."                 | Encourage them to provide the failure back to Claude. Pasting the error message or failing test is far more effective than rephrasing the original request.                                                                  | [Common workflows](/docs/en/common-workflows)                     |
+| "It does not understand our codebase conventions." | Suggest running `/init` to generate a `CLAUDE.md` file, then adding the team's conventions, test commands, and any directories that should be avoided.                                                                       | [Memory](/docs/en/memory)                                         |
+| "Is this just autocomplete?"                       | Offer a brief demonstration in which Claude explains an unfamiliar file, traces a bug across services, or drafts a migration plan. These tasks require reasoning across the repository rather than completing a single line. | A two-minute live demonstration                                   |
 | "What about security and data handling?"           | Refer this question to your administrator. Your organization's deployment and data-handling policy is already configured, and champions should not improvise this answer.                                                    | [Security](/docs/en/security) · [Data usage](/docs/en/data-usage) |
 
 ## Grow the circle
@@ -121,7 +121,7 @@ The objective is not to build a program or to own a rollout. It is to establish 
 
 | Pattern                                    | How to run it                                                                                                                                                                                                                                     | Effort required                            |
 | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| A dedicated channel                        | Create a `#claude-code` channel (or a recurring thread in an existing one), pin the [Quickstart](/docs/en/quickstart) link and one strong example, and answer questions publicly so each answer benefits everyone watching.                            | About five minutes to set up, then ambient |
+| A dedicated channel                        | Create a `#claude-code` channel (or a recurring thread in an existing one), pin the [Quickstart](/docs/en/quickstart) link and one strong example, and answer questions publicly so each answer benefits everyone watching.                       | About five minutes to set up, then ambient |
 | A weekly show-and-tell thread              | Each Friday, post "What did Claude help you with this week?" No preparation, slides, or meeting are required; screenshots and short descriptions are sufficient.                                                                                  | About two minutes per week                 |
 | Share a custom skill                       | Post your most useful `.claude/skills/<name>/SKILL.md` file, for example a `/ship` skill that runs tests and lint before committing, with a one-line description. Because skills are plain Markdown, colleagues can adopt them immediately.       | About five minutes per skill               |
 | Generate a setup guide from your own usage | Run `/team-onboarding` in a project you have spent real time in. Claude scans your recent sessions, commands, and MCP servers, then produces a guide a new teammate can paste as their first message to replay your setup. Pin it in the channel. | About two minutes                          |
@@ -178,15 +178,15 @@ Healthy skepticism is expected; engineers should be cautious about tools that to
 
 The techniques below are the ones that most reliably move someone from a first trial to daily use. Pin this table in a channel or share it on its own.
 
-| Technique                        | How to apply it                                                                                                                                                  |
-| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Provide the right context        | Use `@file` or `@directory/` references, or paste the error or log output directly. Supplying relevant context is more effective than elaborate prompting.       |
-| Review the plan before the edit  | Press `Shift+Tab` to enter plan mode. Claude will describe the intended changes for your approval before executing them.                                         |
+| Technique                        | How to apply it                                                                                                                                                       |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Provide the right context        | Use `@file` or `@directory/` references, or paste the error or log output directly. Supplying relevant context is more effective than elaborate prompting.            |
+| Review the plan before the edit  | Press `Shift+Tab` to enter plan mode. Claude will describe the intended changes for your approval before executing them.                                              |
 | Teach it your repository         | Run `/init` to generate a `CLAUDE.md` file, then add your conventions, test commands, and any directories that should not be modified. See [Memory](/docs/en/memory). |
 | Reuse a workflow                 | Save a `SKILL.md` file in `.claude/skills/<name>/` to create a `/name` skill that the entire team can use. See [Skills](/docs/en/skills).                             |
 | Stay informed during long tasks  | Configure a Stop hook to receive a desktop notification when a long-running task completes. See [Hooks](/docs/en/hooks-guide).                                        |
-| Recover from an incorrect result | Rather than rephrasing the request, paste the failing test or stack trace back to Claude and ask it to address that specific failure.                            |
-| Keep edits surgical              | Ask for a diff, or specify "only change X." Claude respects scope when scope is stated.                                                                          |
+| Recover from an incorrect result | Rather than rephrasing the request, paste the failing test or stack trace back to Claude and ask it to address that specific failure.                                 |
+| Keep edits surgical              | Ask for a diff, or specify "only change X." Claude respects scope when scope is stated.                                                                               |
 
 <Tip>
   Claude Code is updated frequently. Verify version-specific details against the [documentation home page](/docs/en/overview) before distributing this material internally.

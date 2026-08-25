@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/keybindings
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: a4c6803fb442644a5a78d4ec1c8e4676590a72a2fe2a474c988a2448f1f0f1da
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: 716ca52dea672e40f941019f3bf01377c8a98ea62b57a1bbeaf1491e2c6b71df
 ---
 
 Customize keyboard shortcuts in Claude Code with a keybindings configuration file.
@@ -74,13 +74,13 @@ Actions follow a `namespace:action` format, such as `chat:submit` to send a mess
 
 Actions available in the `Global` context:
 
-| Action                 | Default   | Description                                                                                                  |
-| :--------------------- | :-------- | :----------------------------------------------------------------------------------------------------------- |
-| `app:interrupt`        | Ctrl+C    | Cancel current operation                                                                                     |
-| `app:exit`             | Ctrl+D    | Exit Claude Code. Press twice within 800ms to confirm                                                        |
-| `app:redraw`           | (unbound) | Force terminal redraw                                                                                        |
+| Action                 | Default   | Description                                                                                                       |
+| :--------------------- | :-------- | :---------------------------------------------------------------------------------------------------------------- |
+| `app:interrupt`        | Ctrl+C    | Cancel current operation                                                                                          |
+| `app:exit`             | Ctrl+D    | Exit Claude Code. Press twice within 800ms to confirm                                                             |
+| `app:redraw`           | (unbound) | Force terminal redraw                                                                                             |
 | `app:toggleTodos`      | Ctrl+T    | Toggle visibility of Claude's to-do checklist. This is not the [`/tasks`](/docs/en/commands) background-task view |
-| `app:toggleTranscript` | Ctrl+O    | Toggle verbose transcript                                                                                    |
+| `app:toggleTranscript` | Ctrl+O    | Toggle verbose transcript                                                                                         |
 
 ### History actions
 
@@ -96,22 +96,22 @@ Actions for navigating command history:
 
 Actions available in the `Chat` context:
 
-| Action                | Default                           | Description                                                                                                                                                    |
-| :-------------------- | :-------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `chat:cancel`         | Escape                            | Cancel current input                                                                                                                                           |
-| `chat:clearInput`     | Ctrl+L                            | Force a full screen redraw, preserving input. In [fullscreen rendering](/docs/en/fullscreen#clear-the-conversation), press twice within two seconds to run `/clear` |
-| `chat:clearScreen`    | Cmd+K                             | In [fullscreen rendering](/docs/en/fullscreen#clear-the-conversation), press twice within two seconds to run `/clear`                                               |
-| `chat:killAgents`     | Ctrl+X Ctrl+K                     | Stop all running [background subagents](/docs/en/sub-agents#run-subagents-in-foreground-or-background) in this session                                              |
-| `chat:cycleMode`      | Shift+Tab\*                       | Cycle permission modes                                                                                                                                         |
-| `chat:modelPicker`    | Meta+P                            | Open model picker                                                                                                                                              |
-| `chat:fastMode`       | Meta+O                            | Toggle fast mode                                                                                                                                               |
-| `chat:thinkingToggle` | Meta+T                            | Toggle extended thinking                                                                                                                                       |
-| `chat:submit`         | Enter                             | Submit message                                                                                                                                                 |
-| `chat:newline`        | Ctrl+J                            | Insert a newline without submitting                                                                                                                            |
-| `chat:undo`           | Ctrl+\_, Ctrl+Shift+-             | Undo last action                                                                                                                                               |
-| `chat:externalEditor` | Ctrl+G, Ctrl+X Ctrl+E             | Open in external editor                                                                                                                                        |
-| `chat:stash`          | Ctrl+S                            | Stash current prompt                                                                                                                                           |
-| `chat:imagePaste`     | Ctrl+V (Alt+V on Windows and WSL) | Paste image from clipboard. On WSL, both shortcuts are bound by default                                                                                        |
+| Action                | Default                           | Description                                                                                                                                                                                                                                |
+| :-------------------- | :-------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `chat:cancel`         | Escape                            | Cancel current input                                                                                                                                                                                                                       |
+| `chat:clearInput`     | Ctrl+L                            | Force a full screen redraw, preserving input and conversation                                                                                                                                                                              |
+| `chat:clearScreen`    | Cmd+K                             | Force a full screen redraw, preserving input and conversation. See [Clear the conversation](/docs/en/fullscreen#clear-the-conversation) for how Cmd+K behaves on iTerm2 and Terminal.app                                                   |
+| `chat:killAgents`     | Ctrl+X Ctrl+K                     | Stop all running [background subagents](/docs/en/sub-agents#run-subagents-in-foreground-or-background) in this session and turn off [artifact auto-replies](/docs/en/artifacts#let-claude-reply-to-comments-on-its-own) for the rest of it |
+| `chat:cycleMode`      | Shift+Tab\*                       | Cycle permission modes                                                                                                                                                                                                                     |
+| `chat:modelPicker`    | Meta+P                            | Open model picker                                                                                                                                                                                                                          |
+| `chat:fastMode`       | Meta+O                            | Toggle fast mode                                                                                                                                                                                                                           |
+| `chat:thinkingToggle` | Meta+T                            | Toggle extended thinking                                                                                                                                                                                                                   |
+| `chat:submit`         | Enter                             | Submit message                                                                                                                                                                                                                             |
+| `chat:newline`        | Ctrl+J                            | Insert a newline without submitting                                                                                                                                                                                                        |
+| `chat:undo`           | Ctrl+\_, Ctrl+Shift+-             | Undo last action                                                                                                                                                                                                                           |
+| `chat:externalEditor` | Ctrl+G, Ctrl+X Ctrl+E             | Open in external editor                                                                                                                                                                                                                    |
+| `chat:stash`          | Ctrl+S                            | Stash current prompt                                                                                                                                                                                                                       |
+| `chat:imagePaste`     | Ctrl+V (Alt+V on Windows and WSL) | Paste image from clipboard. On WSL, both shortcuts are bound by default                                                                                                                                                                    |
 
 \*On Windows without VT mode (Node \<24.2.0/\<22.17.0, Bun \<1.2.23), defaults to Meta+M.
 
@@ -130,17 +130,19 @@ Actions available in the `Autocomplete` context:
 
 Actions available in the `Confirmation` context:
 
-| Action                      | Default   | Description                                                                                                                        |
-| :-------------------------- | :-------- | :--------------------------------------------------------------------------------------------------------------------------------- |
-| `confirm:yes`               | Y, Enter  | Confirm action                                                                                                                     |
-| `confirm:no`                | N, Escape | Decline action                                                                                                                     |
-| `confirm:previous`          | Up        | Previous option                                                                                                                    |
-| `confirm:next`              | Down      | Next option                                                                                                                        |
-| `confirm:nextField`         | Tab       | Next field                                                                                                                         |
-| `confirm:previousField`     | (unbound) | Previous field                                                                                                                     |
-| `confirm:toggle`            | Space     | Toggle selection                                                                                                                   |
-| `confirm:cycleMode`         | Shift+Tab | Cycle permission modes                                                                                                             |
-| `confirm:toggleExplanation` | Ctrl+E    | Toggle a model-generated [explanation of the command](/docs/en/permissions#permission-system) on Bash and PowerShell permission prompts |
+| Action                      | Default     | Description                                                                                                                                                                                                                                                                                |
+| :-------------------------- | :---------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `confirm:yes`               | Y, Enter    | Confirm action                                                                                                                                                                                                                                                                             |
+| `confirm:no`                | N, Escape   | Decline action                                                                                                                                                                                                                                                                             |
+| `confirm:previous`          | Up          | Previous option                                                                                                                                                                                                                                                                            |
+| `confirm:next`              | Down        | Next option                                                                                                                                                                                                                                                                                |
+| `confirm:nextField`         | Tab         | Next field                                                                                                                                                                                                                                                                                 |
+| `confirm:previousField`     | (unbound)   | Previous field                                                                                                                                                                                                                                                                             |
+| `confirm:toggle`            | Space       | Toggle selection                                                                                                                                                                                                                                                                           |
+| `confirm:cycleMode`         | Shift+Tab\* | Cycle permission modes. On a file permission prompt, closes an open [comment field](/docs/en/permissions#add-a-comment-when-you-answer-a-permission-prompt); with no field open, selects the option that allows the action for the rest of the session, when the prompt offers that option |
+| `confirm:toggleExplanation` | Ctrl+E      | Toggle a model-generated [explanation of the command](/docs/en/permissions#permission-system) on Bash and PowerShell permission prompts                                                                                                                                                    |
+
+\*On Windows without VT mode (Node \<24.2.0/\<22.17.0, Bun \<1.2.23), defaults to Meta+M.
 
 ### Permission actions
 
@@ -223,14 +225,14 @@ Actions available in the `Attachments` context:
 
 Actions available in the `Footer` context:
 
-| Action                  | Default           | Description                                                                                                                                                                                   |
-| :---------------------- | :---------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `footer:next`           | Right             | Next footer item                                                                                                                                                                              |
-| `footer:previous`       | Left              | Previous footer item                                                                                                                                                                          |
-| `footer:up`             | Up                | Navigate up in footer (deselects at top)                                                                                                                                                      |
-| `footer:down`           | Down              | Navigate down in footer                                                                                                                                                                       |
-| `footer:openSelected`   | Enter             | Open selected footer item                                                                                                                                                                     |
-| `footer:clearSelection` | Escape            | Clear footer selection                                                                                                                                                                        |
+| Action                  | Default           | Description                                                                                                                                                                                        |
+| :---------------------- | :---------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `footer:next`           | Right             | Next footer item                                                                                                                                                                                   |
+| `footer:previous`       | Left              | Previous footer item                                                                                                                                                                               |
+| `footer:up`             | Up                | Navigate up in footer (deselects at top)                                                                                                                                                           |
+| `footer:down`           | Down              | Navigate down in footer                                                                                                                                                                            |
+| `footer:openSelected`   | Enter             | Open selected footer item                                                                                                                                                                          |
+| `footer:clearSelection` | Escape            | Clear footer selection                                                                                                                                                                             |
 | `footer:dismiss`        | Backspace, Delete | Dismiss the selected [artifact](/docs/en/artifacts) link from the footer; the published artifact itself is unaffected. On other footer rows, these keys have no effect. Requires v2.1.217 or later |
 
 ### Message selector actions

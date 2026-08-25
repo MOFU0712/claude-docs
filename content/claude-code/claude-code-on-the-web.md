@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/claude-code-on-the-web
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: 6e225694502660ac9f0867a2f12f4323364ab827560dfdc9c423a5943b104e23
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: df3b9b11f74fb17efc42174d97f3abd38c982bb33afb9eac4ab7181aef1a76a7
 ---
 
 Move sessions between web and terminal with `--cloud` and `--teleport`, manage and share sessions, and auto-fix pull requests from the cloud.
@@ -28,7 +28,7 @@ This page covers the web product itself:
 
 ## Cloud environments
 
-Every cloud session runs in a [cloud environment](/docs/en/cloud-environments), the saved configuration that controls network access, environment variables, and setup scripts. When you onboard, Claude Code sets up a **Default** environment with [**Trusted** network access](/docs/en/cloud-environments#access-levels). See [The Default environment](/docs/en/cloud-environments#the-default-environment) for how it's created and how sessions choose an environment when you have more than one.
+Every cloud session runs in a [cloud environment](/docs/en/cloud-environments), the saved configuration that controls network access, environment variables, and setup scripts. If you don't have an environment yet when you onboard, Claude Code sets up a **Default** environment with [**Trusted** network access](/docs/en/cloud-environments#access-levels). See [The Default environment](/docs/en/cloud-environments#the-default-environment) for how it's created and how sessions choose an environment when you have more than one.
 
 The same environments apply wherever you start a cloud session: the web, the terminal, [Claude Tag](https://claude.com/docs/claude-tag/overview), [routines](/docs/en/routines), and the mobile and Desktop apps. Claude Tag channel sessions use [organization-shared environments](/docs/en/cloud-environments#organization-shared-environments) only.
 
@@ -40,7 +40,7 @@ Cloud sessions need access to your GitHub repositories to clone code and push br
 
 | Method           | How it works                                                                                | Best for                                                                |
 | :--------------- | :------------------------------------------------------------------------------------------ | :---------------------------------------------------------------------- |
-| **GitHub App**   | Authorize the Claude GitHub App during [web onboarding](/docs/en/web-quickstart).                | Browser onboarding; teams that want [Auto-fix](#auto-fix-pull-requests) |
+| **GitHub App**   | Authorize the Claude GitHub App during [web onboarding](/docs/en/web-quickstart).           | Browser onboarding; teams that want [Auto-fix](#auto-fix-pull-requests) |
 | **`/web-setup`** | Run `/web-setup` in your terminal to sync your local `gh` CLI token to your Claude account. | Individual developers who already use `gh`                              |
 
 <Note>
@@ -352,7 +352,7 @@ Before relying on cloud sessions for a workflow, account for these constraints:
 * [Ultrareview](/docs/en/ultrareview): run a deep multi-agent code review in a cloud sandbox
 * [Routines](/docs/en/routines): automate work on a schedule, via API call, or in response to GitHub events
 * [Hooks configuration](/docs/en/hooks): run scripts at session lifecycle events
-* [Settings reference](/docs/en/settings): all configuration options
+* [Settings reference](/docs/en/settings-reference): all configuration options
 * [Security](/docs/en/security): isolation guarantees and data handling
 * [Data usage](/docs/en/data-usage): what Anthropic retains from cloud sessions
 * [Claude Tag](https://claude.com/docs/claude-tag/overview): an organization-managed @Claude in Slack that runs on the same cloud infrastructure

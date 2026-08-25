@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/advisor
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: 30646fa3239fb28e76aa51a457d69cda06123b12ab893e6122b06ecb03e38948
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: affbfbbaad658b1252774ec1b1533b6b0b35fa4e35c84bfeeb961806a06f7f7c
 ---
 
 Pair your main model with a stronger advisor model that Claude consults at key moments during a task.
@@ -173,12 +173,12 @@ To disable the advisor tool entirely, set `CLAUDE_CODE_DISABLE_ADVISOR_TOOL=1`. 
 
 The advisor is one of several ways to combine model strengths. Pick based on when you want a second model involved.
 
-| Approach                                                    | When the stronger model runs                                                                                                           | How it starts                                |
-| ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
-| Advisor tool                                                | At decision points mid-task                                                                                                            | Claude calls it when it needs guidance       |
+| Approach                                                         | When the stronger model runs                                                                                                                | How it starts                                |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| Advisor tool                                                     | At decision points mid-task                                                                                                                 | Claude calls it when it needs guidance       |
 | [`opusplan`](/docs/en/model-config#opusplan-model-setting)       | During plan mode when [allowed by `availableModels`](/docs/en/model-config#restrict-model-selection), then switches to Sonnet for execution | You enter plan mode                          |
-| [Subagents](/docs/en/sub-agents#choose-a-model) with `model` set | For the entire delegated subtask                                                                                                       | Claude delegates, or you invoke the subagent |
-| [`/model`](/docs/en/model-config#setting-your-model)             | For all subsequent turns                                                                                                               | You switch models                            |
+| [Subagents](/docs/en/sub-agents#choose-a-model) with `model` set | For the entire delegated subtask                                                                                                            | Claude delegates, or you invoke the subagent |
+| [`/model`](/docs/en/model-config#setting-your-model)             | For all subsequent turns                                                                                                                    | You switch models                            |
 
 ## See also
 

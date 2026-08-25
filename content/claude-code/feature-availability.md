@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/feature-availability
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: 0685d869244ab10760088d71103450dd1f27d17710f61f64523bce5fce9f1e27
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: 31fdc59b93d86a6bba5cb8c947e26c286f1e0816ec5b0004e1bf203039bb80d6
 ---
 
 Compare which Claude Code features are available across Anthropic subscription plans, the Anthropic Console, Amazon Bedrock, Claude Platform on AWS, Google Cloud's Agent Platform, and Microsoft Foundry.
@@ -30,7 +30,7 @@ These work on every provider:
 * [Subagents](/docs/en/sub-agents), [hooks](/docs/en/hooks-guide), [commands](/docs/en/commands), and [skills](/docs/en/skills)
 * [CLAUDE.md memory](/docs/en/memory), [plugins](/docs/en/plugins), and [MCP servers](/docs/en/mcp)
 * [Checkpoints](/docs/en/checkpointing), [sandboxing](/docs/en/sandboxing), and [Workflows](/docs/en/workflows)
-* [OpenTelemetry metrics](/docs/en/monitoring-usage) and the [managed settings file](/docs/en/settings#settings-files)
+* [OpenTelemetry metrics](/docs/en/monitoring-usage) and the [managed settings file](/docs/en/managed-settings#delivery-mechanisms)
 
 Three of these have provider-specific differences:
 
@@ -115,8 +115,8 @@ These features work in the local CLI but depend on a server-side capability that
 
     <tr>
       <td>[Cross-session messaging](/docs/en/cross-session-messaging)</td>
-      <td>✓ (macOS and Linux) <sup><a href="#fn6">6</a></sup></td>
-      <td>✓ (macOS and Linux) <sup><a href="#fn6">6</a></sup></td>
+      <td>✓ <sup><a href="#fn6">6</a></sup></td>
+      <td>✓ <sup><a href="#fn6">6</a></sup></td>
       <td>✗</td>
       <td>✗</td>
       <td>✗</td>
@@ -220,7 +220,7 @@ Organization-level controls and usage visibility.
 <span /><sup>3</sup> Explicit intervals such as `/loop every 2 hours` work on every provider. On Amazon Bedrock, Claude Platform on AWS, Google Cloud's Agent Platform, and Microsoft Foundry, `/loop` cannot pick its own interval or supply the default maintenance prompt, so a prompt with no interval runs every 10 minutes, and `/loop` with no arguments shows the usage message. See [Scheduled tasks](/docs/en/scheduled-tasks).<br />
 <span /><sup>4</sup> Subject to your agreement with the cloud provider.<br />
 <span /><sup>5</sup> Dashboard and API only. [Contribution metrics](/docs/en/analytics#enable-contribution-metrics) requires a claude.ai Team or Enterprise organization.<br />
-<span /><sup>6</sup> Requires Claude Code v2.1.224 or later. WSL 2 counts as Linux; native Windows isn't supported. With API key authentication, same-machine messaging only. Claude can find your [Claude Code on the web](/docs/en/claude-code-on-the-web) sessions and your sessions on other machines only from a session that is connected to [Remote Control](/docs/en/remote-control). Connecting needs a claude.ai sign-in and the other [Remote Control requirements](/docs/en/remote-control#requirements). See [Message sessions on other machines](/docs/en/cross-session-messaging#message-sessions-on-other-machines).
+<span /><sup>6</sup> Requires Claude Code v2.1.224 or later on macOS and Linux, including Linux inside WSL 2. On native Windows, requires Claude Code v2.1.234 or later. With API key authentication, same-machine messaging only. Claude can find your [Claude Code on the web](/docs/en/claude-code-on-the-web) sessions and your sessions on other machines only from a session that is connected to [Remote Control](/docs/en/remote-control). Connecting needs a claude.ai sign-in and the other [Remote Control requirements](/docs/en/remote-control#requirements). See [Message sessions on other machines](/docs/en/cross-session-messaging#message-sessions-on-other-machines).
 
 <Note>
   If you authenticate through an [LLM gateway](/docs/en/llm-gateway), feature availability matches the underlying provider the gateway forwards to. Some Anthropic-only features such as the [Advisor](/docs/en/advisor) work only if the gateway forwards requests intact to the Anthropic API.
@@ -301,21 +301,21 @@ If you authenticate through Amazon Bedrock, Google Cloud's Agent Platform, Micro
 
 | Feature                                                                     | Pro | Max | Team          | Enterprise                        |
 | :-------------------------------------------------------------------------- | :-- | :-- | :------------ | :-------------------------------- |
-| [Claude Code on the web](/docs/en/claude-code-on-the-web)                        | ✓   | ✓   | ✓             | ✓ <sup><a href="#fn7">7</a></sup> |
-| [Routines](/docs/en/routines)                                                    | ✓   | ✓   | ✓             | ✓                                 |
-| [Remote Control](/docs/en/remote-control)                                        | ✓   | ✓   | Admin-enabled | Admin-enabled                     |
-| [Channels](/docs/en/channels)                                                    | ✓   | ✓   | Admin-enabled | Admin-enabled                     |
-| [Computer use](/docs/en/computer-use)                                            | ✓   | ✓   | ✗             | ✗                                 |
-| Dispatch ([Desktop](/docs/en/desktop#sessions-from-dispatch))                    | ✓   | ✓   | ✗             | ✗                                 |
-| [Code Review](/docs/en/code-review)                                              | ✗   | ✗   | ✓             | ✓                                 |
-| [Artifacts](/docs/en/artifacts)                                                  | ✓   | ✓   | ✓             | Admin-enabled                     |
-| [Analytics dashboard and contribution metrics](/docs/en/analytics)               | ✗   | ✗   | ✓             | ✓                                 |
-| [Enterprise Analytics API](/docs/en/analytics#access-data-programmatically)      | ✗   | ✗   | ✗             | ✓                                 |
-| [Server-managed settings](/docs/en/server-managed-settings)                      | ✗   | ✗   | ✓             | ✓                                 |
+| [Claude Code on the web](/docs/en/claude-code-on-the-web)                   | ✓   | ✓   | ✓             | ✓ <sup><a href="#fn7">7</a></sup> |
+| [Routines](/docs/en/routines)                                               | ✓   | ✓   | ✓             | ✓                                 |
+| [Remote Control](/docs/en/remote-control)                                   | ✓   | ✓   | Admin-enabled | Admin-enabled                     |
+| [Channels](/docs/en/channels)                                               | ✓   | ✓   | Admin-enabled | Admin-enabled                     |
+| [Computer use](/docs/en/computer-use)                                       | ✓   | ✓   | ✗             | ✗                                 |
+| Dispatch ([Desktop](/docs/en/desktop#sessions-from-dispatch))               | ✓   | ✓   | ✗             | ✗                                 |
+| [Code Review](/docs/en/code-review)                                         | ✗   | ✗   | ✓             | ✓                                 |
+| [Artifacts](/docs/en/artifacts)                                             | ✓   | ✓   | ✓             | Admin-enabled                     |
+| [Analytics dashboard and contribution metrics](/docs/en/analytics)          | ✗   | ✗   | ✓             | ✓                                 |
+| [Enterprise Analytics API](/docs/en/analytics#access-data-programmatically) | ✗   | ✗   | ✗             | ✓                                 |
+| [Server-managed settings](/docs/en/server-managed-settings)                 | ✗   | ✗   | ✓             | ✓                                 |
 | [SSO](https://support.claude.com/en/articles/9266767-what-is-the-team-plan) | ✗   | ✗   | ✓             | ✓                                 |
 | SCIM                                                                        | ✗   | ✗   | ✗             | ✓                                 |
 | [Compliance API](https://platform.claude.com/docs/en/api/compliance)        | ✗   | ✗   | ✗             | ✓                                 |
-| [Zero Data Retention](/docs/en/zero-data-retention)                              | ✗   | ✗   | ✗             | ✓ <sup><a href="#fn8">8</a></sup> |
+| [Zero Data Retention](/docs/en/zero-data-retention)                         | ✗   | ✗   | ✗             | ✓ <sup><a href="#fn8">8</a></sup> |
 
 <span /><sup>7</sup> On Enterprise, requires a premium seat or a Chat + Claude Code seat. See [Claude Code on the web](/docs/en/claude-code-on-the-web).<br />
 <span /><sup>8</sup> Not included in the standard Enterprise plan. Requires separate enablement by Anthropic for qualified accounts. See [Zero Data Retention](/docs/en/zero-data-retention).

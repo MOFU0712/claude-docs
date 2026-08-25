@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/quickstart
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: 8514dc306b7c098bd22b4db609cebae06c87d2ebbd0ca2031abc07fa00c077d3
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: 4208d333a0ed9e9609e8733a15284ca7eb771f2713f73c0b360e90a7e1b70538
 ---
 
 Welcome to Claude Code!
@@ -15,7 +15,7 @@ Make sure you have:
 * A terminal or command prompt open
   * If you've never used the terminal before, check out the [terminal guide](/docs/en/terminal-guide)
 * A code project to work with
-* A [Claude subscription](https://claude.com/pricing?utm_source=claude_code\&utm_medium=docs\&utm_content=quickstart_prereq) (Pro, Max, Team, or Enterprise), [Claude Console](https://console.anthropic.com/) account, or access through a [supported cloud provider](/docs/en/third-party-integrations)
+* A [Claude subscription](https://claude.com/pricing?utm_source=claude_code\&utm_medium=docs\&utm_content=quickstart_prereq) (Pro, Max, Team, or Enterprise), [Claude Console](https://platform.claude.com/) account, or access through a [supported cloud provider](/docs/en/third-party-integrations)
 
 <Note>
   This guide covers the terminal CLI. Claude Code is also available on the [web](https://claude.ai/code), as a [desktop app](/docs/en/desktop), in [VS Code](/docs/en/vs-code) and [JetBrains IDEs](/docs/en/jetbrains), in [Slack](/docs/en/slack), and in CI/CD with [GitHub Actions](/docs/en/github-actions) and [GitLab](/docs/en/gitlab-ci-cd). See [all interfaces](/docs/en/overview#use-claude-code-everywhere).
@@ -106,11 +106,11 @@ For Claude subscription or Console accounts, follow the prompts to complete auth
 You can log in using any of these account types:
 
 * [Claude Pro, Max, Team, or Enterprise](https://claude.com/pricing?utm_source=claude_code\&utm_medium=docs\&utm_content=quickstart_login) (recommended)
-* [Claude Console](https://console.anthropic.com/) (API access with pre-paid credits). On first login, a "Claude Code" workspace is automatically created in the Console for centralized cost tracking.
+* [Claude Console](https://platform.claude.com/) (API access with pre-paid credits). On first login, a "Claude Code" workspace is automatically created in the Console for centralized cost tracking.
 * [Amazon Bedrock, Google Cloud's Agent Platform, or Microsoft Foundry](/docs/en/third-party-integrations) (enterprise cloud providers)
 * A self-hosted [Claude apps gateway](/docs/en/claude-apps-gateway), if your organization runs one: your admin pre-configures the gateway URL, and `/login` opens directly on the **Cloud gateway** screen for you to sign in with corporate SSO
 
-Once logged in, your credentials are stored and you won't need to log in again.
+Once logged in, your credentials are stored and you won't need to log in again. Learn more in [Credential Management](/docs/en/authentication#credential-management).
 
 ## Step 3: Start your first session
 
@@ -124,10 +124,6 @@ claude
 Replace `/path/to/your/project` with the path to the project you want to work on.
 
 You'll see the Claude Code prompt with the version, current model, and working directory shown above it. Type `/help` for available commands or `/resume` to continue a previous conversation.
-
-<Tip>
-  After logging in (Step 2), your credentials are stored on your system. Learn more in [Credential Management](/docs/en/authentication#credential-management).
-</Tip>
 
 ## Step 4: Ask your first question
 
@@ -324,7 +320,7 @@ For more, see [best practices](/docs/en/best-practices) and [common workflows](/
   </Accordion>
 
   <Accordion title="Save time with shortcuts">
-    * Type `/` to see all commands and skills
+    * Type `/` to see the commands and skills available to you
     * Use Tab for command completion
     * Press ↑ for command history
     * Press `Shift+Tab` to cycle permission modes
@@ -336,19 +332,19 @@ For more, see [best practices](/docs/en/best-practices) and [common workflows](/
 Now that you've learned the basics, explore more advanced features:
 
 <CardGroup>
-  <Card title="How Claude Code works" icon="microchip" href="/en/how-claude-code-works">
+  <Card title="How Claude Code works" icon="microchip" href="/docs/en/how-claude-code-works">
     Understand the agentic loop, built-in tools, and how Claude Code interacts with your project
   </Card>
 
-  <Card title="Best practices" icon="star" href="/en/best-practices">
+  <Card title="Best practices" icon="star" href="/docs/en/best-practices">
     Get better results with effective prompting and project setup
   </Card>
 
-  <Card title="Common workflows" icon="graduation-cap" href="/en/common-workflows">
+  <Card title="Common workflows" icon="graduation-cap" href="/docs/en/common-workflows">
     Step-by-step guides for common tasks
   </Card>
 
-  <Card title="Extend Claude Code" icon="puzzle-piece" href="/en/features-overview">
+  <Card title="Extend Claude Code" icon="puzzle-piece" href="/docs/en/features-overview">
     Customize with CLAUDE.md, skills, hooks, MCP, and more
   </Card>
 </CardGroup>

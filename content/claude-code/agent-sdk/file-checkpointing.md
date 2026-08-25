@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/agent-sdk/file-checkpointing
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: 563138e7ceb30729138b4f648d5244fb736bcba434ae14b72dc428e469e10d61
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: bd84c3ee502c13a52929ed2c211853374c9b07b621f126e67d5bd03a4eee29e4
 ---
 
 Track file changes during agent sessions and restore files to any previous state
@@ -25,12 +25,6 @@ When you enable file checkpointing, the SDK creates backups of files before modi
 <Note>
   File rewinding restores files on disk to a previous state. It does not rewind the conversation itself. The conversation history and context remain intact after calling `rewindFiles()` (TypeScript) or `rewind_files()` (Python).
 </Note>
-
-The checkpoint system tracks:
-
-* Files created during the session
-* Files modified during the session
-* The original content of modified files
 
 When you rewind to a checkpoint, Claude Code deletes the files it created and restores the files it modified to their content at that point. Claude Code skips a tracked path that is a symlink, hard link, or other non-regular file. It also skips a tracked file whose parent directory no longer resolves to its checkpoint-time location, or whose backup it can't read safely. [`RewindFilesResult`](/docs/en/agent-sdk/typescript#rewindfilesresult) counts every skipped path in its `skippedLinks` field. Skipping requires Claude Code v2.1.216 or later; before v2.1.216, a rewind wrote and deleted through links at tracked paths.
 
@@ -709,13 +703,13 @@ Before you begin, make sure you have the [Claude Agent SDK installed](/docs/en/a
 
 File checkpointing has the following limitations:
 
-| Limitation                         | Description                                                                                                                                                                      |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Write/Edit/NotebookEdit tools only | Changes made through Bash commands are not tracked                                                                                                                               |
+| Limitation                         | Description                                                                                                                                                                           |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Write/Edit/NotebookEdit tools only | Changes made through Bash commands are not tracked                                                                                                                                    |
 | Subagent edits                     | Edits a [subagent](/docs/en/agent-sdk/subagents) applies aren't tracked or restored, except a skill with `context: fork` running in the foreground; use git to revert untracked edits |
-| Same session                       | Checkpoints are tied to the session that created them                                                                                                                            |
-| File content only                  | Creating, moving, or deleting directories is not undone by rewinding                                                                                                             |
-| Local files                        | Remote or network files are not tracked                                                                                                                                          |
+| Same session                       | Checkpoints are tied to the session that created them                                                                                                                                 |
+| File content only                  | Creating, moving, or deleting directories is not undone by rewinding                                                                                                                  |
+| Local files                        | Remote or network files are not tracked                                                                                                                                               |
 
 ## Troubleshooting
 

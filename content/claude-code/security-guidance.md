@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/security-guidance
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: 3ad1f4cdde1aa13f772f2b107db9f1019dbfec5c4aaa0283a6d074cbd05c273d
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: 8d3f6f4a843f43ca1b9cea1e146d040df6a9f71cd3cbce197370c1cf977a8e30
 ---
 
 Install the security-guidance plugin to have Claude review its own code changes for vulnerabilities and fix them in the same session.
@@ -14,7 +14,6 @@ The plugin is the in-session companion to [Code Review](/docs/en/code-review), w
 
 ## Prerequisites
 
-* Claude Code CLI version 2.1.144 or later
 * Python 3.7 or later on your `PATH`. The agentic commit review needs Python 3.10 or later, as do all model-backed reviews when Claude Code uses a third-party provider such as Amazon Bedrock or Google Cloud's Agent Platform. The plugin prefers the versioned interpreters `python3.13` through `python3.10`, then falls back to `python3`, `python`, and `py -3`
 * A git repository for the directory you work in. The end-of-turn and commit reviews diff against git state and skip silently outside a repository. The per-edit pattern check works anywhere
 
@@ -58,7 +57,7 @@ User-scoped plugins do not carry into [Claude Code on the web](/docs/en/claude-c
 }
 ```
 
-Administrators can enable the plugin organization-wide by setting [`enabledPlugins`](/docs/en/settings#plugin-settings) in [managed settings](/docs/en/admin-setup).
+Administrators can enable the plugin organization-wide by setting [`enabledPlugins`](/docs/en/settings-reference#enabledplugins) in [managed settings](/docs/en/admin-setup).
 
 ## What the plugin checks
 
@@ -221,13 +220,13 @@ If you build your own hooks, the [plugin's source](https://github.com/anthropics
 
 The plugin is one layer in a defense-in-depth approach. It catches issues earliest, while code is still in the editor, but it is not a guarantee and does not replace later checks. A typical stack:
 
-| Stage                  | Tool                                                      | What it covers                                                                                           |
-| :--------------------- | :-------------------------------------------------------- | :------------------------------------------------------------------------------------------------------- |
-| In session             | Security guidance plugin                                  | Common vulnerabilities in code Claude writes, fixed in the same session                                  |
+| Stage                  | Tool                                                           | What it covers                                                                                           |
+| :--------------------- | :------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------- |
+| In session             | Security guidance plugin                                       | Common vulnerabilities in code Claude writes, fixed in the same session                                  |
 | On demand, single pass | [`/security-review`](/docs/en/commands#all-commands)           | One-time security pass on the current branch, run when you ask                                           |
 | On demand, deep scan   | [Claude Security plugin](/docs/en/claude-security)             | Multi-agent vulnerability scan of a repository or diff, with independently reviewed findings and patches |
 | On pull request        | [Code Review](/docs/en/code-review), Team and Enterprise plans | Multi-agent correctness and security review with full codebase context                                   |
-| In CI                  | Your existing static analysis and dependency scanners     | Language-specific rules, supply-chain checks, and policy enforcement the plugin does not attempt         |
+| In CI                  | Your existing static analysis and dependency scanners          | Language-specific rules, supply-chain checks, and policy enforcement the plugin does not attempt         |
 
 To find security issues in code you already have, rather than in changes Claude is writing, ask Claude in a session to review a specific file or directory for vulnerabilities, or use the [Claude Security plugin](/docs/en/claude-security) for a deeper multi-agent scan of the whole repository; [`/security-review`](/docs/en/commands#all-commands) covers only the changes on your current branch. Either way, the review reads the source code in your checkout, not a running site or deployed service.
 

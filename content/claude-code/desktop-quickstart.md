@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/desktop-quickstart
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: 3c8908e1b93c632b30b9c5c0d6489af78c82f54f997b7bac09b8d252023a906f
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: b0cf693e326270448cd87153de8244ae9e5bd5abf54f9013735094ce560d354e
 ---
 
 Install Claude Code on desktop and start your first coding session
@@ -17,7 +17,7 @@ The desktop app gives you Claude Code with a graphical interface built for runni
     For x64 processors
   </Card>
 
-  <Card title="Get Claude for Linux (beta)" icon="linux" href="/en/desktop-linux">
+  <Card title="Get Claude for Linux (beta)" icon="linux" href="/docs/en/desktop-linux">
     apt or .deb for Ubuntu and Debian
   </Card>
 </CardGroup>

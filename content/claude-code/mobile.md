@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/mobile
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: cf60abe32f0c7183157e10bfc2ff07a155623723117fc7e2764646cd70857d7d
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: e86a47032c1f61f65d55c9e1967ed7fd70ef918a82acb830844b2784a8b46548
 ---
 
 Start, monitor, and steer Claude Code tasks from your phone with the Claude app for iOS and Android.
@@ -36,11 +36,11 @@ The Claude app for [iOS](https://apps.apple.com/us/app/claude-by-anthropic/id647
 
 From the app you can start cloud sessions, drive a Claude Code session running on your computer, or message Dispatch a task. The app is the same for all three; they differ in where the work happens.
 
-| Feature                                              | What you connect to                                                   | When to use                                                                                                                                          |
-| :--------------------------------------------------- | :-------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Feature                                                   | What you connect to                                                   | When to use                                                                                                                                               |
+| :-------------------------------------------------------- | :-------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Claude Code on the web](/docs/en/claude-code-on-the-web) | A cloud session on cloud infrastructure, Anthropic-managed by default | Your repository is on GitHub and the task should keep running after you put your phone away. See the [web quickstart](/docs/en/web-quickstart) to set up. |
-| [Remote Control](/docs/en/remote-control)                 | A Claude Code session running on your computer                        | The work needs your local filesystem, tools, or MCP servers.                                                                                         |
-| [Dispatch](/docs/en/desktop#sessions-from-dispatch)       | The Desktop app on your computer                                      | You want to message a task and let Dispatch decide how to run it. Requires a Pro or Max plan.                                                        |
+| [Remote Control](/docs/en/remote-control)                 | A Claude Code session running on your computer                        | The work needs your local filesystem, tools, or MCP servers.                                                                                              |
+| [Dispatch](/docs/en/desktop#sessions-from-dispatch)       | The Desktop app on your computer                                      | You want to message a task and let Dispatch decide how to run it. Requires a Pro or Max plan.                                                             |
 
 If your computer will be off, use cloud sessions, which run in the cloud and continue with your laptop closed. Remote Control and Dispatch drive your own machine, so it needs to stay on with Claude Code or the Desktop app running. If your machine sleeps during a Remote Control session, Claude Code reconnects when the machine comes back online.
 
@@ -58,7 +58,12 @@ Open a session in the app to check progress, answer Claude's questions, or steer
 
 Remote Control connects the Claude app to a Claude Code session running on your machine, so code execution and filesystem access stay local while you drive the session from your phone. Start the session on your computer with `claude remote-control`, or run `/remote-control` in a session that's already open. Then scan the session QR code the terminal can display, or open the Claude app, tap **Code**, and pick the session from the list. See [connect from another device](/docs/en/remote-control#connect-from-another-device) for each option.
 
-Attachments you add in the Claude app reach the local session too. Claude sees attached photos directly as part of your message. Claude Code downloads other files to your machine and passes them to Claude as `@` file references. For requirements, invocation modes, and troubleshooting, see the [Remote Control overview](/docs/en/remote-control).
+When you add an attachment in the Claude app, it reaches the local session too:
+
+* **Photos**: Claude sees attached photos directly as part of your message. Claude Code also saves each photo under `~/.claude/uploads/` and tells Claude the saved file path, so Claude can copy the image into files it creates.
+* **Other files**: Claude Code downloads them to your machine and passes them to Claude as `@` file references.
+
+For requirements, invocation modes, and troubleshooting, see the [Remote Control overview](/docs/en/remote-control).
 
 ### Get push notifications
 

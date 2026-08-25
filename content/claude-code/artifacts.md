@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/artifacts
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: 4b816adcf811cbc70f06592c13c49701f63cc8e98e34f2c95b8ddf63afd25677
+fetched_at: '2026-08-25T01:58:26+00:00'
+content_hash: 52b53a29b06899d1e2520855b90564b1db3bc04c2634b4bc34b9745aed44b5f8
 ---
 
 Artifacts turn Claude Code's work into live, interactive pages on claude.ai that you can keep private, share with your organization, or publish to a public link.
@@ -65,15 +65,21 @@ Add a per-region breakdown below the summary chart and republish.
 
 Anyone with the page open sees the update in place. Each publish becomes a version, and from the **Share** control in the page header you can choose which version viewers see.
 
-To update an artifact from a different session, give Claude the artifact's URL and ask it to revise. Without the URL, a new session always creates a new artifact rather than updating an existing one.
+To update an artifact from a different session, give Claude its URL, or attach it with [`/artifacts`](#find-an-artifact-again). Without either, a new session creates a new artifact instead of updating one.
 
 ```text wrap theme={null}
 Update https://claude.ai/code/artifact/5fbea6f3-... with today's numbers.
 ```
 
+## Find an artifact again
+
+Run `/artifacts` in Claude Code to list every artifact you own and every artifact shared with you. Select one and press `o` to open it in your browser or `c` to copy its link. Press `Enter` to attach it to the current session; before v2.1.216, `Enter` opened it in your browser. Claude Code reads the list from your claude.ai account, so it works in a new session and after `/clear`, when the link has scrolled out of the terminal. Requires Claude Code v2.1.208 or later.
+
 ## Share an artifact
 
-A new artifact is visible only to you. To share it, open the artifact in your browser and use the **Share** control in the page header. The header names you as the artifact's author, so anyone you share it with can see who published the page. It also links to your gallery at [claude.ai/code/artifacts](https://claude.ai/code/artifacts), which lists every artifact you have created.
+A new artifact is visible only to you. To share it, open the artifact in your browser and use the **Share** control in the page header. The header also links to your gallery at [claude.ai/code/artifacts](https://claude.ai/code/artifacts), which lists every artifact you have created.
+
+Viewers in your organization can see who published the page: on an artifact shared within your organization, your name is in the title menu, and on a public artifact it's in the page header for signed-in viewers in your organization. A viewer who opens a public link without signing in, or from outside your organization, sees the label `Content is user-generated and unverified.` instead of your name.
 
 Who you can share with depends on your plan:
 
@@ -84,7 +90,44 @@ Who you can share with depends on your plan:
 
 People you share with are viewers by default: they see each version you publish but can't change the page. On Team and Enterprise plans, you can also make someone an editor. In the share dialog, add a person and switch their role from **viewer** to **editor**.
 
-An editor publishes new versions the same way you [update the artifact from another session](#update-an-artifact): they give Claude the artifact's URL in their own session, and Claude pulls the current content and republishes with their changes. Everyone with the page open sees each update live.
+An editor publishes new versions the same way you [update the artifact from another session](#update-an-artifact): they give Claude the artifact's URL, or attach it from [`/artifacts`](#find-an-artifact-again), and Claude pulls the current content and republishes with their changes. Everyone with the page open sees each update live.
+
+## Collect comments on an artifact
+
+When you share an artifact within your organization, the people you share it with can leave comments on the page, and you can have Claude read those comments and reply to them. You need Claude Code v2.1.221 or later and a Team or Enterprise plan, because only an artifact you [share within your organization](#share-an-artifact) takes comments. Claude reads the comments in two cases:
+
+* **You ask Claude to read them**: give Claude the artifact's URL and ask for the comments. Claude lists each thread and marks the comments a commenter sent to it.
+* **A commenter sends a comment to Claude**: in a thread on the page, the commenter mentions `@claude` or uses the thread's Claude control, where the page offers one. Either gesture activates the thread, and Claude can reply only in a thread someone activated. Viewers see each reply attributed to Claude, via you.
+
+If you share an artifact publicly, viewers can't comment on it: the page says `Comments aren't available while this Artifact is shared publicly.` To switch an artifact that already has comment threads to a public link, delete the threads first.
+
+To ask for the comments yourself, give Claude the URL:
+
+```text wrap theme={null}
+Read the comments on https://claude.ai/code/artifact/5fbea6f3-... and make the changes the commenters ask for.
+```
+
+If Claude tells you it can't read comments, check three things:
+
+* You're running Claude Code v2.1.221 or later.
+* You're not in your first session since you installed Claude Code or upgraded from a version before v2.1.221. In that [first session after an install or upgrade](/docs/en/env-vars#first-session-after-an-install-or-upgrade), Claude can't read comments yet; start a new session and ask again.
+* You haven't turned feature-flag fetching off. If you set `DISABLE_GROWTHBOOK`, `DISABLE_TELEMETRY`, or `DO_NOT_TRACK`, also set [`CLAUDE_CODE_ARTIFACT_COMMENTS=1`](/docs/en/env-vars#features-that-need-feature-flag-fetching) so Claude can read comments without fetching flags.
+
+### Let Claude reply to comments on its own
+
+After your session publishes an artifact, Claude Code watches that artifact for comments for as long as the session runs. When a commenter sends a comment to Claude, it reaches your session right away, and Claude can read the thread and reply without you asking. You need Claude Code v2.1.228 or later. If you turned feature-flag fetching off, also set both [`CLAUDE_CODE_ARTIFACT_COMMENTS=1` and `CLAUDE_CODE_ARTIFACT_COMMENTS_AUTOREACT=1`](/docs/en/env-vars#features-that-need-feature-flag-fetching). Your [permission mode](/docs/en/permission-modes) decides what Claude does when a sent comment arrives:
+
+* **Claude replies on its own**: when your permission mode lets Claude post the reply without asking you, Claude reads the thread and replies, and edits the artifact when the comment asks for a change. You see `Auto-replied to comment thread on Artifact: <name>` or `Auto-edited Artifact: <name> in response to a comment thread`.
+* **Claude waits for you**: outside plan mode, when posting the reply would need your approval, you see `Comments are waiting on Artifact: <name>`. Claude then asks you for approval to read the thread, and again to post the reply.
+* **Claude pauses in plan mode**: you see `Comments are waiting on Artifact: <name>`, and Claude doesn't reply until you leave plan mode and ask it to read and reply.
+
+Claude also stops replying on its own to an artifact after it handles 60 sent comments or thread activations on that artifact within an hour. You see `Comments are waiting on Artifact: <name>` once, and Claude picks up again as that hour's comments age out.
+
+Run `/tasks` to see each artifact your session is watching, listed as a live-updates task. You can stop Claude from replying on its own in three ways, and each one lasts a different length of time:
+
+* **Press Ctrl+C once**: Claude stops replying on every artifact your session is watching, and starts again on an artifact when you have your session publish it again.
+* **Stop the task in `/tasks`**: Claude stops replying on that artifact for the rest of the session. Publishing it again doesn't start replies again, and if you resume the session later, Claude still doesn't reply there.
+* **Press `Ctrl+X Ctrl+K` twice within 3 seconds**: the chord that [stops every running background subagent](/docs/en/interactive-mode#general-controls) also stops Claude from replying on every artifact for the rest of the session.
 
 ## Pull live data with MCP connectors
 
@@ -202,20 +245,20 @@ Generating an artifact uses output tokens like any other response, and a styled 
 
 Artifacts require every condition below. When one is not met, Claude writes a local HTML file or says it cannot publish instead.
 
-| Requirement         | Available when                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| :------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Plan                | Pro, Max, Team, or Enterprise. On Pro and Max plans, artifacts are private to you until you share them, and no admin management applies. On Team plans, artifacts are on by default. On Enterprise plans, an Owner [enables them](#manage-artifacts-for-your-organization) in claude.ai admin settings.                                                                                                                                       |
-| Authentication      | The session is backed by a claude.ai account: sign in with `/login` in the CLI or desktop app. Claude Tag sessions are signed in through the agent's identity, so no step is needed there. Sessions using an API key, [gateway token](/docs/en/llm-gateway), or cloud-provider credential cannot publish.                                                                                                                                          |
-| Model provider      | Anthropic API. Not available on [Amazon Bedrock](/docs/en/amazon-bedrock), [Google Cloud's Agent Platform](/docs/en/google-vertex-ai), or [Microsoft Foundry](/docs/en/microsoft-foundry).                                                                                                                                                                                                                                                                   |
-| Organization policy | Customer-managed encryption keys (CMEK), HIPAA, and [Zero Data Retention](/docs/en/zero-data-retention) are not enabled for the organization.                                                                                                                                                                                                                                                                                                      |
+| Requirement         | Available when                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| :------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Plan                | Pro, Max, Team, or Enterprise. On Pro and Max plans, artifacts are private to you until you share them, and no admin management applies. On Team plans, artifacts are on by default. On Enterprise plans, an Owner [enables them](#manage-artifacts-for-your-organization) in claude.ai admin settings.                                                                                                                                                 |
+| Authentication      | The session is backed by a claude.ai account: sign in with `/login` in the CLI or desktop app. Claude Tag sessions are signed in through the agent's identity, so no step is needed there. Sessions using an API key, [gateway token](/docs/en/llm-gateway), or cloud-provider credential cannot publish.                                                                                                                                               |
+| Model provider      | Anthropic API. Not available on [Amazon Bedrock](/docs/en/amazon-bedrock), [Google Cloud's Agent Platform](/docs/en/google-vertex-ai), or [Microsoft Foundry](/docs/en/microsoft-foundry).                                                                                                                                                                                                                                                              |
+| Organization policy | Customer-managed encryption keys (CMEK), HIPAA, and [Zero Data Retention](/docs/en/zero-data-retention) are not enabled for the organization.                                                                                                                                                                                                                                                                                                           |
 | Surface             | Claude Code CLI version 2.1.183 or later, or the Claude desktop app version 1.13576.0 or later. [Claude Tag](https://claude.com/docs/claude-tag/overview) sessions can also publish artifacts when both Claude Tag and artifacts are enabled for the organization. Off by default in [Agent SDK](/docs/en/agent-sdk/overview), GitHub Action, and MCP-server contexts, and when [`CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC`](/docs/en/env-vars) is set. |
 
 ## Disable artifacts
 
 To turn artifacts off for your own sessions regardless of your organization's setting, use any of:
 
-| Method                               | Setting                              |
-| :----------------------------------- | :----------------------------------- |
+| Method                                    | Setting                              |
+| :---------------------------------------- | :----------------------------------- |
 | [Settings file](/docs/en/settings)        | `"disableArtifact": true`            |
 | [Environment variable](/docs/en/env-vars) | `CLAUDE_CODE_DISABLE_ARTIFACT=1`     |
 | [Permission rule](/docs/en/permissions)   | Add `Artifact` to `permissions.deny` |
