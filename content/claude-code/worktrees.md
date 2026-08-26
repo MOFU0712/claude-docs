@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/worktrees
-fetched_at: '2026-08-25T01:58:26+00:00'
-content_hash: f54b9574455ad89501dfa00279dde8f6ecc843918b399866e23b16c5baaef624
+fetched_at: '2026-08-26T02:27:04+00:00'
+content_hash: e6193f6053ae8d8ddcb28720c0205fb60e5dbb34778c279698ae20f7935a4824
 ---
 
 Isolate parallel Claude Code sessions in separate git worktrees so changes don't collide. Covers the `--worktree` flag, subagent isolation, `.worktreeinclude`, cleanup, and non-git VCS hooks.
@@ -172,6 +172,8 @@ Before v2.1.233, Claude Code accepted only `#<number>` and GitHub-style pull req
 A worktree is a fresh checkout, so untracked files like `.env` or `.env.local` from your main repository are not present. To copy them automatically when Claude creates a worktree, add a `.worktreeinclude` file to your project root.
 
 The file uses `.gitignore` syntax. Only files that match a pattern and are also gitignored are copied, so tracked files are never duplicated.
+
+If you write a pattern that starts with `**/` and the files you want are inside a directory that is gitignored as a whole, Claude Code copies them only when that directory itself matches the pattern, or when the first name after the `**/` is one of the names in the directory's path. For example, if you write `**/.claude/skills/*.md`, that first name is `.claude`, so Claude Code copies the matching files out of an ignored `.claude/` directory. To copy files out of an ignored directory that a `**/` pattern doesn't reach, name the directory in the pattern instead: write `vendor/**/config.json` rather than `**/config.json`. Before v2.1.239, Claude Code copied files out of a wholly ignored directory for a `**/` pattern only when the directory itself matched the pattern.
 
 This `.worktreeinclude` copies two env files and a secrets config into each new worktree:
 

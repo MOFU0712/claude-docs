@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/admin-setup
-fetched_at: '2026-08-25T01:58:26+00:00'
-content_hash: 85af8a1e355e679cb07ddca9cd85c3019ab39bc180f90bc2c64c901b22d44f39
+fetched_at: '2026-08-26T02:27:04+00:00'
+content_hash: 2f4563ceee3a2c3276b4f7a74cc0115c6917aea95646469fb1556324191a3fea
 ---
 
 A decision map for administrators deploying Claude Code, covering API providers, managed settings, policy enforcement, usage monitoring, and data handling.
@@ -59,7 +59,7 @@ The plist and HKLM registry locations work with any provider and resist tamperin
 
 By default, WSL reads only the Linux file path at `/etc/claude-code`. To extend your Windows registry and `C:\Program Files\ClaudeCode` policy to WSL on the same machine, set [`wslInheritsWindowsSettings: true`](/docs/en/settings-reference#wslinheritswindowssettings) in either of those admin-only Windows sources.
 
-Whichever mechanism you choose, managed values take precedence over user and project settings, apart from a few security-sensitive [exceptions](/docs/en/settings#exceptions-to-managed-settings-precedence). Array settings such as `permissions.allow` and `permissions.deny` merge entries from all sources, so developers can extend managed lists but not remove from them. For `fallbackModel` and `availableModels`, the managed value replaces lower layers rather than merging.
+Whichever mechanism you choose, managed values take precedence over user and project settings, apart from a few security-sensitive [exceptions](/docs/en/settings#exceptions-to-managed-settings-precedence). Array settings such as `permissions.allow` and `permissions.deny` merge entries from all sources, so developers can extend managed lists but not remove from them. For `fallbackModel`, `availableModels`, and [`modelPicker`](/docs/en/settings-reference#modelpicker), the managed value replaces lower layers rather than merging.
 
 ### WSL sessions in Claude Code Desktop
 

@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/agent-sdk/tool-search
-fetched_at: '2026-08-25T01:58:26+00:00'
-content_hash: ca9893b8334eb93209c9dd2ac0ea91d15cdb5d06de327c65a7860d37bbf36b23
+fetched_at: '2026-08-26T02:27:04+00:00'
+content_hash: 38f13788567cd8319368b17f67a4cf84e2ddafab8b9b660b3a8556dc10b3387d
 ---
 
 Scale your agent to thousands of tools by discovering and loading only what's needed, on demand.
@@ -17,7 +17,7 @@ This approach solves two challenges as tool libraries scale:
 
 Tool search is on by default, with the exceptions listed in [Configure tool search](#configure-tool-search).
 
-When it is active, tool definitions are withheld from the context window. The agent receives a summary of available tools and searches for relevant ones when the task requires a capability not already loaded. Up to five of the most relevant tools are loaded into context by default, where they stay available for subsequent turns. If the conversation is long enough that the SDK compacts earlier messages to free space, previously discovered tools may be removed, and the agent searches again as needed.
+When it is active, tool definitions are withheld from the context window. The agent receives a summary of available tools and searches for relevant ones when the task requires a capability not already loaded. Up to five of the most relevant tools are loaded into context by default, where they stay available for subsequent turns. When the SDK compacts earlier messages to free space, it keeps the discovered tools loaded.
 
 Tool search adds one extra round-trip the first time Claude discovers a tool (the search step), but for large tool sets this is offset by smaller context on every turn. With fewer than \~10 tools whose definitions fit comfortably in the context window, loading everything upfront is typically faster.
 

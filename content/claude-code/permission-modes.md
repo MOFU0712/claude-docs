@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/permission-modes
-fetched_at: '2026-08-25T01:58:26+00:00'
-content_hash: 7a3f93bf4b38aa880fc3f4f3450447e59f4b2c61481b0b174979132b180cc623
+fetched_at: '2026-08-26T02:27:04+00:00'
+content_hash: 490c93d63a760235c0bf51b22f11260eaaebfe07354b9b1f69f620dc138f8daf
 ---
 
 Control whether Claude asks before acting. Switch permission modes with Shift+Tab in the CLI, the mode indicator in VS Code, or the mode selector in Desktop.
@@ -183,15 +183,7 @@ Each interface has its own control for switching permission modes during a sessi
 
     A mode you pick in the mode selector is remembered per folder and takes precedence over `defaultMode` for that folder. Plan is the exception: picking it applies to the current session only.
 
-    This example sets Plan mode as the default for new local sessions:
-
-    ```json theme={null}
-    {
-      "permissions": {
-        "defaultMode": "plan"
-      }
-    }
-    ```
+    For where `defaultMode` goes in a settings file, see the example under [Start in a different permission mode](#start-in-a-different-mode).
   </Tab>
 
   <Tab title="Web and mobile">
@@ -257,15 +249,7 @@ Accepting a plan also gives the session a [generated title](/docs/en/sessions#na
 
 ### Set plan mode as the default
 
-To make plan mode the default for a project's terminal sessions, set `defaultMode` in `.claude/settings.json`. Conversations the [VS Code extension](/docs/en/vs-code) starts don't read project settings for the starting permission mode. There, set `claudeCode.initialPermissionMode` to `plan` in your VS Code user settings instead. This example sets the project default:
-
-```json theme={null}
-{
-  "permissions": {
-    "defaultMode": "plan"
-  }
-}
-```
+To make plan mode the default for a project's terminal sessions, set `defaultMode` to `plan` in `.claude/settings.json`, placed as the example under [Start in a different permission mode](#start-in-a-different-mode) shows. Conversations the [VS Code extension](/docs/en/vs-code) starts don't read project settings for the starting permission mode. There, set `claudeCode.initialPermissionMode` to `plan` in your VS Code user settings instead.
 
 ## Eliminate permission prompts with auto mode
 
@@ -292,7 +276,7 @@ Auto mode is available only when your account meets all of these requirements:
 
 If Claude Code reports auto mode as unavailable, one of these requirements is unmet; this is not a transient outage. A separate message that names a model and says auto mode "cannot determine the safety" of an action means a classifier request failed; that failure is usually transient, but on Amazon Bedrock it can repeat until your account can invoke the named model. See the [error reference](/docs/en/errors#auto-mode-cannot-determine-the-safety-of-an-action) for the causes and what to do.
 
-If you set `defaultMode: "auto"` in [settings](/docs/en/settings-reference#all-settings) and a terminal session starts in Manual mode with no error, the setting is likely in `.claude/settings.json` or `.claude/settings.local.json`. In Claude Code v2.1.142 and later, `auto` doesn't take effect from those files. Move it to `~/.claude/settings.json`. For a conversation the VS Code extension started, check the extension's own list in [Switch permission modes](#switch-permission-modes) instead.
+If you set `defaultMode: "auto"` in [settings](/docs/en/settings-reference#all-settings) and a terminal session starts in Manual mode with no error, the setting is likely in `.claude/settings.json` or `.claude/settings.local.json`. `auto` doesn't take effect from those files. Move it to `~/.claude/settings.json`. For a conversation the VS Code extension started, check the extension's own list in [Switch permission modes](#switch-permission-modes) instead.
 
 ### Auto mode on Bedrock, Agent Platform, or Foundry
 
@@ -411,6 +395,8 @@ When auto mode can't approve your session's actions, what happens depends on the
 * **A mode switch during a check**: if you switch permission modes while a classifier check is pending, Claude Code discards a verdict the new mode wouldn't have requested rather than applying it: you're prompted for approval instead, or the action is auto-denied in [`dontAsk` mode](#allow-only-pre-approved-tools-with-dontask-mode).
 
 Repeated blocks usually mean the classifier is missing context about your infrastructure. Use `/feedback` to report false positives, or have an administrator [configure trusted infrastructure](/docs/en/auto-mode-config).
+
+<span />
 
 <AccordionGroup>
   <Accordion title="How the classifier evaluates actions">

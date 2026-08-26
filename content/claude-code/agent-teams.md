@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/agent-teams
-fetched_at: '2026-08-25T01:58:26+00:00'
-content_hash: 4bd0d0c80614e365be900a1ca12c22e6deb6d088bf012709ec142abf50f3406f
+fetched_at: '2026-08-26T02:27:04+00:00'
+content_hash: a2befd79dd08ba377e96087c889c85b2b4b90faba1b7b44788664ec2f70fba91
 ---
 
 Coordinate multiple Claude Code instances working together as a team, with shared tasks, inter-agent messaging, and centralized management.
@@ -301,6 +301,8 @@ The lead assigns every teammate a name when it spawns them, and any teammate can
 ### Token usage
 
 Agent teams use significantly more tokens than a single session. Each teammate has its own context window, and token usage scales with the number of active teammates. For research, review, and new feature work, the extra tokens are usually worthwhile. For routine tasks, a single session is more cost-effective. See [agent team token costs](/docs/en/costs#agent-team-token-costs) for usage guidance.
+
+An in-process teammate's requests fall outside the main conversation's [cache TTL bucket](/docs/en/prompt-caching#which-ttl-each-request-gets), so its cache holds for five minutes by default, including on a Claude subscription. To keep it for an hour, set [`subagentPromptCacheTtl`](/docs/en/settings-reference#subagentpromptcachettl) to `1h`. The API bills 1-hour cache writes at a higher rate.
 
 ## Use case examples
 

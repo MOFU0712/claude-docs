@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/microsoft-foundry
-fetched_at: '2026-08-06T04:45:15+00:00'
-content_hash: 4e65762e27421eb743b2d595f167b304be41b3df1b56911855306706953d0db5
+fetched_at: '2026-08-26T02:27:04+00:00'
+content_hash: c82141ed9086c3384b983aa0463db53462117d961783ca860c528b5d92b56c95
 ---
 
 Learn about configuring Claude Code through Microsoft Foundry, including setup, configuration, and troubleshooting.
@@ -117,6 +117,8 @@ For current and legacy model IDs, see [Models overview](https://platform.claude.
 ```bash theme={null}
 export ENABLE_PROMPT_CACHING_1H=1
 ```
+
+To set different TTLs for your main conversation and for the requests Claude Code makes outside it, [choose the TTL yourself](/docs/en/prompt-caching#choose-the-ttl-yourself).
 
 ### 5. Run Claude Code
 

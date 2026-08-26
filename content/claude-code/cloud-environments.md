@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/cloud-environments
-fetched_at: '2026-08-25T01:58:26+00:00'
-content_hash: a94cde40e00ed476ec607c2574d9e9ef8bb612d3b9407bc444935762e1655420
+fetched_at: '2026-08-26T02:27:04+00:00'
+content_hash: 767c4cd74a433afc993df6868282e2366d10a6fab7c3d57b9229a51a5e0f07a9
 ---
 
 Configure cloud environments for Claude Code cloud sessions: network access levels, environment variables, setup scripts, and environment caching.
@@ -335,7 +335,7 @@ Setup scripts and SessionStart hooks run in a fixed order when a cloud session s
 | **When they run**            | Before Claude Code launches, skipped when a [cached environment](#environment-caching) exists                                                                             | After Claude Code launches, on every session including resumed                                                                                                                                                          |
 | **Where they run**           | Cloud sessions only                                                                                                                                                       | Local and cloud sessions                                                                                                                                                                                                |
 
-If you have SessionStart hooks in your user-level `~/.claude/settings.json`, don't expect them in the cloud: user-level settings stay on your machine. In a cloud session, Claude Code runs hooks from the repository and from your organization's [server-managed settings](/docs/en/server-managed-settings); sessions in a [self-hosted environment](/docs/en/self-hosted-environments-configuration#permissions-and-tool-approval) also run hooks the operator seeded from the runner host's `~/.claude/`.
+If you have SessionStart hooks in your user-level `~/.claude/settings.json`, don't expect them in the cloud: user-level settings stay on your machine. In a cloud session, Claude Code runs hooks from the repository and from your organization's [server-managed settings](/docs/en/server-managed-settings). In a [self-hosted environment](/docs/en/self-hosted-environments-configuration#permissions-and-tool-approval), Claude Code also runs the hooks the operator seeded from the runner host's `~/.claude/`, and it runs the hooks in the runner image's managed settings file when neither [server-managed settings nor an MDM-delivered Claude Code policy](/docs/en/settings#precedence-within-the-managed-tier) supplies the managed tier.
 
 ### Install dependencies with a SessionStart hook
 

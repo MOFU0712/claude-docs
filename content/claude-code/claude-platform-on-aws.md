@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/claude-platform-on-aws
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: 1f0c4ad3b06a2011abeace3702fafccf902bc5c7a1a3f9bdcd1a199b4cdfa24d
+fetched_at: '2026-08-26T02:27:04+00:00'
+content_hash: 8bc376d8b1e1c29a30ea33318ca12d25d8cb91807ddb47f828e108c1caca53e7
 ---
 
 Configure Claude Code to use the Anthropic-operated Claude API with AWS authentication, IAM access control, and AWS Marketplace billing.
@@ -106,6 +106,8 @@ export ANTHROPIC_DEFAULT_HAIKU_MODEL=claude-haiku-4-5
 For the full list of model IDs and aliases, see [Models overview](https://platform.claude.com/docs/en/about-claude/models/overview). For other model-related variables, see [Model configuration](/docs/en/model-config).
 
 [Prompt caching](/docs/en/prompt-caching) is enabled automatically. To request a 1-hour cache TTL instead of the 5-minute default, set `ENABLE_PROMPT_CACHING_1H=1`. The API bills 1-hour cache writes at a higher rate. See [prompt caching pricing](https://platform.claude.com/docs/en/build-with-claude/prompt-caching#pricing) for the rates.
+
+To set different TTLs for your main conversation and for the requests Claude Code makes outside it, [choose the TTL yourself](/docs/en/prompt-caching#choose-the-ttl-yourself).
 
 ### 4. Launch and verify
 

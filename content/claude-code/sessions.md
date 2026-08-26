@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/sessions
-fetched_at: '2026-08-25T01:58:26+00:00'
-content_hash: cf16acde9b4eaa334a2aeaba663afcf2f8266e28f4612d4cbfaad8cecb9b157d
+fetched_at: '2026-08-26T02:27:04+00:00'
+content_hash: 551030f6e598613ec828e53b0ee66a4c9e32a1a50e138237fa84a917ae814729
 ---
 
 Name, resume, branch, and switch between Claude Code conversations. Covers `--continue`, `--resume`, `--from-pr`, the `/resume` picker, session naming, exporting transcripts, and where transcripts are stored.
@@ -67,7 +67,7 @@ Sessions whose first prompt was a [`/loop`](/docs/en/scheduled-tasks#run-a-promp
 
 From v2.1.169, moving a session with [`/cd`](/docs/en/commands) relocates it to the new directory's project storage, so it appears in that directory's picker afterward. As of v2.1.196, a moved session stays out of the old directory's picker even after a crash or forced exit. On earlier versions, it could also reappear in the old directory's list after an exit that wasn't clean when the old path contained special characters such as underscores.
 
-When you select a session from another worktree of the same repository, Claude Code resumes it in place. When you select a session from an unrelated project, Claude Code copies a `cd` and resume command to your clipboard instead.
+When you select a session from another worktree of the same repository, Claude Code resumes it in place; when the session's own worktree no longer exists, Claude Code [resumes it in your current directory](/docs/en/worktrees#resume-a-worktree-session). When you select a session from an unrelated project, Claude Code copies a `cd` and resume command to your clipboard instead. If that project's directory no longer exists, Claude Code resumes the session in your current directory rather than copying a `cd` command that would fail.
 
 Resuming by name resolves across the current repository and its worktrees. Both forms look for an exact match and resume it directly even if it lives in a different worktree:
 

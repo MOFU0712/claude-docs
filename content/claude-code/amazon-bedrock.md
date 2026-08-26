@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/amazon-bedrock
-fetched_at: '2026-08-25T01:58:26+00:00'
-content_hash: 8813da0374cfd38ce08a08d93e46db800949aa10638c5169dd04009a0946422f
+fetched_at: '2026-08-26T02:27:04+00:00'
+content_hash: 9941caad3f85af5a37ea232bc5031fe60e6d1a90a4bdc53fd0e7e649c45f387d
 ---
 
 Learn about configuring Claude Code through Amazon Bedrock, including setup, IAM configuration, and troubleshooting.
@@ -249,7 +249,7 @@ export ANTHROPIC_MODEL='arn:aws:bedrock:us-east-2:your-account-id:application-in
 # export ENABLE_PROMPT_CACHING_1H=1
 ```
 
-The 1-hour cache TTL is billed at a higher rate than the 5-minute default. See [cache lifetime](/docs/en/prompt-caching#cache-lifetime).
+The 1-hour cache TTL is billed at a higher rate than the 5-minute default. See [cache lifetime](/docs/en/prompt-caching#cache-lifetime). To set different TTLs for your main conversation and for the requests Claude Code makes outside it, [choose the TTL yourself](/docs/en/prompt-caching#choose-the-ttl-yourself).
 
 <Note>Prompt caching may not be available in all Amazon Bedrock regions. If cache token counts stay at zero, check [supported models, regions, and limits](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html#prompt-caching-models) in the Amazon Bedrock documentation.</Note>
 
