@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/plugins-reference
-fetched_at: '2026-08-26T02:27:05+00:00'
-content_hash: 50ece9daccfb59664d76139fba42df853bfff7ad28b209ddbe46b1e85fef87e6
+fetched_at: '2026-08-27T04:37:31+00:00'
+content_hash: 2e5600990b24cec7b52ca357263533135bc30624d83a4f218a7c895a27fd7ab3
 ---
 
 Complete technical reference for Claude Code plugin system, including schemas, CLI commands, and component specifications.
@@ -1107,6 +1107,10 @@ claude plugin update <plugin> [options]
 | `-y, --yes`           | Accept a command the plugin's marketplace declares, without the confirmation prompt: the command that produces a plugin with a [`command` source](/docs/en/plugin-marketplaces#command-sources), or the [`headersHelper`](/docs/en/plugin-marketplaces#authenticate-archive-downloads) that authenticates an archive download. Accepting a `headersHelper` requires Claude Code v2.1.238 or later. Claude Code still prints the command first. Required when stdin or stdout isn't a TTY. Has no effect inside a Claude Code session, so run the command from your own terminal |         |
 | `-h, --help`          | Display help for command                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |         |
 
+<Note>
+  Claude Code resolves a bare plugin name against your installed plugins. When installed plugins from different marketplaces share the name, Claude Code refuses the update and lists the qualified `plugin-name@marketplace-name` commands to run instead. Before v2.1.246, Claude Code accepted only the qualified form and rejected a bare name as not found.
+</Note>
+
 ***
 
 ### plugin list
@@ -1239,7 +1243,7 @@ This shows:
 
 * `Invalid JSON syntax: Unexpected token } in JSON at position 142`: check for missing commas, extra commas, or unquoted strings
 * `Plugin <name> has an invalid manifest file at .claude-plugin/plugin.json. Validation errors: name: Invalid input: expected string, received undefined`: a required field is missing
-* `Plugin <name> has a corrupt manifest file at .claude-plugin/plugin.json. JSON parse error: ...`: JSON syntax error
+* `Plugin <name> has a corrupt manifest file at .claude-plugin/plugin.json. JSON parse error: ...`: JSON syntax error. Before v2.1.246, Claude Code also produced this error for a `plugin.json` saved as UTF-8 with a leading byte-order mark (BOM), even when the JSON was otherwise valid.
 
 **Plugin loading errors**:
 

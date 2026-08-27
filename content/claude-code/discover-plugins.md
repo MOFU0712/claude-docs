@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/discover-plugins
-fetched_at: '2026-08-26T02:27:04+00:00'
-content_hash: 1487c22b30add19e8b2a3c8299b3f0088a8012b07cdf027a8d9a50704e12a02c
+fetched_at: '2026-08-27T04:37:31+00:00'
+content_hash: b1b8162d84de42f91b3f9a64954e831e3c8c395ab4f4919d27777538dda63d36
 ---
 
 Find and install plugins from marketplaces to extend Claude Code with new skills, agents, and capabilities.
@@ -408,7 +408,7 @@ When the [install summary](#install-plugins) reports `Plugin is now active.`, Cl
 
 When the reload would invalidate the prompt cache, the command warns and skips until you rerun it with `--force`.
 
-Claude Code reloads all active plugins and shows counts for plugins, skills, agents, hooks, plugin MCP servers, and plugin LSP servers. The skills count covers only each plugin's `commands/` directory, not its `skills/` directory, so the summary can report `0 skills` even when the plugin's skills reloaded.
+Claude Code reloads all active plugins and shows counts for plugins, skills, agents, hooks, plugin MCP servers, and plugin LSP servers. In the skills count, Claude Code includes every skill a plugin provides: both its `commands/` entries and its `SKILL.md` skills. Before v2.1.246, Claude Code counted only `commands/` entries, so it could reload a plugin's `SKILL.md` skills and still report `0 skills` in the summary.
 
 Reloading has a token cost on the next request: newly loaded components announce themselves in content appended to the conversation, while the existing history still reads from the prompt cache. A plugin that provides MCP servers costs more when its tools aren't deferred by [tool search](/docs/en/mcp#scale-with-mcp-tool-search): the change invalidates the cache and the next request re-reads the entire conversation. See [enabling or disabling a plugin](/docs/en/prompt-caching#enabling-or-disabling-a-plugin) for details.
 

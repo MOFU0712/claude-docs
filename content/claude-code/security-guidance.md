@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/security-guidance
-fetched_at: '2026-08-25T01:58:26+00:00'
-content_hash: 8d3f6f4a843f43ca1b9cea1e146d040df6a9f71cd3cbce197370c1cf977a8e30
+fetched_at: '2026-08-27T04:37:31+00:00'
+content_hash: f40e14bf14a6844a8795b823d37dc6b6823f9a138043e83ec750310b9bed549a
 ---
 
 Install the security-guidance plugin to have Claude review its own code changes for vulnerabilities and fix them in the same session.
@@ -200,7 +200,7 @@ To remove it from your user scope:
 /plugin uninstall security-guidance@claude-plugins-official
 ```
 
-If the plugin was enabled through a project's `.claude/settings.json`, disabling it from `/plugin` writes an override to your `.claude/settings.local.json` rather than editing the checked-in file, so the plugin stays off for you while teammates are unaffected. The same dialog also offers to uninstall the plugin for everyone by removing it from the shared `.claude/settings.json`. If it was enabled through [managed settings](/docs/en/admin-setup), only an administrator can disable it.
+If the plugin was enabled through a project's `.claude/settings.json`, uninstalling it from `/plugin` writes an override to your `.claude/settings.local.json` rather than editing the checked-in file, so the plugin stays off for you while teammates are unaffected. The same dialog also offers to uninstall the plugin for everyone by removing it from the shared `.claude/settings.json`. If it was enabled through [managed settings](/docs/en/admin-setup), only an administrator can disable it.
 
 ## How the plugin integrates with Claude Code
 

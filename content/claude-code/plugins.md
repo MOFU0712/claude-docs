@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/plugins
-fetched_at: '2026-08-26T02:27:04+00:00'
-content_hash: 52dc917537c66010fcc62273e06db0f9cd4c748c403e694fd390321cccf1588c
+fetched_at: '2026-08-27T04:37:31+00:00'
+content_hash: 11b45ec82d6b6f436672f3b6541badca0c45d067934cc71fab3372192aa14f92
 ---
 
 Create custom plugins to extend Claude Code with skills, agents, hooks, and MCP servers.
@@ -134,7 +134,7 @@ This quickstart walks you through creating a plugin with a custom skill. You'll 
     Greet the user named "$ARGUMENTS" warmly and ask how you can help them today. Make the greeting personal and encouraging.
     ```
 
-    Run `/reload-plugins` to pick up the changes. The skills count in the summary covers only `commands/` directories, so it can report `0 skills` even though the skill you just edited reloaded. Then try the skill with your name:
+    Run `/reload-plugins` to pick up the changes. Then try the skill with your name:
 
     ```shell theme={null}
     /my-first-plugin:hello Alex

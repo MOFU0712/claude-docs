@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/slack
-fetched_at: '2026-08-25T01:58:26+00:00'
-content_hash: 4140afa2668c003f9eec9b4a1d39646e21f69c8a842cb1f60c559d311b5a75e3
+fetched_at: '2026-08-27T04:37:31+00:00'
+content_hash: 8feec57fbe5e32ebf998ba4597f3242409dea61b3678fc13f1c3382632c5b28f
 ---
 
 Delegate coding tasks directly from your Slack workspace. Anthropic is retiring this earlier version for Team and Enterprise workspaces in favor of Claude Tag; it remains the setup path on Pro and Max plans.
@@ -177,7 +177,7 @@ for more details.
 
 ### "Claude Code is not enabled for your account"
 
-This error means your Claude account has no cloud environment yet, not that an admin needs to enable anything. Sign in at [claude.ai/code](https://claude.ai/code) once with the same account you connected to Slack. The first visit creates your default cloud environment, and the error clears on your next mention. Each user must do this individually.
+This error means your Claude account has no cloud environment yet. Sign in at [claude.ai/code](https://claude.ai/code) once with the same account you connected to Slack and finish [web onboarding](/docs/en/web-quickstart#connect-github), which creates your default cloud environment or asks you to create it. The error clears on your next mention. Each user must do this individually.
 
 ### Sessions not starting
 

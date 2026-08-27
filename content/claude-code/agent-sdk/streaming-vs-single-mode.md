@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/agent-sdk/streaming-vs-single-mode
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: e12675cb46260970c69679db3f6348068dec5050d119ad890db24dc27512fe19
+fetched_at: '2026-08-27T04:37:31+00:00'
+content_hash: f298c2afa26275f2b260fc07f588c7bb60c267e01cc7df2d3e18ab3d42b866dc
 ---
 
 Understanding the two input modes for Claude Agent SDK and when to use each
@@ -276,7 +276,7 @@ If a query ends with an error result, such as `error_max_turns`, a single messag
 
   async def single_message_example():
       # Simple one-shot query using query() function
-      # query() raises after an error result, such as error_max_turns
+      # query() raises ResultError after an error result, such as error_max_turns
       try:
           async for message in query(
               prompt="Explain the authentication flow",
@@ -284,7 +284,6 @@ If a query ends with an error result, such as `error_max_turns`, a single messag
           ):
               if isinstance(message, ResultMessage) and message.subtype == "success":
                   print(message.result)
-      # The SDK raises a plain Exception for error results, so match Exception here
       except Exception as e:
           print(f"Query failed: {e}")
 

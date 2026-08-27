@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/workflows
-fetched_at: '2026-08-26T02:27:04+00:00'
-content_hash: 4b7c061cec4530ef03e6c90a07d6fc132e2cb224cdd248418c01c88f4b1253f1
+fetched_at: '2026-08-27T04:37:31+00:00'
+content_hash: 8b1306d55c2d17525c6c9005ff92f74698632c1264761f6a63e04ec9ca8ef20f
 ---
 
 Dynamic workflows orchestrate many subagents from a script Claude writes and you can rerun. Use them for codebase audits, large migrations, and cross-checked research.
@@ -245,7 +245,7 @@ use a workflow to run npx tsc --noEmit and keep fixing the reported errors until
 Discover the files to migrate, transform each one in an isolated copy so edits don't conflict, and verify each result.
 
 ```text wrap theme={null}
-use a workflow to migrate every component under src/components/ from styled-components to Tailwind, working on each file in its own isolated copy
+use a workflow to migrate every component under src/components/ from JavaScript to TypeScript, working on each file in its own isolated copy
 ```
 
 ### Review every changed file and write one summary

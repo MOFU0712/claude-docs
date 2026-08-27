@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/claude-directory
-fetched_at: '2026-08-25T01:58:26+00:00'
-content_hash: 3db98b6e060ba7f81d9aa332b27f8945b67731ea07dc3adf4d958f8d3ca0084a
+fetched_at: '2026-08-27T04:37:31+00:00'
+content_hash: 937c33979ba86ae809b530bcb08583fc1b7ee4352ecd7654c97dd911468af26e
 ---
 
 Where Claude Code reads CLAUDE.md, settings.json, hooks, skills, commands, subagents, workflows, rules, and auto memory. Explore the .claude directory in your project and ~/.claude in your home directory.
@@ -110,6 +110,7 @@ Claude Code deletes the files in the paths below once they're older than [`clean
 | `shell-snapshots/`                           | Aliases, functions, and shell options captured at startup and applied by the [Bash tool](/docs/en/tools-reference#bash-tool-behavior) to each command. Removed on clean exit. The sweep clears any left after a crash.                                                                                         |
 | `backups/`                                   | Earlier versions of `~/.claude.json`, copied when Claude Code rewrites the file. Claude Code keeps the five newest, plus a copy of any version it couldn't parse.                                                                                                                                              |
 | `feedback-bundles/`                          | Redacted transcript archives written by `/feedback` on third-party providers or when no Anthropic credentials are configured, for sending to your Anthropic account team                                                                                                                                       |
+| `feedback/drafts/`                           | Queued [Claude-drafted feedback](/docs/en/tools-reference#sendfeedback-tool-behavior) awaiting your review in `/feedback`. Swept after `cleanupPeriodDays` or 30 days, whichever is shorter. When the queue is at its 10-draft limit, Claude Code deletes the oldest draft to make room.                       |
 | `usage-data/`                                | `report.html` and timestamped report copies written by [`/insights`](/docs/en/costs#analyze-your-usage-patterns), plus cached per-session analysis data used to build them                                                                                                                                     |
 | `todos/`, `statsig/`, `logs/`                | Legacy directories from older versions. No longer written. The sweep removes their contents and then the empty directory.                                                                                                                                                                                      |
 
@@ -210,6 +211,7 @@ You can also delete any of the application-data paths above by hand. New session
 | `~/.claude/stats-cache.json`                                                                                                                                       | Historical totals shown by `/usage`                                                                                    |
 | `~/.claude/usage-data/`                                                                                                                                            | Past [`/insights`](/docs/en/costs#analyze-your-usage-patterns) reports and the cached analysis data used to build them |
 | `~/.claude/feedback-bundles/`                                                                                                                                      | Feedback and bug-report archives you haven't yet sent to your Anthropic account team                                   |
+| `~/.claude/feedback/drafts/`                                                                                                                                       | [Claude-drafted feedback](/docs/en/tools-reference#sendfeedback-tool-behavior) you haven't sent                        |
 | `~/.claude/remote-settings.json`                                                                                                                                   | Nothing. Re-fetched on next launch.                                                                                    |
 | `~/.claude/cache/changelog.md`                                                                                                                                     | Nothing. Refreshed in the background.                                                                                  |
 | `~/.claude/policy-limits.json`                                                                                                                                     | Nothing. Refreshed automatically.                                                                                      |
