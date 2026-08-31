@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/agent-sdk/todo-tracking
-fetched_at: '2026-08-25T01:58:26+00:00'
-content_hash: 76ee1c463701b5cb890e631d6ecd13e8ed442d08151408c043b71c96fdecfad9
+fetched_at: '2026-08-31T02:39:11+00:00'
+content_hash: c35d0239b6449c4cb4516fe9755d5f0676c99ce2132c9b8bbfec7e8b0254e88e
 ---
 
 Track todos in Agent SDK sessions and render Claude's progress in your application from structured tool calls
@@ -74,7 +74,7 @@ The streamed `tool_use` input is the raw shape the model emitted. Claude Code re
 
   try {
     for await (const message of query({
-      prompt: "Optimize my React app performance and track progress with todos",
+      prompt: "Create a static website with a home page, an about page, and a shared stylesheet, and track progress with todos",
       // Keeps the Task tools on models where Claude Code otherwise doesn't provide them.
       options: { maxTurns: 15, permissionMode: "acceptEdits", env: { ...process.env, CLAUDE_CODE_ENABLE_TODO_TOOLS: "1" } },
     })) {
@@ -110,7 +110,7 @@ The streamed `tool_use` input is the raw shape the model emitted. Claude Code re
   async def main():
       try:
           async for message in query(
-              prompt="Optimize my React app performance and track progress with todos",
+              prompt="Create a static website with a home page, an about page, and a shared stylesheet, and track progress with todos",
               # Keeps the Task tools on models where Claude Code otherwise doesn't provide them.
               options=ClaudeAgentOptions(max_turns=15, permission_mode="acceptEdits", env={"CLAUDE_CODE_ENABLE_TODO_TOOLS": "1"}),
           ):

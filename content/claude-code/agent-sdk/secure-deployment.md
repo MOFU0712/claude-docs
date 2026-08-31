@@ -1,12 +1,12 @@
 ---
 source_url: https://code.claude.com/docs/en/agent-sdk/secure-deployment
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: 54362465b1b92eb5da04d6d81dd83d1f6fd294ad98a97fc70382ab6a582399f9
+fetched_at: '2026-08-31T02:39:11+00:00'
+content_hash: ee945eb4e6d99b8f3f40db54da0233a1b27f64692cf579bd8df0f94d86bd657b
 ---
 
 A guide to securing Claude Code and Agent SDK deployments with isolation, credential management, and network controls
 
-Claude Code and the Agent SDK are powerful tools that can execute code, access files, and interact with external services on your behalf.
+Claude Code and the Agent SDK can execute code, access files, and interact with external services on your behalf.
 
 Unlike traditional software that follows predetermined code paths, these tools generate their actions dynamically based on context and goals. This flexibility is what makes them useful, but it also means their behavior can be influenced by the content they process: files, webpages, or user input. This is sometimes called prompt injection. For example, if a repository's README contains unusual instructions, Claude Code might incorporate those into its actions in ways the operator didn't anticipate. This guide covers practical ways to reduce this risk.
 

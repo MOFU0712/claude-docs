@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/plugin-relevance
-fetched_at: '2026-08-27T04:37:31+00:00'
-content_hash: d011c70b4988195eb28a496b4c99d94cdb9ddd6b65cc9791709930f2912161df
+fetched_at: '2026-08-31T02:39:11+00:00'
+content_hash: fe5552b44e120528e21776442e6b5a79f9dc2238a429c0268ba9922b4397625d
 ---
 
 Add a relevance block to marketplace plugin entries so Claude Code suggests them when a user's work matches.
@@ -9,8 +9,6 @@ Add a relevance block to marketplace plugin entries so Claude Code suggests them
 If you operate a plugin marketplace for your organization, you can have Claude Code suggest specific plugins to users based on what they are working on. Add a `relevance` block to a plugin's entry in `marketplace.json`, then allowlist the marketplace in managed settings. When a user's session matches one of the declared signals, Claude Code surfaces an install suggestion for that plugin.
 
 Marketplace-declared suggestions are opt-in per marketplace through [managed settings](/docs/en/managed-settings). No marketplace's `relevance` declarations produce suggestions until an administrator adds it to the allowlist, including the official Anthropic marketplace. Claude Code also includes one built-in suggestion that is independent of this allowlist; that tip and all marketplace-declared tips are disabled when [`spinnerTipsEnabled`](/docs/en/settings-reference#spinnertipsenabled) is set to `false`.
-
-This feature requires Claude Code v2.1.152 or later. Older clients ignore the `relevance` field.
 
 This page is for marketplace operators and enterprise administrators. If you are looking to install plugins, see [Discover and install plugins](/docs/en/discover-plugins).
 
@@ -23,8 +21,8 @@ Signal matching happens locally on the user's machine. The matching adds no netw
 When a signal matches and the plugin is not already installed, Claude Code shows the plugin in three places:
 
 * **Spinner tip**: a "Working with *topic*? Install the *plugin* plugin" message with the `/plugin install` command appears below the spinner while Claude is responding.
-* **Session-start suggestion**: if the `cwd` signal matches the working directory, a one-line `plugin suggestion: <name>@<marketplace> · /plugin` notification appears before the first turn. This surface requires Claude Code v2.1.153 or later.
-* **`/plugin` Discover tab**: the plugin is pinned to the top of the Discover list with an annotation such as "suggested for this directory" or "suggested for stripe commands". This surface requires Claude Code v2.1.154 or later.
+* **Session-start suggestion**: if the `cwd` signal matches the working directory, a one-line `plugin suggestion: <name>@<marketplace> · /plugin` notification appears before the first turn.
+* **`/plugin` Discover tab**: the plugin is pinned to the top of the Discover list with an annotation such as "suggested for this directory" or "suggested for stripe commands".
 
 The spinner tip and the session-start notification are part of the spinner-tips system. Claude Code disables both when `spinnerTipsEnabled` resolves to `false` across your settings files, or when `excludeDefault` resolves to `true` across the [`spinnerTipsOverride`](/docs/en/settings-reference#spinnertipsoverride) keys in user, `--settings`, and managed settings and those keys configure at least one tip or a `tipsFile`.
 

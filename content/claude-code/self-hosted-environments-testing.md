@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/self-hosted-environments-testing
-fetched_at: '2026-08-25T01:58:26+00:00'
-content_hash: acc865635b7450b7994660912c6ba761239fe90fec90eb730fb5badf1bbd79f4
+fetched_at: '2026-08-31T02:39:11+00:00'
+content_hash: 4a32fbaf1225bfbb98eef55c53aa3509f5bd05fa7696ba8f2b8ad9c7abe40472
 ---
 
 Verify a self-hosted runner image from CI: dispatch a session with the CLI, read Claude's replies through a Stop hook, and script the full loop.
@@ -86,7 +86,7 @@ The `--environment` and `--ref` dispatch flags require Claude Code v2.1.224 or l
 
 ### `--environment` dispatch behavior
 
-In a non-interactive run, with `-p` or a piped prompt, Claude Code creates the session, prints the session ID and a link to it, and exits. From a terminal, `claude --environment <id> "task"` starts an attached interactive cloud session on the environment instead.
+Claude Code creates the session, prints the session ID and a link to it, and exits.
 
 The flag takes precedence over the [`remote.defaultEnvironmentId`](/docs/en/settings-reference#remote-defaultenvironmentid) setting. It doesn't support `--output-format stream-json`, and can't be combined with flags that resume, attach to, or preconfigure a session, such as `--resume`, `--continue`, `--teleport`, `--session-id`, or `--init-only`. `--cloud` is rejected with a session ID or URL, and in non-interactive runs when it carries a description. A bare `--cloud` is treated as absent. From a terminal, you can pass the task as the `--cloud` description instead of a positional prompt.
 

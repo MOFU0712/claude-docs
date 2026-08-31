@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/vs-code
-fetched_at: '2026-08-26T02:27:04+00:00'
-content_hash: b649d7769bcfcf1ee58706d2fea5bf923e7a5b0a4c28f65d871619a764795490
+fetched_at: '2026-08-31T02:39:11+00:00'
+content_hash: 3d908884d67bb887aebf75e9e61a56564d2ea6b5e3f253fceb688425d80cbdad
 ---
 
 Install and configure the Claude Code extension for VS Code. Get AI coding assistance with inline diffs, @-mentions, plan review, and keyboard shortcuts.
@@ -129,6 +129,11 @@ You can also hold `Shift` while dragging files into the prompt box to add them a
 ### Resume past conversations
 
 Click the **Session history** button at the top of the Claude Code panel to access your conversation history. You can search by keyword or browse by time (Today, Yesterday, Last 7 days, etc.). Click any conversation to resume it with the full message history. New sessions receive AI-generated titles based on your first message. Hover over a session to reveal rename and remove actions: rename to give it a descriptive title, or remove to delete it from the list. For more on resuming sessions, see [Manage sessions](/docs/en/sessions).
+
+When the conversation you resume ended in plan mode, Claude Code restores plan mode. Requires Claude Code v2.1.246 or later. Claude Code doesn't restore it in two cases:
+
+* The extension [chooses the starting permission mode](/docs/en/permission-modes#switch-permission-modes) from `claudeCode.initialPermissionMode` or a pick that carries over from an earlier conversation
+* You have `claudeCode.claudeProcessWrapper` configured
 
 ### Resume cloud sessions from Claude.ai
 

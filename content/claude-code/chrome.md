@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/chrome
-fetched_at: '2026-08-27T04:37:31+00:00'
-content_hash: c9bb9d3ab26c35b5c12bdef0cdb9eb314cc40be6f43bed13ae4e0866bbb50263
+fetched_at: '2026-08-31T02:39:11+00:00'
+content_hash: c0288e973d0b1be1a874c4f04f0da6f05ddecbfc1092379fc1beeb979b9c2345
 ---
 
 Connect Claude Code to your Chrome browser to test web apps, debug with console logs, automate form filling, and extract data from web pages.
@@ -76,7 +76,7 @@ Chrome integration also requires signing in with `/login`. If you authenticate w
 
 Run `/chrome` at any time to check the connection status, manage permissions, reconnect the extension, or choose which connected browser to use. The integration is working when the status panel shows "Status: Enabled" and "Extension: Installed".
 
-If more than one browser is connected, you choose which one Claude uses. When a browser action starts before you've chosen, Claude prompts you to pick one. To switch browsers later, run `/chrome` and select **Select browser…**. Claude keeps using your choice even when another browser connects. Browser selection requires Claude Code v2.1.154 or later.
+If more than one browser is connected, you choose which one Claude uses. When a browser action starts before you've chosen, Claude prompts you to pick one. To switch browsers later, run `/chrome` and select **Select browser…**. Claude keeps using your choice even when another browser connects.
 
 For VS Code, see [browser automation in VS Code](/docs/en/vs-code#automate-browser-tasks-with-chrome).
 

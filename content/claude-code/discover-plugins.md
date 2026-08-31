@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/discover-plugins
-fetched_at: '2026-08-27T04:37:31+00:00'
-content_hash: b1b8162d84de42f91b3f9a64954e831e3c8c395ab4f4919d27777538dda63d36
+fetched_at: '2026-08-31T02:39:11+00:00'
+content_hash: 36dcd196f3f95d6bdd465a387924810b12bdf255b65d1e6306707377c31b714d
 ---
 
 Find and install plugins from marketplaces to extend Claude Code with new skills, agents, and capabilities.
@@ -51,7 +51,7 @@ The official marketplace includes several categories of plugins:
 
 ### Code intelligence
 
-Code intelligence plugins enable Claude Code's built-in LSP tool, giving Claude the ability to jump to definitions, find references, and see type errors immediately after edits. These plugins configure [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) connections, the same technology that powers VS Code's code intelligence.
+Code intelligence plugins enable Claude Code's built-in LSP tool, giving Claude the ability to jump to definitions, find references, and see type errors immediately after edits. These plugins configure [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) connections, the same technology that powers VS Code's code intelligence. In [cloud sessions](/docs/en/claude-code-on-the-web), Claude Code doesn't start plugin language servers, so Claude doesn't get the LSP tool there.
 
 Install the language server binary from the table below before using these plugins; the plugin doesn't install it for you. If you already have a language server installed, Claude may prompt you to install the corresponding plugin when you open a project.
 

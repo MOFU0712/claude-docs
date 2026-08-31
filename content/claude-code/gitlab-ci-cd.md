@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/gitlab-ci-cd
-fetched_at: '2026-08-20T06:51:05+00:00'
-content_hash: 93012282fad6e09b4eaaafa92a914b4dc75a6498a24acb8150cda4194a83243e
+fetched_at: '2026-08-31T02:39:11+00:00'
+content_hash: 6ea09f37b957d60286ad34491d23dc3989884516dc92650b241fe7f52ea84ea3
 ---
 
 Learn about integrating Claude Code into your development workflow with GitLab CI/CD
@@ -42,7 +42,7 @@ Pick regional endpoints to reduce latency and meet data-sovereignty requirements
 
 ## What can Claude do?
 
-Claude Code enables powerful CI/CD workflows that transform how you work with code:
+In a GitLab pipeline, Claude Code can:
 
 * Create and update MRs from issue descriptions or comments
 * Analyze performance regressions and propose optimizations

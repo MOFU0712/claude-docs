@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/code-review
-fetched_at: '2026-08-27T04:37:31+00:00'
-content_hash: a65381c148c48b3765e2cc65d686da4e07398c59fabf49296964a2651dddb7ac
+fetched_at: '2026-08-31T02:39:11+00:00'
+content_hash: c8228f920246975cb6590e14b9717fad7385f86ebe010ac56b5185d2d020810e
 ---
 
 Set up automated PR reviews that catch logic errors, security vulnerabilities, and regressions using multi-agent analysis of your full codebase
@@ -367,7 +367,9 @@ Before v2.1.246, Claude started `/code-review` on its own only where a feature f
 
 ### Escalate to ultrareview
 
-`/code-review ultra --fix` runs the deeper [ultrareview](/docs/en/ultrareview) in the cloud, then applies its findings to your working tree when they arrive back in your session. Ultrareview uses its own scope: your current branch against the repository's default branch, plus any uncommitted and staged changes in the working tree. Pass a branch name, such as `/code-review ultra develop`, to compare against a different base.
+`/code-review ultra --fix` runs the deeper [ultrareview](/docs/en/ultrareview) in the cloud, then applies its findings to your working tree when they arrive back in your session.
+
+Ultrareview uses its own scope: your current branch against the repository's default branch, plus uncommitted and staged changes in the working tree. For uncommitted changes to files named like credentials or keys, such as `.env` and `*.tfvars` files, Claude Code follows the rules for [uploading a local repository to a cloud session](/docs/en/claude-code-on-the-web#send-local-repositories-without-github). Pass a branch name, such as `/code-review ultra develop`, to compare against a different base.
 
 When the target is a `github.com` pull request, you can have Claude [post the finished findings to the PR](/docs/en/ultrareview#post-findings-to-the-pull-request) as a comment from your GitHub account. Requires Claude Code v2.1.227 or later.
 
@@ -379,7 +381,7 @@ To start a cloud review from a script or CI, run `claude -p '/code-review ultra'
 
 When the review would bill [usage credits](https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans), Claude Code stops before launching, because the billing confirmation needs an interactive session. Run the [`claude ultrareview` subcommand](/docs/en/ultrareview#run-ultrareview-non-interactively) instead; by running it, you consent to the charge.
 
-The command was named `/simplify` before v2.1.147, when it applied fixes by default. From v2.1.154, `/simplify` runs a separate cleanup-only review that applies fixes without hunting for bugs. If you scripted `/simplify` for bug-finding, switch to `/code-review --fix`, which is unchanged.
+The command was named `/simplify` before v2.1.147, when it applied fixes by default. `/simplify` runs a separate cleanup-only review that applies fixes without hunting for bugs. If you scripted `/simplify` for bug-finding, switch to `/code-review --fix`.
 
 ## Related resources
 

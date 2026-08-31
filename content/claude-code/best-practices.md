@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/best-practices
-fetched_at: '2026-08-27T04:37:31+00:00'
-content_hash: 8b76713127888f5533127f5e3d91a9ca325073eaef48e7e7febb54ed361642ae
+fetched_at: '2026-08-31T02:39:11+00:00'
+content_hash: 659fbc797d477a367e72ae6f8098be5a2c133933f4d3a2e29fd3cd75a1b4f7ac
 ---
 
 Tips and patterns for getting the most out of Claude Code, from configuring your environment to scaling across parallel sessions.
@@ -398,7 +398,7 @@ During long sessions, Claude's context window can fill with irrelevant conversat
   Delegate research with `"use subagents to investigate X"`. They explore in a separate context, keeping your main conversation clean for implementation.
 </Tip>
 
-Since context is your fundamental constraint, subagents are one of the most powerful tools available. When Claude researches a codebase it reads lots of files, all of which consume your context. Subagents run in separate context windows and report back summaries:
+Since context is your fundamental constraint, use subagents to keep research out of it. When Claude researches a codebase it reads lots of files, all of which consume your context. Subagents run in separate context windows and report back summaries:
 
 ```text wrap theme={null}
 Use subagents to investigate how our authentication system handles token
@@ -462,9 +462,10 @@ The first command prints plain text. The `json` format returns a single JSON obj
   Run multiple Claude sessions in parallel to speed up development, run isolated experiments, or start complex workflows.
 </Tip>
 
-Pick the parallel approach that fits how much coordination you want to do yourself:
+Pick the parallel approach that fits how much coordination you want to do yourself, and add messaging when the sessions need to pass findings between them:
 
 * [Worktrees](/docs/en/worktrees): run separate CLI sessions in isolated git checkouts so edits don't collide
+* [Cross-session messaging](/docs/en/cross-session-messaging): let the sessions you run yourself pass findings to each other
 * [Desktop app](/docs/en/desktop#work-in-parallel-with-sessions): manage multiple local sessions visually, each in its own worktree
 * [Claude Code on the web](/docs/en/claude-code-on-the-web): run sessions in the cloud, on Anthropic-managed infrastructure by default
 * [Agent view](/docs/en/agent-view): research preview. Run `claude agents` to dispatch sessions that keep running in the background and watch them from one screen
@@ -504,7 +505,7 @@ For large migrations or analyses, you can distribute work across many parallel C
     ```
   </Step>
 
-  <Step title="Test on a few files, then run at scale">
+  <Step title="Test on a few files, then run on all of them">
     Refine your prompt based on what goes wrong with the first 2-3 files, then run on the full set. The `--allowedTools` flag restricts what Claude can do, which matters when you're running unattended.
   </Step>
 </Steps>
