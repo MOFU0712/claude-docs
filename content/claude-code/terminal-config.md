@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/terminal-config
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: d794dc2d66b285e4a8aca8fb06e16e539a31dab6f038bd5a0c1c7629984fb7d2
+fetched_at: '2026-09-01T06:13:54+00:00'
+content_hash: 4ddc15f3133be8399b2dae2f162bf2ce91703097393eb9c4f4e575d80b03ab7f
 ---
 
 Fix Shift+Enter for newlines, get a terminal bell when Claude finishes, configure tmux, match the color theme, and enable Vim mode in the Claude Code CLI.
@@ -308,7 +308,7 @@ Run `/tui fullscreen` to switch and save the preference. Your conversation relau
 
 ## Paste large content
 
-When you paste more than 800 characters or more than two lines into the prompt, Claude Code collapses the input to a placeholder such as `[Pasted text #1 +120 lines]` so the input box stays usable. The full content is still sent to Claude when you submit.
+When you paste more than 800 characters or more than three lines into the prompt, Claude Code collapses the input to a placeholder such as `[Pasted text #1 +120 lines]` so the input box stays usable. In a terminal window shorter than 12 rows the line limit drops, so Claude Code collapses a three-line paste at 11 rows and any multi-line paste at 10 rows or fewer. Claude Code still sends the full content when you submit.
 
 When you delete with a word or line shortcut such as `Ctrl+W` or `Ctrl+K`, or with a vim delete through an `f`/`t` motion such as `df]`, and the deleted range reaches inside a placeholder, Claude Code removes the placeholder whole. You can paste the deletion back to restore it, with [`Ctrl+Y`](/docs/en/interactive-mode#text-editing) after `Ctrl+W`, `Ctrl+U`, or `Ctrl+K`, or with [`p` in NORMAL mode](/docs/en/interactive-mode#editing-normal-mode) after a vim delete.
 

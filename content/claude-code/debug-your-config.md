@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/debug-your-config
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: e8043bf563a4361f3630f5aaac6494ecdf78cb58512ba9703dbbc7fe9f444e01
+fetched_at: '2026-09-01T06:13:54+00:00'
+content_hash: dd18fefe778684387ed505cee9f3f12109ba0c0bf5bc6ea59d06fe24f8df0187
 ---
 
 Diagnose why CLAUDE.md, settings, hooks, MCP servers, or skills aren't taking effect. Use /context, /doctor, /hooks, and /mcp to see what actually loaded.
@@ -82,8 +82,7 @@ cd /tmp && CLAUDE_CONFIG_DIR=/tmp/claude-clean claude
 The clean session has no user or project settings, hooks, MCP servers, plugins, or memory. On the first launch, expect the first-run setup screens, starting with theme selection. If you see them, the clean configuration directory is in effect. Later launches with the same directory skip these screens because Claude Code saves onboarding state there.
 
 * Managed settings still apply if your organization deploys them. Claude Code reads MDM profiles, registry policy, and `managed-settings.json` from locations outside the configuration directory, and [fetches server-managed settings](/docs/en/server-managed-settings#fetch-and-caching-behavior) again for the clean session once it has credentials
-* On Linux and Windows, you'll be prompted to log in again because credentials are stored under the configuration directory
-* On macOS, credentials are in the Keychain and carry over to the clean session
+* You'll be prompted to log in again
 
 If the problem disappears here, the cause is somewhere in your real `~/.claude` or project `.claude` files. Reintroduce them one at a time, by copying files into the temporary directory or by launching from your project, to find which one. If it persists in the clean session, the cause is outside your user and project configuration. Run `/status` to check whether managed settings are in effect, look for [environment variables](/docs/en/env-vars) that affect Claude Code, then see [Troubleshooting](/docs/en/troubleshooting).
 

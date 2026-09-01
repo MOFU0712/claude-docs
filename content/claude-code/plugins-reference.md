@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/plugins-reference
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: 1b779f152bd8a3160f675731f70b7c0e5df4a1a7091f300cc855376c83cd1e01
+fetched_at: '2026-09-01T06:13:54+00:00'
+content_hash: 29416193c088912bddd541dd62efc494e95112aeee4d061b1e413ce3788b79d2
 ---
 
 Complete technical reference for Claude Code plugin system, including schemas, CLI commands, and component specifications.
@@ -603,7 +603,7 @@ Before v2.1.207, these fields substituted `${user_config.KEY}` values; update pl
 
 Non-sensitive values are stored under the [`pluginConfigs`](/docs/en/settings-reference#pluginconfigs) key in your user `settings.json` as `pluginConfigs[<plugin-id>].options`.
 
-Sensitive values go to the macOS Keychain, or to `~/.claude/.credentials.json` on platforms where no supported keychain is available. Keychain storage is shared with OAuth tokens and has an approximately 2 KB total limit, so keep sensitive values small.
+On macOS, Claude Code stores sensitive values in the macOS Keychain, falling back to `~/.claude/.credentials.json` when the Keychain rejects the write. On platforms without a supported keychain, it stores them in `~/.claude/.credentials.json`. Keychain storage is shared with OAuth tokens and has an approximately 2 KB total limit, so keep sensitive values small.
 
 Claude Code reads all `pluginConfigs` values from only three settings sources:
 

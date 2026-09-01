@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/memory
-fetched_at: '2026-08-25T01:58:26+00:00'
-content_hash: 8ca91b8107365651659a702e07953f522db56f86df3b449f28bcb8687c52ffa8
+fetched_at: '2026-09-01T06:13:54+00:00'
+content_hash: 49d73d254bbe819bb5fc60b18b366c7c69981e9d0921e9e035086da38f169e20
 ---
 
 Give Claude persistent instructions with CLAUDE.md files, and let Claude accumulate learnings automatically with auto memory.
@@ -334,6 +334,8 @@ This example excludes a top-level CLAUDE.md and a rules directory from a parent 
 ```
 
 Patterns are matched against absolute file paths using glob syntax. You can configure `claudeMdExcludes` at any [settings layer](/docs/en/settings#where-settings-live): user, project, local, or managed policy. Arrays merge across layers.
+
+To exclude a rules file you reach through a [symlink](#share-rules-across-projects-with-symlinks), whether the file or its directory is the link, write the pattern against either path: the file's path under `.claude/rules/` or its link target. A pattern that matches either path excludes the file. Before v2.1.239, only a pattern that matched the link target excluded the file.
 
 Managed policy CLAUDE.md files cannot be excluded. This ensures organization-wide instructions always apply regardless of individual settings.
 

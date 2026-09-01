@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/fast-mode
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: 1833244c0c0348fd4ff8762372fe5d1b01657f9985517beac7aad2fbbfda799d
+fetched_at: '2026-09-01T06:13:54+00:00'
+content_hash: 0ae58294471764419a562dbe0f22ef740bba0808af00517cb8e7070b64944136
 ---
 
 Get faster Opus responses in Claude Code by toggling fast mode.
@@ -109,7 +109,9 @@ You can combine both: use fast mode with a lower [effort level](/docs/en/model-c
 Fast mode requires all of the following:
 
 * **Anthropic API or subscription only**: fast mode is available through the Anthropic Console API and for Claude subscription plans using usage credits. It is not available on Amazon Bedrock, Google Cloud's Agent Platform, Microsoft Foundry, or Claude Platform on AWS. Console organizations must also have [fast mode access provisioned](#enable-fast-mode-for-your-organization).
-* **Usage credits turned on for subscription plans**: on a Pro, Max, Team, or Enterprise plan, your account must have [usage credits](/docs/en/costs#add-usage-credits-to-your-subscription) turned on, which allows billing beyond your plan's included usage. Until they're on, `/fast` shows "Fast mode requires usage credits · /usage-credits to turn them on". On Pro and Max, turn them on in the **Usage credits** section of [**Settings > Usage**](https://claude.ai/settings/usage) on claude.ai, or run `/usage-credits` to open that page. On Team and Enterprise, a member with billing access turns them on for the organization at [**Admin settings > Usage**](https://claude.ai/admin-settings/usage), and a member without it runs `/usage-credits` to send the organization's admins a request.
+* **Usage credits turned on for subscription plans**: on a Pro, Max, Team, or Enterprise plan, your account must have [usage credits](/docs/en/costs#add-usage-credits-to-your-subscription) turned on, which allows billing beyond your plan's included usage. Until they're on, `/fast` shows "Fast mode requires usage credits · /usage-credits to turn them on". How you turn them on depends on your plan:
+  * On Pro and Max, turn them on in the **Usage credits** section of [**Settings > Usage**](https://claude.ai/settings/usage) on claude.ai, or run `/usage-credits` to open that page.
+  * On Team and Enterprise, a member with billing access turns them on for the organization at [**Admin settings > Usage**](https://claude.ai/admin-settings/usage), and a member without it runs `/usage-credits` to send the organization's admins a request.
 
 <Note>
   Fast mode usage draws directly from usage credits, even if you have remaining usage on your plan.

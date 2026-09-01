@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/costs
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: e73c503d49ea7a5f948207145d79e9d619941ee4ed9cbe948865cb59f136b27b
+fetched_at: '2026-09-01T06:13:54+00:00'
+content_hash: 2fbdca233bd731662114ca1caddad4fd1dfb8781bd546f7cf2f888fb24119de3
 ---
 
 Track token usage, set team spend limits, and reduce Claude Code costs with context management, model selection, extended thinking settings, and preprocessing hooks.
@@ -88,7 +88,7 @@ You can run `/insights` on any plan and with any provider. The analysis runs thr
 
 ### Add usage credits to your subscription
 
-[Usage credits](https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans) let you keep working past your plan's usage limit. To manage them, run `/usage-credits` after signing in with your claude.ai subscription through `/login`; the command isn't available with API key authentication. What it opens depends on your role:
+[Usage credits](https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans) let you keep working past your plan's usage limit. To manage them, run `/usage-credits` after signing in with your claude.ai subscription through `/login`; the command isn't available with API key authentication. In self-serve Enterprise organizations, Enterprise trials, and Enterprise organizations billed through AWS Marketplace, the command requires Claude Code v2.1.248 or later; earlier versions reject it with [`Unknown command: /usage-credits`](/docs/en/errors#unknown-command). What it opens depends on your role:
 
 | Your role                                        | What `/usage-credits` does                                                                                                                                                                                                                        |
 | :----------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |

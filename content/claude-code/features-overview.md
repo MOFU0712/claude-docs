@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/features-overview
-fetched_at: '2026-08-25T01:58:26+00:00'
-content_hash: c5cb216e64d8c9b5dbaadfdaa1055e6588c8660fccac669542bc487b84c473fb
+fetched_at: '2026-09-01T06:13:54+00:00'
+content_hash: 057abebf7f2fe188651f859278c4b49c5893bd53d050a441bb1edd899da0b7f9
 ---
 
 Understand when to use CLAUDE.md, Skills, subagents, hooks, MCP, and plugins.
@@ -274,7 +274,7 @@ Each feature loads at different points in your session. The tabs below explain w
 
     **What loads:** Fresh, isolated context containing:
 
-    * The agent's own system prompt, not the full Claude Code system prompt
+    * The agent's own system prompt, not the Claude Code system prompt
     * Full content of skills listed in the agent's `skills:` field
     * CLAUDE.md and git status, except the built-in Explore and Plan agents [omit both](/docs/en/sub-agents#what-loads-at-startup)
     * Whatever context the lead agent passes in the prompt

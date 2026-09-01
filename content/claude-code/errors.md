@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/errors
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: 0750624eb57d45c9742661ebf6530d9219d8a26fdcd596c04313cd78086943a9
+fetched_at: '2026-09-01T06:13:54+00:00'
+content_hash: d971e27593b5bc0c885a301488bdd83d5079fe3f93428b35e54d6d0fe4d46933
 ---
 
 Look up Claude Code runtime error messages with what each one means and how to fix it.
@@ -68,6 +68,8 @@ Match the message you see to a section below.
 | `API Error: 401 Invalid authentication credentials`                                                                                                                                                   | [Authentication](#api-error-401-invalid-authentication-credentials)                                                           |
 | `Login expired · Please run /login`                                                                                                                                                                   | [Authentication](#login-expired)                                                                                              |
 | `Failed to authenticate: OAuth session expired and could not be refreshed`                                                                                                                            | [Authentication](#login-expired)                                                                                              |
+| `Your account is on hold and can't use Claude Code. View details or appeal: https://claude.ai/restricted`                                                                                             | [Authentication](#your-account-is-on-hold)                                                                                    |
+| `Your account is on hold and can't sign in to Claude Code. View details or appeal: https://claude.ai/restricted`                                                                                      | [Authentication](#your-account-is-on-hold)                                                                                    |
 | `Anthropic profile login expired · Re-authenticate your Anthropic profile`                                                                                                                            | [Authentication](#anthropic-profile-login-expired)                                                                            |
 | `Anthropic profile login expired · Run /login to use your claude.ai account instead, or re-authenticate the profile`                                                                                  | [Authentication](#anthropic-profile-login-expired)                                                                            |
 | `does not meet scope requirement user:profile`                                                                                                                                                        | [Authentication](#oauth-scope-requirement)                                                                                    |
@@ -241,6 +243,7 @@ Claude Code retries these failures:
   * When no reduction can fit, for example when the conversation itself nearly fills the context window.
   * When a retry can't shrink `max_tokens` any further. Before v2.1.218, Claude Code could re-send a reduced request that still didn't fit, such as when the extended thinking budget exceeded the remaining context, until the retry budget ran out.
 * An expired or missing Google Cloud credential on [Google Cloud's Agent Platform](/docs/en/google-vertex-ai), which surfaces as an error such as `Could not load the default credentials`. Claude Code discards its cached credentials and retries up to two times, running your [`gcpAuthRefresh`](/docs/en/google-vertex-ai#advanced-credential-configuration) command if you configured one, then reports the error so you can re-authenticate right away. [Google Cloud's Agent Platform troubleshooting](/docs/en/google-vertex-ai#troubleshooting) covers re-authenticating. Before v2.1.228, Claude Code retried a failing credential through the full retry budget before showing the error.
+* A `401` or `403` from the Anthropic API, directly or through an [LLM gateway](/docs/en/llm-gateway), while an [`apiKeyHelper`](/docs/en/settings-reference#apikeyhelper) script supplies the credential. Claude Code re-runs the script and retries with its fresh output, within the full retry budget. When the script itself fails on the re-run, Claude Code shows [Your apiKeyHelper script is failing](#your-apikeyhelper-script-is-failing) instead.
 
 Before v2.1.227, `Connection lost before a response was produced` read `Connection closed while thinking, before producing a response` and `The response stalled before a response was produced` read `Response stalled while thinking, before producing a response`.
 
@@ -527,7 +530,7 @@ When this error appears mid-conversation because the context grew past 200K toke
 **What to do:**
 
 * Run `/model` and select the variant without the `[1m]` suffix to fall back to the standard context window
-* Run `/usage-credits` to turn on metered billing for the 1M variant on Pro and Max, or to request it from your admin on Team and Enterprise
+* Where the message names `/usage-credits`, run it to turn on metered billing for the 1M variant on Pro and Max, or to request usage credits from your admin on Team and Enterprise
 * If the error persists after `/model`, a 1M model ID may be set elsewhere. See [Setting your model](/docs/en/model-config#setting-your-model) for the configuration locations to check in priority order.
 * To remove 1M variants from the model picker entirely, set [`CLAUDE_CODE_DISABLE_1M_CONTEXT=1`](/docs/en/env-vars)
 
@@ -648,7 +651,7 @@ Not logged in · Please run /login
 * For CI or automation where interactive login is not possible, configure an [`apiKeyHelper`](/docs/en/settings-reference#apikeyhelper) script that fetches a key at startup
 * See [Authentication precedence](/docs/en/authentication#authentication-precedence) to understand which credential Claude Code uses when several are present
 
-If you are prompted to log in repeatedly, see [Not logged in or token expired](/docs/en/troubleshoot-install#not-logged-in-or-token-expired) for system clock and macOS Keychain fixes.
+If you are prompted to log in repeatedly, see [Not logged in or token expired](/docs/en/troubleshoot-install#not-logged-in-or-token-expired) for system clock checks and macOS credential-storage recovery steps.
 
 ### Could not resolve authentication method
 
@@ -926,7 +929,7 @@ API Error: 401 ... authentication_error
 * Run `/login` to sign in again
 * If the error returns within the same session after re-authenticating, run `/logout` first to fully clear the stored token, then `/login`
 * If you authenticate with the `CLAUDE_CODE_OAUTH_TOKEN` environment variable, Claude Code keeps sending the value you set after a request fails with a 401, rather than switching to a stored login's token. [`/status`](/docs/en/commands) shows this credential as an `Auth token` row reading `CLAUDE_CODE_OAUTH_TOKEN`. Generate a fresh token with [`claude setup-token`](/docs/en/authentication#generate-a-long-lived-token) and restart with it, or unset the variable and run `/login`. Before v2.1.225, Claude Code could replace the variable's value mid-session with the short-lived access token from a stored login, and the session failed with 401 errors again once that token expired.
-* For repeated prompts to log in across launches, see the system clock and macOS Keychain checks in [Troubleshooting](/docs/en/troubleshoot-install#not-logged-in-or-token-expired)
+* For repeated prompts to log in across launches, see the system clock checks and macOS credential-storage recovery steps in [Troubleshooting](/docs/en/troubleshoot-install#not-logged-in-or-token-expired)
 * For other failures including `403 Forbidden` and OAuth browser issues, see [Login and authentication](/docs/en/troubleshoot-install#login-and-authentication)
 
 ### API Error: 401 Invalid authentication credentials
@@ -946,7 +949,9 @@ Please run /login · API Error: 401 Invalid authentication credentials
 
 ### Login expired
 
-Claude Code tried to renew your saved claude.ai or Claude Console login and the OAuth service rejected the stored refresh token, so Claude Code cleared the saved credentials. After that, each request stops locally before it reaches the API, because only `/login` can create new credentials. Before v2.1.206, Claude Code sent the request anyway with whatever credential remained in the environment, and every model then failed with [There's an issue with the selected model](#theres-an-issue-with-the-selected-model) or a 401 instead of a prompt to sign in.
+Claude Code tried to renew your saved claude.ai or Claude Console login and the OAuth service rejected the stored refresh token, so Claude Code cleared the saved credentials. After that, each model request stops locally with this message before it reaches the API, because only `/login` can create new credentials.
+
+Before v2.1.206, Claude Code sent the model request anyway with whatever credential remained in the environment, and every model then failed with [There's an issue with the selected model](#theres-an-issue-with-the-selected-model) or a 401 instead of a prompt to sign in.
 
 ```text theme={null}
 Login expired · Please run /login
@@ -958,7 +963,7 @@ In [non-interactive mode](/docs/en/headless) (`-p`) and the [Agent SDK](/docs/en
 Failed to authenticate: OAuth session expired and could not be refreshed
 ```
 
-This is not the same state as [OAuth token revoked or expired](#oauth-token-revoked-or-expired). Those messages report a 401 the API returned. Claude Code itself produces `Login expired` for a login it already failed to renew, so it sends no request.
+This is not the same state as [OAuth token revoked or expired](#oauth-token-revoked-or-expired). Those messages report a 401 the API returned. Claude Code itself produces `Login expired` for a login it already failed to renew, so it sends no request. When the renewal fails because the account itself is suspended rather than the login being stale, Claude Code shows [Your account is on hold](#your-account-is-on-hold) instead.
 
 Sessions authenticated with an API key, [`CLAUDE_CODE_OAUTH_TOKEN`](/docs/en/env-vars), or a third-party provider don't use the saved login and never see this message.
 
@@ -970,6 +975,22 @@ You can check for this state before a request fails: [`/status`](/docs/en/comman
 * In non-interactive mode, run `claude` in the same environment, complete `/login`, then rerun your command. For automation that can't sign in interactively, authenticate with `ANTHROPIC_API_KEY` or [generate a long-lived token with `claude setup-token`](/docs/en/authentication#generate-a-long-lived-token).
 * If signing in keeps failing, see [Login and authentication](/docs/en/troubleshoot-install#login-and-authentication)
 
+### Your account is on hold
+
+The Claude account behind your login has been suspended. Claude Code shows the first message when it tries to renew your saved login and learns of the hold, and the second when a sign-in you complete in the browser reports it:
+
+```text theme={null}
+Your account is on hold and can't use Claude Code. View details or appeal: https://claude.ai/restricted
+Your account is on hold and can't sign in to Claude Code. View details or appeal: https://claude.ai/restricted
+```
+
+Signing in again with the same account doesn't clear the message, because the hold is on the account rather than the login. In [non-interactive mode](/docs/en/headless) (`-p`) and the [Agent SDK](/docs/en/agent-sdk/overview), the structured error code is `account_on_hold`. Before v2.1.235, Claude Code reported a held account as [Login expired · Please run /login](#login-expired), whose recovery steps can't clear a hold.
+
+**What to do:**
+
+* Open the link in the message to view the hold's details or appeal it
+* If you have another Claude account or an API key that isn't affected by the hold, you can keep working while the hold is resolved: run `/login` with that account, or set the key with `ANTHROPIC_API_KEY`
+
 ### Anthropic profile login expired
 
 Claude Code is authenticating through an Anthropic credential profile whose saved login credential has expired, and the profile holds no refresh credential Claude Code can use to renew it. Claude Code stops each request locally without retrying, because a retry would read the same expired credential.
@@ -979,16 +1000,16 @@ Anthropic profile login expired · Re-authenticate your Anthropic profile
 Anthropic profile login expired · Run /login to use your claude.ai account instead, or re-authenticate the profile
 ```
 
-This appears only when the active credential comes from an Anthropic credential profile, one you select with the `ANTHROPIC_PROFILE` environment variable or that Claude Code discovers as the active profile in your Anthropic configuration directory. Sessions that authenticate with `/login`, an API key, a bearer token such as `ANTHROPIC_AUTH_TOKEN`, or a third-party provider never see this message.
+This appears only when the active credential comes from an Anthropic credential profile, one you select with the `ANTHROPIC_PROFILE` environment variable, that Claude Code discovers as the active profile in your Anthropic configuration directory, or that Claude Code wrote when you [signed in without an API key](/docs/en/authentication#sign-in-without-an-api-key). Sessions that authenticate with `/login`'s claude.ai option, an API key, a bearer token such as `ANTHROPIC_AUTH_TOKEN`, or a third-party provider never see this message.
 
-Running `/login` doesn't renew the profile credential. Which form you see depends on whether you selected the profile or Claude Code discovered it, and tells you whether a working login can take over instead:
+On a machine that [offers the keyless sign-in](/docs/en/authentication#sign-in-without-an-api-key), run `/login`, choose the Anthropic Console account, and sign in again to renew a profile that the keyless Console sign-in or the Claude Platform CLI's `ant auth login` wrote. Claude Code replaces the expired credential in that profile. For a federation profile or one another tool created, `/login` doesn't renew the credential. Which form you see depends on whether you selected the profile or Claude Code discovered it:
 
-* When you set `ANTHROPIC_PROFILE` explicitly, the message ends with `Re-authenticate your Anthropic profile`. Claude Code gives the profile precedence over a saved login, so signing in doesn't stop the error.
+* When you set `ANTHROPIC_PROFILE` explicitly, the message ends with `Re-authenticate your Anthropic profile`.
 * When Claude Code discovered the profile from your configuration directory, the message offers `/login`, because Claude Code gives a working `/login` precedence over the discovered profile and then authenticates with your claude.ai or Console account instead. Before v2.1.234, Claude Code showed the `Re-authenticate your Anthropic profile` form in this case too.
 
 **What to do:**
 
-* Sign in to the profile again with the tool that created it, then retry
+* Sign in to the profile again, then retry: on a machine that [offers the keyless sign-in](/docs/en/authentication#sign-in-without-an-api-key), run `/login` and choose the Anthropic Console account for a profile the keyless Console sign-in or the Claude Platform CLI's `ant auth login` wrote; for other profiles, use the tool that created them
 * If an administrator provisioned the profile's credential, ask them to issue a new one
 * Run `/status` to confirm the active credential source and profile name
 * To stop using the profile, unset `ANTHROPIC_PROFILE` if you set it, then authenticate another way, such as `/login` or `ANTHROPIC_API_KEY`
@@ -1207,7 +1228,7 @@ Claude Code sends each affected request twice: the empty streaming attempt and t
 
 ### Bedrock streaming response has an unexpected content-type
 
-A gateway or proxy between Claude Code and [Amazon Bedrock](/docs/en/amazon-bedrock) is transforming the streaming response body or its `Content-Type` header. Amazon Bedrock streams responses as `application/vnd.amazon.eventstream`, and Claude Code rejects a successful streaming response that reports a different content-type instead of decoding a body it can't read. The request isn't retried.
+A gateway or proxy between Claude Code and [Amazon Bedrock](/docs/en/amazon-bedrock) is transforming the streaming response body or its `Content-Type` header. Amazon Bedrock streams responses as `application/vnd.amazon.eventstream`. Rather than decode a body it can't read, Claude Code rejects a successful streaming response that reports a different content-type. Claude Code doesn't retry the request.
 
 ```text theme={null}
 Bedrock streaming response has content-type "text/event-stream"; expected "application/vnd.amazon.eventstream". A gateway or proxy between Claude Code and Bedrock is likely transforming the response body — Bedrock's binary event-stream format must be passed through unmodified. Set CLAUDE_CODE_DISABLE_BEDROCK_CONTENT_TYPE_GUARD=1 to suppress this check while the gateway is being fixed.
@@ -1218,7 +1239,7 @@ Before v2.1.208, the same misconfiguration surfaced as `API Error: Truncated eve
 **What to do:**
 
 * Configure the gateway to pass the `InvokeModelWithResponseStream` response body and its `Content-Type` header through unmodified. An intermediary that re-emits the stream as server-sent events is a common cause.
-* If the gateway rewrites only the header and passes the binary body through intact, set [`CLAUDE_CODE_DISABLE_BEDROCK_CONTENT_TYPE_GUARD=1`](/docs/en/env-vars) to skip the check until the gateway is fixed. See [Streaming errors behind a gateway or proxy](/docs/en/amazon-bedrock#streaming-errors-behind-a-gateway-or-proxy).
+* Setting [`CLAUDE_CODE_DISABLE_BEDROCK_CONTENT_TYPE_GUARD=1`](/docs/en/env-vars) hides this error, but Claude Code doesn't decode a binary body under a rewritten header, so those requests fall back to a slower non-streaming path. See [Streaming errors behind a gateway or proxy](/docs/en/amazon-bedrock#streaming-errors-behind-a-gateway-or-proxy).
 
 ### SSL certificate errors
 
@@ -1557,7 +1578,11 @@ A tool in the request declared an `input_schema` that fails the API's JSON Schem
 API Error: 400 ... tools.N.custom.input_schema: JSON schema is invalid
 ```
 
-Claude Code [excludes MCP tools whose input schema would fail this validation](/docs/en/mcp#tools-with-invalid-input-schemas) when it loads a server's tools, so requests normally never include one. On a deployment that doesn't receive the remote configuration that enables the exclusion, Claude Code records in the server's log which tool would be rejected but sends it anyway, so this error can still occur. The error can also occur for a tool whose schema declares a JSON Schema dialect other than draft 2020-12 in `$schema`: Claude Code doesn't check those schemas against the JSON Schema meta-schema, though it still excludes one with an invalid top-level property name.
+Claude Code [excludes MCP tools whose input schema would fail this validation](/docs/en/mcp#tools-with-invalid-input-schemas) when it loads a server's tools, so requests normally never include one.
+
+On a [deployment where flag fetching is off](/docs/en/env-vars#features-that-need-feature-flag-fetching), or on a machine whose flags have never arrived, Claude Code records in the server's log which tool would be rejected but sends it anyway, so this error can still occur.
+
+The error can also occur for a tool whose schema declares a JSON Schema dialect other than draft 2020-12 in `$schema`. Claude Code doesn't check those schemas against the JSON Schema meta-schema, though the top-level property-name check still applies.
 
 Before v2.1.216, no deployment ran the exclusion checks.
 
@@ -1723,7 +1748,7 @@ API Error: Opus 4.6 can't help with this. Start a new session to continue.
 Send feedback with /feedback or learn more: https://www.anthropic.com/legal/aup
 ```
 
-The message names the model that declined, or `Claude` when no model is recorded. In [non-interactive mode](/docs/en/headless) (`-p`), the final line reads `Learn more:` followed by the link, without the `/feedback` mention.
+The message names the model that declined, or `Claude` when no model is recorded.
 
 The check evaluates the full conversation, not only your latest prompt, so sending a new message in the same session usually re-triggers the same refusal. The same applies after exiting and reopening the session with `--continue` or `--resume`, since the transcript on disk still contains the triggering content. On [Amazon Bedrock](/docs/en/amazon-bedrock), [Google Cloud's Agent Platform](/docs/en/google-vertex-ai), and [Microsoft Foundry](/docs/en/microsoft-foundry), this message also covers requests the model's safety measures flagged as a cybersecurity topic. See [Safety measures flagged a cybersecurity topic](#safety-measures-flagged-a-cybersecurity-topic).
 
@@ -1745,10 +1770,7 @@ API Error: Opus 4.8's safeguards flagged this message. Our intentionally broad s
 
 The message links to the [Cyber Verification Program](https://support.claude.com/en/articles/14604842-real-time-cyber-safeguards-on-claude), which grants access for legitimate cybersecurity work.
 
-What you see depends on your provider and mode:
-
-* On [Amazon Bedrock](/docs/en/amazon-bedrock), [Google Cloud's Agent Platform](/docs/en/google-vertex-ai), and [Microsoft Foundry](/docs/en/microsoft-foundry), a cybersecurity flag produces the [Usage Policy refusal](#usage-policy-refusal) message instead.
-* In [non-interactive mode](/docs/en/headless), the final sentence reads `Learn more:` followed by the link, without the `/feedback` mention.
+On [Amazon Bedrock](/docs/en/amazon-bedrock), [Google Cloud's Agent Platform](/docs/en/google-vertex-ai), and [Microsoft Foundry](/docs/en/microsoft-foundry), a cybersecurity flag produces the [Usage Policy refusal](#usage-policy-refusal) message instead.
 
 The safeguard itself is server-side and predates v2.1.203; client releases since then have changed only the message's wording.
 From v2.1.203 through v2.1.218, the message read `<model> has safety measures that flagged this message for a cybersecurity topic. To learn about the Cyber Verification Program and apply for access, visit our help center:` followed by the same help-center link, and interactive sessions appended `If you were not engaging in a cybersecurity topic, please send feedback via /feedback.`
@@ -2095,8 +2117,10 @@ Unknown command: /hepl. Did you mean /help?
 Claude Code suggests the closest command name or alias that the menu lists in this session. When nothing is close, the message ends after the name. The cause is usually one of the following:
 
 * A typo, such as `/hepl` for `/help`. [How the command menu matches what you type](/docs/en/commands#how-the-command-menu-matches-what-you-type) covers picking a close match before you submit
-* A command that exists but isn't available in this session because a requirement isn't met, such as your platform, plan, or authentication method. The troubleshooting entries for [`/web-setup`](/docs/en/web-quickstart#web-setup-shows-no-commands-match-or-unknown-command) and [`/schedule`](/docs/en/routines#schedule-returns-unknown-command) walk through two common cases
+* A command that exists but isn't available in this session because a requirement isn't met, such as your platform, plan, or authentication method. The troubleshooting entries for [`/web-setup`](/docs/en/web-quickstart#web-setup-shows-no-commands-match-or-unknown-command) and [`/schedule`](/docs/en/routines#schedule-returns-unknown-command) walk through two common cases. Some commands answer with their own message when your organization's policy disables them
 * A command from a [plugin](/docs/en/plugins) or [MCP server](/docs/en/mcp#use-mcp-prompts-as-commands) that isn't installed or connected in this session
+
+Claude Code doesn't treat every prompt that starts with `/` as a command. It sends the prompt to Claude as a normal message when the first word after the `/` starts with punctuation, such as the `/--` that opens a Lean doc comment, or is a path such as `/var/log/syslog`.
 
 Before v2.1.236, if you pressed `Enter` while the command menu listed a near match for the name you typed, Claude Code ran that match, so a typo such as `/hepl` ran `/help` instead of producing this message.
 
@@ -3104,11 +3128,11 @@ Permission deny rule (.claude/settings.json): Write(docs/**) is not matched by f
 
 * Replace `Write(path)`, `NotebookEdit(path)`, and legacy `MultiEdit(path)` rules with `Edit(path)`. `Edit` rules cover all file-editing tools.
 * Except in `--allowedTools`, where Claude Code accepts a `Glob` rule without warning, replace `Glob(path)` rules with `Read(path)`.
-* Fix the rule at the source the warning names in parentheses: a settings file path, or the flag itself for `--allowed-tools` and `--disallowed-tools`. A `claude-settings-<hash>.json` path that doesn't exist on disk stands for an inline `--settings` value; fix the JSON you pass to that flag.
+* Fix the rule at the source the warning names in parentheses: a settings file path, or the flag itself for `--allowed-tools` and `--disallowed-tools`. A `claude-settings-<hash>.json` path that doesn't exist on disk stands for an inline `--settings` value. Fix the JSON you pass to that flag.
 * Leave bare tool-name rules such as `Write` or `Glob` alone. Claude Code matches them at the [tool level](/docs/en/permissions#match-all-uses-of-a-tool) and doesn't warn about them.
-* If the source reads `managed policy settings`, forward the warning to whoever maintains your managed settings; you can't clear it yourself.
+* If the source reads `managed policy settings`, forward the warning to whoever maintains your managed settings, since you can't clear it yourself.
 
-In a [background session](/docs/en/agent-view) or with `--output-format json` or `stream-json`, Claude Code writes the warning to the debug log instead of stderr, so machine-read output stays clean; run with `--debug` to capture it at `~/.claude/debug/<session-id>.txt`. Before v2.1.210, Claude Code accepted these rules without a warning.
+In a [background session](/docs/en/agent-view) or with `--output-format json` or `stream-json`, Claude Code writes the warning to the debug log instead of stderr, so machine-read output stays clean. Run with `--debug` to capture it at `~/.claude/debug/<session-id>.txt`. Before v2.1.210, Claude Code accepted these rules without a warning.
 
 ### Has a wildcard before the rest of the command
 

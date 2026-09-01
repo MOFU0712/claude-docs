@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/third-party-integrations
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: 27d45ba62edd8fb38373b77cbadb6e70d730172373cc2d725cfddce9d8e6d42b
+fetched_at: '2026-09-01T06:13:54+00:00'
+content_hash: 99f64658459afbb66b7d2d28af4fc5d6aef87bd3317afe75d2910e198e629083
 ---
 
 Learn how Claude Code can integrate with various third-party services and infrastructure to meet enterprise deployment requirements.
@@ -81,7 +81,7 @@ If your organization has specific infrastructure requirements, compare the optio
     <tr>
       <td>Authentication</td>
       <td>Claude.ai SSO or email</td>
-      <td>API key</td>
+      <td>API key or a [Console sign-in without one](/docs/en/authentication#sign-in-without-an-api-key)</td>
       <td>API key or AWS credentials</td>
       <td>API key or AWS credentials</td>
       <td>GCP credentials</td>

@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/agent-sdk/observability
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: 0b36329d704ac1cf5dac0dafd50e4b6fa269aeb01754c6ded2154b9ea86601dd
+fetched_at: '2026-09-01T06:13:54+00:00'
+content_hash: dce7073d29209850d9b6539f1592f6c9e0d9c493a5b64d31e8d472069c8a5454
 ---
 
 Export traces, metrics, and events from the Agent SDK to your observability backend using OpenTelemetry.
@@ -145,7 +145,7 @@ Traces give you the most detailed view of an agent run. With `CLAUDE_CODE_ENHANC
 * **`claude_code.interaction`:** wraps a single turn of the agent loop, from receiving a prompt to producing a response.
 * **`claude_code.llm_request`:** wraps each call to the Claude API, with model name, latency, and token counts as attributes.
 * **`claude_code.tool`:** wraps each tool invocation, with child spans for the permission wait (`claude_code.tool.blocked_on_user`) and the execution itself (`claude_code.tool.execution`).
-* **`claude_code.hook`:** wraps each [hook](/docs/en/agent-sdk/hooks) execution. Requires detailed beta tracing (`ENABLE_BETA_TRACING_DETAILED=1` and `BETA_TRACING_ENDPOINT`) in addition to the variables above.
+* **`claude_code.hook`:** wraps each [hook](/docs/en/agent-sdk/hooks) execution. Requires detailed beta tracing (`ENABLE_BETA_TRACING_DETAILED=1` and `BETA_TRACING_ENDPOINT`), a pair that also [changes where your logs and traces go](/docs/en/env-vars#variables).
 
 The `llm_request`, `tool`, and `hook` spans are children of the enclosing `claude_code.interaction` span. When the agent spawns a subagent through the Agent tool, the subagent's `llm_request` and `tool` spans nest under the parent agent's `claude_code.tool` span, so the full delegation chain appears as one trace.
 

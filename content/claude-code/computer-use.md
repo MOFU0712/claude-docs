@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/computer-use
-fetched_at: '2026-08-25T01:58:26+00:00'
-content_hash: 4f8261f15beb1d93162d27ce2825b6929b2c9816f2074b0fc9034e0281bfb9c9
+fetched_at: '2026-09-01T06:13:54+00:00'
+content_hash: 0d42893249474a8e6a244c0ae8f16db34055177e625ac8813572742bc2997153
 ---
 
 Enable computer use in the Claude Code CLI so Claude can open apps, click, type, and see your screen on macOS. Test native apps, debug visual issues, and automate GUI-only tools without leaving your terminal.
@@ -89,6 +89,8 @@ Apps with broad reach show an extra warning in the prompt so you know what appro
 | Can change system settings | System Settings                                              |
 
 These apps aren't blocked. The warning lets you decide whether the task warrants that level of access.
+
+Approve Finder to let Claude click the desktop, the Dock, or a Finder window.
 
 Claude's level of control also varies by app category: browsers and trading platforms are view-only, terminals and IDEs are click-only, and everything else gets full control. See [app permissions in Desktop](/docs/en/desktop#app-permissions) for the complete tier breakdown.
 

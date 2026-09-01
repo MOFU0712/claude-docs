@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/self-hosted-environments-testing
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: 4a32fbaf1225bfbb98eef55c53aa3509f5bd05fa7696ba8f2b8ad9c7abe40472
+fetched_at: '2026-09-01T06:13:54+00:00'
+content_hash: 2a2cdd0bae80a075acc9be79f8451fe197f8f926e8b17dce2f08c6189dc0b8b3
 ---
 
 Verify a self-hosted runner image from CI: dispatch a session with the CLI, read Claude's replies through a Stop hook, and script the full loop.
@@ -188,7 +188,9 @@ Both `claude -p ... --environment` and `claude -p ... --cloud` authenticate with
 
 ### Long-lived CI host
 
-Run `claude auth login` once interactively on the machine that executes the script, using a dedicated user account for automation. The token lives in the OS keychain on macOS, or in `~/.claude/.credentials.json` on Linux and Windows. The CLI refreshes the short-lived access token automatically on each invocation, but the underlying refresh-token grant is capped at 30 days from the initial login, so re-run `claude auth login` interactively on that host every 30 days.
+Run `claude auth login` once interactively on the machine that executes the script, using a dedicated user account for automation. Claude Code stores the token in the OS keychain on macOS, or in `~/.claude/.credentials.json` on Linux and Windows. On a macOS host whose Keychain can't be written, as is typical in an SSH session where the login Keychain stays locked, Claude Code stores the token in `~/.claude/.credentials.json` there too. See [Credential management](/docs/en/authentication#credential-management).
+
+The CLI refreshes the short-lived access token automatically on each invocation, but the underlying refresh-token grant is capped at 30 days from the initial login, so re-run `claude auth login` interactively on that host every 30 days.
 
 ### Ephemeral CI runners
 
@@ -204,7 +206,7 @@ Create and delete environments programmatically so each CI run gets a clean one;
 
 `$ADMIN_TOKEN` is a claude.ai OAuth access token for an account that holds an Owner role, minted the same way as [Authenticate from CI](#authenticate-from-ci):
 
-* **Mint it**: run `claude auth login` with an account that holds an Owner role, then read the current access token from the OS keychain on macOS or `~/.claude/.credentials.json` on Linux and Windows.
+* **Mint it**: run `claude auth login` with an account that holds an Owner role, then read the current access token from wherever [Long-lived CI host](#long-lived-ci-host) says Claude Code stored it.
 * **Read it fresh each run**: the CLI rotates the access token, and the same 30-day refresh-grant cap applies, so don't store a copy.
 * **Pass it via stdin**: as the example does, so the token never lands in curl's argument list or your build log.
 

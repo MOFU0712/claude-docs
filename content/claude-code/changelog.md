@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/changelog
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: e6e005c45a47f3d978c5e86eca338a852750b944b545c2f17e8c477b93e7cc28
+fetched_at: '2026-09-01T06:13:54+00:00'
+content_hash: 85bfd782baeec8f02dd9b4f856af8affa01826fbad20a720e55aa6c98ed0937f
 ---
 
 Release notes for Claude Code, including new features, improvements, and bug fixes by version.
@@ -9,6 +9,13 @@ Release notes for Claude Code, including new features, improvements, and bug fix
 This page is generated from the [CHANGELOG.md on GitHub](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md).
 
 Run `claude --version` to check your installed version.
+
+<Update label="2.1.252" description="August 31, 2026">
+  * Fixed Bash commands failing with "task output swap refused (tasks dir moved or linked)" on some Macs
+  * Fixed "always allow" not saving in a project that has no .claude/settings.local.json yet
+  * Fixed Remote Control sessions hosted by Claude Desktop or VS Code stalling for minutes after a tool finished when the connection to claude.ai was degraded
+  * Fixed background task notifications with very large failure output (for example git errors on a full disk) making the conversation exceed the API request size limit
+</Update>
 
 <Update label="2.1.251" description="August 28, 2026">
   * Added `PreModelSwitch` and `PostModelSwitch` hook events (block, confirm, or annotate a model switch); `SessionStart` resume hooks now receive session staleness and the estimated re-cache cost

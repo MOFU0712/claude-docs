@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/feature-availability
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: 99867747a20e1c4587a0eec91dcf1b72959556991e8c4ed52d41a0e99c1eea82
+fetched_at: '2026-09-01T06:13:54+00:00'
+content_hash: b26912849487c456da71de454cdbc93fc1199ea1ee849505e52392ad774f241c
 ---
 
 Compare which Claude Code features are available across Anthropic subscription plans, the Anthropic Console, Amazon Bedrock, Claude Platform on AWS, Google Cloud's Agent Platform, and Microsoft Foundry.
@@ -15,7 +15,7 @@ In the tables below, ✓ means available, ✗ means not available, and "See note
 How you authenticate determines which features Claude Code can reach. For a single list of what is missing on your provider, see the [summary by provider](#summary-by-provider) tabs. To find your column in the tables:
 
 * **Claude subscription**: you sign in with a claude.ai account on the Pro, Max, Team, or Enterprise plan
-* **Anthropic Console**: you authenticate with an Anthropic API key
+* **Anthropic Console**: you authenticate with an Anthropic API key or by [signing in to a Console account without one](/docs/en/authentication#sign-in-without-an-api-key)
 * **Amazon Bedrock**: you use Claude models from the Amazon Bedrock model catalog and set `CLAUDE_CODE_USE_BEDROCK`. The [Mantle endpoint](/docs/en/amazon-bedrock#use-the-mantle-endpoint) (`CLAUDE_CODE_USE_MANTLE`) is covered by this column
 * **Claude Platform on AWS**: you bought Claude through AWS Marketplace but call the Anthropic API, and set `CLAUDE_CODE_USE_ANTHROPIC_AWS`
 * **Google Cloud's Agent Platform**: Google-operated; you set `CLAUDE_CODE_USE_VERTEX`
