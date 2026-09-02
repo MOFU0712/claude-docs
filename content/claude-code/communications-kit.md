@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/communications-kit
-fetched_at: '2026-08-25T01:58:26+00:00'
-content_hash: 5eb4fc47645a9f5632fbab227968d6341dfaca4d4d33f680a382f4158b7dc83e
+fetched_at: '2026-09-02T09:46:44+00:00'
+content_hash: 50c2e406142ee70cb5ca83b06c5d3953e63e72f99e8999da783253d111fd819f
 ---
 
 Launch announcements, drip-campaign messages, and FAQ responses for rolling Claude Code out to your engineering organization.
@@ -211,7 +211,7 @@ Claude Code runs on the same models as the Claude app, and you can switch
 mid-session. *Sonnet* is the workhorse default for everyday feature work,
 bugs, tests, and reviews. Reach for *Opus* on large refactors, gnarly
 debugging, or anything high-stakes. Drop to *Haiku* for quick questions,
-formatting, and mechanical edits where speed wins. *Fable 5* is the most
+formatting, and mechanical edits where speed wins. *Fable* is the most
 capable model for your hardest, longest-running tasks; it is not the
 default, so select it with `/model fable`, and note that cybersecurity and
 biology content falls back to Opus automatically. Opus 5 runs its own
@@ -224,12 +224,12 @@ the right default for most tasks.
 📖 Model configuration → https://code.claude.com/docs/en/model-config
 ```
 
-| Model   | Best for                                                                                                                                                                                                                            |
-| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Fable 5 | The hardest, longest-running tasks. Opt-in only: select it with `/model fable`. Cybersecurity or biology content [falls back to Opus](/docs/en/model-config#automatic-model-fallback)                                               |
-| Opus    | Large-scale refactors, complex debugging, architecture decisions, high-stakes changes. On Opus 5, cybersecurity or biology content triggers [automatic model fallback or a refusal](/docs/en/model-config#automatic-model-fallback) |
-| Sonnet  | Everyday feature work, bug fixes, tests, documentation, code review. Recommended default.                                                                                                                                           |
-| Haiku   | Quick questions, formatting, mechanical edits, rapid iteration                                                                                                                                                                      |
+| Model  | Best for                                                                                                                                                                                                                            |
+| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Fable  | The hardest, longest-running tasks. Opt-in only: select it with `/model fable`. Cybersecurity or biology content [falls back to Opus](/docs/en/model-config#automatic-model-fallback)                                               |
+| Opus   | Large-scale refactors, complex debugging, architecture decisions, high-stakes changes. On Opus 5, cybersecurity or biology content triggers [automatic model fallback or a refusal](/docs/en/model-config#automatic-model-fallback) |
+| Sonnet | Everyday feature work, bug fixes, tests, documentation, code review. Recommended default.                                                                                                                                           |
+| Haiku  | Quick questions, formatting, mechanical edits, rapid iteration                                                                                                                                                                      |
 
 **Quick wins to try first**
 

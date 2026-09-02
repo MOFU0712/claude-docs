@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/cross-session-messaging
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: 9f7c48870064522c108eae4a8d413df5468c3dfcd8452b7b944e51651d13f566
+fetched_at: '2026-09-02T09:46:44+00:00'
+content_hash: c09725dd87f199233efe4619b0a1d82ed9aaf947dfaebb6235d481ae0afc3988
 ---
 
 Let Claude list and message your other Claude Code sessions on this machine, and reach your sessions on other machines or on the web.
@@ -122,7 +122,7 @@ Claude finds a message's target on its own, so you don't need to run anything be
 
 * **Subagents**: agents running inside the current session.
 * **Teammates**: this session's own [agent team](/docs/en/agent-teams) teammates. Before v2.1.239, teammates didn't appear in the listing, though Claude could already message them by name.
-* **Your other local sessions**: Claude Code sessions running on the same machine, including [background sessions](/docs/en/agent-view). A session appears only when it binds an [inbox socket](#the-sessions-inbox-socket). The worker process that the [supervisor process](/docs/en/agent-view#the-supervisor-process) keeps ready for your next background session appears once you dispatch work to it.
+* **Your other local sessions**: Claude Code sessions running on the same machine, including [background sessions](/docs/en/agent-view). A session appears only when it binds an [inbox socket](#the-sessions-inbox-socket).
 * **Your cloud sessions**: your [Claude Code on the web](/docs/en/claude-code-on-the-web) sessions, shown while this session is connected to [Remote Control](/docs/en/remote-control). Claude Code labels them `cloud` in the listing.
 * **Your Remote Control sessions on other machines**: shown while this session is connected to [Remote Control](/docs/en/remote-control), and labeled `Remote Control`. Claude Code shows `offline` as the status of a session whose Remote Control connection has dropped.
 

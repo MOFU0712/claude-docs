@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/prompt-caching
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: 6f962de9fd233e05241b7d5e5accf2df99c820a4f50cee11a7db2f5f7c7a2539
+fetched_at: '2026-09-02T09:46:44+00:00'
+content_hash: 7a019d9a3561c7c29a66e671a81d046694bc161d3757cb9ca8ecf0e63ab4a6e7
 ---
 
 Claude Code manages prompt caching automatically. See why a model switch triggers a slow uncached turn, what `/compact` costs, why CLAUDE.md edits don't apply mid-session, and how to check your cache hit rate.
@@ -87,7 +87,7 @@ You can also require this confirmation or skip it with a [PreModelSwitch hook](/
 
 The [`opusplan` model setting](/docs/en/model-config#opusplan-model-setting) resolves to Opus during plan mode and Sonnet during execution, so each plan-mode toggle is a model switch and starts a fresh cache.
 
-[Automatic model fallback](/docs/en/model-config#automatic-model-fallback) on Fable 5 and Opus 5 is also a model switch. When a safety classifier flags a request and the flagged category has a fallback model, Claude Code re-runs the request on that model and the session continues there.
+[Automatic model fallback](/docs/en/model-config#automatic-model-fallback) on Fable 5.1, Fable 5, and Opus 5 is also a model switch. When a safety classifier flags a request and the flagged category has a fallback model, Claude Code re-runs the request on that model and the session continues there.
 
 ### Changing effort level
 

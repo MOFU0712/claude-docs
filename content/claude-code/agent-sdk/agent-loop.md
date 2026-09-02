@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/agent-sdk/agent-loop
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: 133525aed5941acb465ec6ff1370ca70a2c2728ee313d01cc34ec78abb99921e
+fetched_at: '2026-09-02T09:46:44+00:00'
+content_hash: 281482b96a24d094a36811f6d68217667f94554a9aebb12aec078ff1a8fe448b
 ---
 
 Understand the message lifecycle, tool execution, context window, and architecture that power your SDK agents.
@@ -196,13 +196,13 @@ With [streaming input](/docs/en/agent-sdk/streaming-vs-single-mode), a message t
 
 The `effort` option controls how much reasoning Claude applies. Lower effort levels use fewer tokens per turn and reduce cost. Not all models support the effort parameter. See [Effort](https://platform.claude.com/docs/en/build-with-claude/effort) for which models support it.
 
-| Level      | Behavior                          | Good for                                                                  |
-| :--------- | :-------------------------------- | :------------------------------------------------------------------------ |
-| `"low"`    | Minimal reasoning, fast responses | File lookups, listing directories                                         |
-| `"medium"` | Balanced reasoning                | Routine edits, standard tasks                                             |
-| `"high"`   | Thorough analysis                 | Refactors, debugging                                                      |
-| `"xhigh"`  | Extended reasoning depth          | Coding and agentic tasks; recommended on Fable 5, Opus 4.7+, and Sonnet 5 |
-| `"max"`    | Maximum reasoning depth           | Multi-step problems requiring deep analysis                               |
+| Level      | Behavior                          | Good for                                                                                            |
+| :--------- | :-------------------------------- | :-------------------------------------------------------------------------------------------------- |
+| `"low"`    | Minimal reasoning, fast responses | File lookups, listing directories                                                                   |
+| `"medium"` | Balanced reasoning                | Routine edits, standard tasks                                                                       |
+| `"high"`   | Thorough analysis                 | Refactors, debugging                                                                                |
+| `"xhigh"`  | Extended reasoning depth          | Coding and agentic tasks on the [models that support it](/docs/en/model-config#adjust-effort-level) |
+| `"max"`    | Maximum reasoning depth           | Multi-step problems requiring deep analysis                                                         |
 
 If you don't set `effort`, both SDKs leave the parameter unset and defer to the model's default behavior.
 

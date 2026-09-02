@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/agent-sdk/custom-tools
-fetched_at: '2026-08-25T01:58:26+00:00'
-content_hash: 944a68c53f67ad4660035469dc3f9952892ee90e2fad9cabd6b3ebb04e4a6923
+fetched_at: '2026-09-02T09:46:44+00:00'
+content_hash: cf3ce27242a8c0387ac5741c60ab10ee342abf598bdeffabb4df36222bf565fc
 ---
 
 Define custom tools with the Claude Agent SDK's in-process MCP server so Claude can call your functions, hit your APIs, and perform domain-specific operations.
@@ -441,7 +441,9 @@ The example below catches two kinds of failures inside the handler and composes 
 
 ## Return images and resources
 
-The `content` array in a tool result accepts `text`, `image`, `audio`, `resource`, and `resource_link` blocks. You can mix them in the same response. In TypeScript, the SDK saves audio blocks to disk and Claude receives a text block with the saved file path; in Python, the SDK drops audio blocks from the tool result and logs a warning. The SDK converts resource link blocks to a text block containing the link's name, URI, and description.
+The `content` array in a tool result accepts `text`, `image`, `audio`, `resource`, and `resource_link` blocks. You can mix them in the same response. In TypeScript, the SDK saves audio blocks to disk and Claude receives a text block with the saved file path; in Python, the SDK drops audio blocks from the tool result and logs a warning.
+
+Claude receives each resource link block as a text block containing the link's name, URI, and description. In TypeScript, your application also receives the links themselves as [`resourceLinks`](/docs/en/agent-sdk/typescript#sdkmcpresourcelink) on the user message's `tool_use_result`; in Python, the SDK flattens them to text before the CLI sees the result, so the Python [`resourceLinks` key](/docs/en/agent-sdk/python#usermessage) is never produced for in-process tools.
 
 ### Images
 

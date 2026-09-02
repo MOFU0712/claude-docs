@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/output-styles
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: b62a97f7966e89f001f355f576a92b6c195af9ff7d3de5f12cbf675e622c0fea
+fetched_at: '2026-09-02T09:46:44+00:00'
+content_hash: 344b305b88f1f8defee290e03823d709bcd8db50135c5c08093bb2fbf2b9f7f2
 ---
 
 Adapt Claude Code for uses beyond software engineering
@@ -31,6 +31,7 @@ There are four additional built-in output styles:
 Pick a style in one of these ways:
 
 * **Terminal**: run `/config` and select **Output style** to pick a style from a menu. Claude Code saves your selection to `.claude/settings.local.json` at the [local project level](/docs/en/settings).
+* **VS Code extension**: open the [command menu](/docs/en/vs-code#use-the-prompt-box) with `/` and select **Output styles** to pick a style, including your custom styles. Claude Code saves your selection to `.claude/settings.local.json`, the same file the terminal menu writes. Requires Claude Code v2.1.257 or later.
 * **Desktop app**: set the `outputStyle` field in a settings file, for example `.claude/settings.local.json`, the file the terminal menu writes. When you run `/config` there, Claude Code [opens **Settings > Claude Code**](/docs/en/desktop#what’s-not-available-in-desktop) rather than a menu.
 
 <Note>The standalone `/output-style` command was deprecated in v2.1.73 and removed in v2.1.91. Use `/config` or edit the `outputStyle` setting directly.</Note>

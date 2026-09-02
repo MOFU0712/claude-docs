@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/llm-gateway-connect
-fetched_at: '2026-09-01T06:13:54+00:00'
-content_hash: 44fef68bb5ada73c457e3d9aa967f7455fc6ce31c4432db5030c996c533fe1fc
+fetched_at: '2026-09-02T09:46:44+00:00'
+content_hash: fa374aafdb365aed01c150759ffe6c430d946fed89496cafe3de7369567c758c
 ---
 
 Point Claude Code at your organization's LLM gateway. Check whether your admin already configured it, or set the base URL and credential yourself, then verify the connection and fix gateway errors.
@@ -93,7 +93,7 @@ Replace the values with the ones your gateway team gave you:
 
 Shell exports apply only to that terminal session and programs started from it. An editor launched from the dock or Start menu won't see them. To make the values persist across new terminals, add the same lines to your shell profile, such as `~/.zshrc`, `~/.bashrc`, or your PowerShell `$PROFILE`.
 
-If you export the gateway only in your shell, it doesn't reliably reach background agents hosted by the [supervisor](/docs/en/agent-view#how-background-sessions-are-hosted); see [how each background session sources its gateway](/docs/en/agent-view#the-supervisor-process). Use a settings file for any gateway that background agents must always route through.
+If you export the gateway only in your shell, it doesn't reliably reach background agents hosted by the [supervisor](/docs/en/agent-view#how-background-sessions-are-hosted); see [how each background session sources its gateway](/docs/en/agent-view#llm-gateway). Use a settings file for any gateway that background agents must always route through.
 
 #### Set in a settings file
 

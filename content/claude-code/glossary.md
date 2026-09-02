@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/glossary
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: 6c8ed29522b53f42aeda00314e6a9f5fa96376b7842322ba852941ccfa868989
+fetched_at: '2026-09-02T09:46:44+00:00'
+content_hash: 7a0e62a5569101e65a0327a1c5183bae6f79c0757474cec012fa9cb955f52d46
 ---
 
 Definitions for Claude Code terminology. Learn what agentic loop, compaction, CLAUDE.md, hooks, subagents, MCP, and other core concepts mean.
@@ -132,7 +132,7 @@ Learn more: [Sessions from Dispatch](/docs/en/desktop#sessions-from-dispatch)
 
 ### Effort level
 
-A setting that controls how much of the adaptive-reasoning thinking budget Claude uses on each turn. Higher effort means more thinking tokens and deeper reasoning; lower effort is faster and cheaper. Effort is supported on Fable 5, on Opus 4.6 and later, and on Sonnet 4.6 and later.
+A setting that controls how much of the adaptive-reasoning thinking budget Claude uses on each turn. Higher effort means more thinking tokens and deeper reasoning; lower effort is faster and cheaper. Effort is supported on Fable 5.1 and Fable 5, on Opus 4.6 and later, and on Sonnet 4.6 and later.
 
 Learn more: [Adjust effort level](/docs/en/model-config#adjust-effort-level)
 

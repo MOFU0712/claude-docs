@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/claude-security
-fetched_at: '2026-09-01T06:13:54+00:00'
-content_hash: 38ad0cb7a402903d3d0f7d36c005301ac551bd8e2366ea3e664479a7f1ed25f2
+fetched_at: '2026-09-02T09:46:44+00:00'
+content_hash: f2b8e1d7df3a1ab2dbb1042aa1ec84201beef801859eebace0d6cc8b093c212e
 ---
 
 Install the Claude Security plugin to scan your codebase for vulnerabilities in a Claude Code session and turn findings into patches you review and apply.
@@ -138,7 +138,7 @@ The plugin doesn't replace your existing source-code security tools. Run it alon
 
 **The `/claude-security` menu opens with a Python warning.** The plugin needs `python3` 3.9 or later on your `PATH`. When it can't find `python3` at all, the menu warns that Claude Security won't work until one is installed; when the first `python3` on your `PATH` is older, the warning names the version it found. Install Python 3, or put a newer `python3` first on your `PATH`, then start a new session.
 
-**You may see "Fable 5's safeguards flagged this message" when using Fable 5.** Due to Fable 5's cybersecurity safety classifiers, certain model activities will be blocked and automatically downgraded to Opus.  This is expected, and the scan should still complete successfully.
+**You may see "Fable 5.1's safeguards flagged this message" or "Fable 5's safeguards flagged this message" when using a Fable model.** Due to Fable's cybersecurity safety classifiers, certain model activities will be blocked and automatically downgraded to Opus.  This is expected, and the scan should still complete successfully.
 
 ## Related resources
 

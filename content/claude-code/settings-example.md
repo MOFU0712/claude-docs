@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/settings-example
-fetched_at: '2026-09-01T06:13:54+00:00'
-content_hash: b3ac938647ddb1927965102afa267700062c2a38d0affb5239cb01f346ae5048
+fetched_at: '2026-09-02T09:46:44+00:00'
+content_hash: e167f9a3000d7f0134f72e16dddf0dc9cb4c9865eac02ebec8297a9d1b98c315
 ---
 
 Realistic settings.json files for a developer, a team, and an organization: copy one, keep the keys you want, and change the values.
@@ -248,7 +248,7 @@ A `managed-settings.json` file that shows the shape of the managed keys, with on
 * `forceLoginMethod` and `forceLoginOrgUUID` pin the login method and organization
 * `availableModels` and `enforceAvailableModels` restrict which models sessions can use
 * `permissions.deny` blocks two file reads and `curl`, and `disableBypassPermissionsMode` removes the bypass permission mode
-* `allowManagedPermissionRulesOnly` and `allowManagedMcpServersOnly` make the managed permission and MCP allowlists the only ones that apply
+* [`allowManagedPermissionRulesOnly`](/docs/en/settings-reference#allowmanagedpermissionrulesonly) and [`allowManagedMcpServersOnly`](/docs/en/settings-reference#allowmanagedmcpserversonly) make the managed permission and MCP allowlists the only ones that apply
 * `allowedMcpServers` pins the MCP server by URL
 * `strictKnownMarketplaces` allows one plugin marketplace
 * `sandbox` sandboxes commands with a fixed network allowlist and no unsandboxed retry
@@ -341,7 +341,7 @@ Administrators deploy a file like this as `managed-settings.json`, or the same J
         // Remove the bypass-permissions mode from every session
         "disableBypassPermissionsMode": "disable"
       },
-      // Only managed permission rules apply
+      // Ignore permission rules from user, project, and local settings
       "allowManagedPermissionRulesOnly": true,
       // Only the GitHub MCP server, matched by URL rather than by name, since a user can
       // name any server "github". Servers that don't match don't load, which includes every

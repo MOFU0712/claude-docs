@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/agent-teams
-fetched_at: '2026-09-01T06:13:54+00:00'
-content_hash: b6c4b8d8d70b642288ee498302b638cacd8d90ef744fbaee9afad259c2c7a224
+fetched_at: '2026-09-02T09:46:44+00:00'
+content_hash: ae0f7a24e1c238650f3d0dfe15392528f63ad461d0ff3b5455e0df48502d2b93
 ---
 
 Coordinate multiple Claude Code instances working together as a team, with shared tasks, inter-agent messaging, and centralized management.
@@ -148,6 +148,8 @@ Claude Code picks each teammate's model from the first of these that applies:
 2. For a teammate spawned from a [subagent definition](#use-subagent-definitions-for-teammates), the definition's `model`, where `inherit` selects the lead's model.
 3. [`CLAUDE_CODE_SUBAGENT_MODEL`](/docs/en/model-config#environment-variables), when it's set to anything other than `inherit`.
 4. The lead's current model.
+
+[`CLAUDE_CODE_SUBAGENT_MODEL_FORCE`](/docs/en/sub-agents#choose-a-model) applies to teammates as well as to subagents.
 
 Before v2.1.251, `CLAUDE_CODE_SUBAGENT_MODEL` came first in this order.
 
