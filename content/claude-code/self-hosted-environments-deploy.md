@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/self-hosted-environments-deploy
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: 2c7faa537be53f8827aaff60ddfe060132e8da8f708883aa61b85fd3bff38878
+fetched_at: '2026-09-04T00:27:18+00:00'
+content_hash: b351de8379ec43173f215a044cf76b95e9057fc8dee58845cbbbe4f56c6e3655
 ---
 
 Run self-hosted runners in production: security hardening, network egress control, git credentials, Kubernetes and Compose recipes, and troubleshooting.
@@ -421,6 +421,8 @@ If tool traffic must stay inside your network, run the equivalent tools as local
 ### Some sessions don't count as idle
 
 A session holding a background task that never finishes doesn't count as idle, so `--release-idle-session-min` won't release that session's slot. A session that's waiting on an approval requested from inside a running tool call also doesn't count as idle. Always set `--kill-session-after-min` alongside it as a hard backstop so no session can hold a slot indefinitely.
+
+`--kill-session-after-min` is a backstop for runaway sessions. The runner terminates any session that reaches the limit, even one someone is still using, so set the flag well above your longest expected session, such as `--kill-session-after-min 480` for 8 hours. To free slots from conversations that go idle, use `--release-idle-session-min` instead.
 
 ### Additional limitations
 
