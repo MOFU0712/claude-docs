@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/monitoring-usage
-fetched_at: '2026-09-01T06:13:54+00:00'
-content_hash: 18e6a7d1fc41380572e5270fcfc07bae25f9710cd5bc1c7ed222c7a67fe5bff6
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: 52a4f0340cc600e08bb1757fb2c10ceb18106348a5e5f88a4a49f484432b4a29
 ---
 
 Learn how to enable and configure OpenTelemetry for Claude Code.
@@ -1139,7 +1139,7 @@ Logged once per run of the retention cleanup sweep, which deletes [session trans
 
 Like every OTel event on this page, it goes only to the telemetry backend you configure. Requires Claude Code v2.1.227 or later.
 
-When Claude Code can't safely determine the retention period, it pauses the sweep and emits the event with `result` set to `"skipped"` and a `skip_reason`. When [managed settings](/docs/en/server-managed-settings) set `cleanupPeriodDays`, the managed value pins the retention period and the sweep runs even when a settings file in a lower-priority scope is broken or invalid. When `managed-settings.json` itself can't be read or parsed, Claude Code still pauses the sweep unless the [managed tier](/docs/en/managed-settings#how-claude-code-combines-managed-sources) supplies `cleanupPeriodDays` from elsewhere, such as server-managed settings or a `managed-settings.d/` drop-in beside the broken file. The deletion counter attributes are present only when `result` is `"complete"`.
+When Claude Code can't safely determine the retention period, it pauses the sweep and emits the event with `result` set to `"skipped"` and a `skip_reason`. When [managed settings](/docs/en/server-managed-settings) set `cleanupPeriodDays`, the managed value pins the retention period and the sweep runs even when a settings file in a lower-priority scope is broken or invalid. When `managed-settings.json` itself can't be read, Claude Code still pauses the sweep unless the [managed tier](/docs/en/managed-settings#how-claude-code-combines-managed-sources) supplies `cleanupPeriodDays` from elsewhere, such as server-managed settings or a `managed-settings.d/` drop-in beside the broken file. The deletion counter attributes are present only when `result` is `"complete"`.
 
 **Event Name**: `claude_code.retention_sweep`
 
@@ -1154,7 +1154,7 @@ When Claude Code can't safely determine the retention period, it pauses the swee
 * `used_default`: `"true"` when no readable settings source sets `cleanupPeriodDays`, `"false"` otherwise. On complete events, `"true"` means the 30-day default applied
 * `skip_reason`: Why Claude Code paused the sweep. Present only when `result` is `"skipped"`:
   * `"user_source_disabled"`: User settings are excluded, for example by the [`--setting-sources`](/docs/en/cli-reference#cli-flags) flag or the SDK's [`settingSources`](/docs/en/agent-sdk/typescript#options) option, and no enabled source provides `cleanupPeriodDays`
-  * `"settings_unknowable"`: A settings file couldn't be read or parsed, so `cleanupPeriodDays` may be set to a value Claude Code can't see
+  * `"settings_unknowable"`: A settings file couldn't be read or parsed, so `cleanupPeriodDays` or `desktopSessionCleanupPeriodDays` may be set to a value Claude Code can't see
   * `"settings_invalid_key_set"`: Settings have validation errors and `cleanupPeriodDays` or `desktopSessionCleanupPeriodDays` is explicitly set, so falling back to the default could delete or keep files against that setting
 * `transcripts_deleted`: Number of session transcripts, the top-level `~/.claude/projects/*/*.jsonl` files, that the sweep deleted
 * `transcripts_exempted_desktop`: Number of transcripts past the retention period that the sweep kept under the [Claude Desktop and Cowork rule](/docs/en/claude-directory#cleaned-up-automatically). These don't count toward `files_past_cutoff`. Requires Claude Code v2.1.248 or later

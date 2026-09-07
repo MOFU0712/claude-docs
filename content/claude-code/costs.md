@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/costs
-fetched_at: '2026-09-02T09:46:44+00:00'
-content_hash: 4fbd03b076f74672c6fd9aa4e6f8de4c107eab19848f30cceb21cfbbbf464df6
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: 5795bc97dc67f173d35781f7d301d4f46dfe5783d14df0937276852b6f6b8303
 ---
 
 Track token usage, set team spend limits, and reduce Claude Code costs with context management, model selection, extended thinking settings, and preprocessing hooks.
@@ -45,7 +45,7 @@ Prompt cache (main):   14 requests · 91% of input tokens from cache · 2 misses
 
 The misses, expected rebuilds, and warm or cold parts of the line mean the following:
 
-* **Misses**: requests that re-processed content the cache already held, with the time of the last miss and how many tokens those requests wrote back to the cache. Claude Code counts a request as a miss when the request re-processed more than 5% and at least 2,000 tokens of what it could have read from cache. [Actions that invalidate the cache](/docs/en/prompt-caching#actions-that-invalidate-the-cache) lists the usual causes.
+* **Misses**: requests that re-processed content the cache already held, with the time of the last miss and how many tokens those requests wrote back to the cache. Claude Code counts a request as a miss when the request re-processed more than 5% and at least 2,000 tokens of what it could have read from cache. [Actions that invalidate the cache](/docs/en/prompt-caching#actions-that-invalidate-the-cache) lists the usual causes. When Claude Code can identify a likely cause for the last miss, the line names it too, for example `likely cause: tool definitions changed`. The likely-cause text requires Claude Code v2.1.260 or later.
 * **Expected rebuilds**: when Claude Code has itself just rewritten the conversation, by [compaction](/docs/en/prompt-caching#compacting-the-conversation) or by clearing old tool results from context, it counts the same kind of miss as an expected rebuild instead. This part appears only after at least one expected rebuild has happened.
 * **Warm or cold**: whether the cached prefix is still within its [cache lifetime](/docs/en/prompt-caching#cache-lifetime), with the TTL in effect. When the cache is cold, the line shows how long the session has been idle. When no response has reported cache tokens, the line ends with `no prompt caching reported by the API` instead.
 

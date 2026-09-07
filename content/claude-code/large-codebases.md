@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/large-codebases
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: 6eed4bf87bfcd454c418ac205c26ad28a596c8dc32908fe8a90214a8bac6dc74
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: 0a98ce2617d22d9f9d6a86cda4cadd679a1a2205449bb96b18c9400771b5d02b
 ---
 
 Configure Claude Code for monorepos and large single-tree codebases with nested CLAUDE.md files, sparse worktrees, code intelligence, and per-package skills so Claude stays focused on the code you're working in.
@@ -176,7 +176,7 @@ The example below blocks build artifacts and a vendored SDK:
 }
 ```
 
-Deny rules cover Claude's built-in file tools and recognized Bash file commands, including `cat`, `head`, `grep`, and `find`, when a denied path is passed as an argument. Claude Code also makes a best-effort attempt to leave denied paths out of the results of the built-in Grep and Glob tools. Claude still sees denied paths in the output of a Bash search such as `grep -r` or `find`.
+Deny rules cover Claude's built-in file tools. In Bash, they cover the file commands Claude Code recognizes, such as `cat`, `head`, `grep`, and `find`, when a denied path appears as an argument, and the target of a [redirection](/docs/en/permissions#redirections) such as `< file`. Claude Code also makes a best-effort attempt to leave denied paths out of the results of the built-in Grep and Glob tools. A Bash search such as `grep -r` or `find` over a directory that contains denied files still includes them in its output.
 
 Deny rules don't cover subprocesses that open files themselves. For the full pattern syntax, see [Read and Edit permission rules](/docs/en/permissions#read-and-edit).
 

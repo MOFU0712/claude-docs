@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/sandboxing
-fetched_at: '2026-09-02T09:46:44+00:00'
-content_hash: cf6ddfd9903879ad2cc0f0c0d1b2ca3bba1b5dfa0ed8091f8500496dab606a48
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: f97aaec447d9fc387e015f01161d22df99366dee1e7f99f908b18afa13722751
 ---
 
 Learn how Claude Code's sandboxed Bash tool provides filesystem and network isolation for safer, more autonomous agent execution.
@@ -121,7 +121,7 @@ Claude Code offers two sandbox modes. In both, the sandbox enforces the same fil
 
 #### Auto-allow mode
 
-When a command can be sandboxed, Claude Code runs it inside the sandbox and approves it automatically, without asking your permission. Commands that cannot be sandboxed, such as those needing network access to non-allowed hosts, fall back to the regular permission flow, where Claude Code checks your [permission rules](/docs/en/permissions) and gates any command those rules do not already allow, with a prompt in Manual mode or the classifier in [auto mode](/docs/en/permission-modes#eliminate-prompts-with-auto-mode).
+When a command can be sandboxed, Claude Code runs it inside the sandbox and approves it automatically, without asking your permission. Commands that cannot be sandboxed, such as those needing network access to non-allowed hosts, fall back to the regular permission flow, where Claude Code checks your [permission rules](/docs/en/permissions) and gates any command those rules do not already allow, with a prompt in Manual mode.
 
 Even in auto-allow mode, the following still apply:
 
@@ -144,9 +144,16 @@ All Bash commands go through the regular permission flow, even when sandboxed. T
 
 Some commands can't run inside the sandbox at all, such as tools that are incompatible with it or that need a host you haven't allowed. Claude Code reports sandbox violations in the blocked command's result, naming the path or host the sandbox denied, so Claude sees what the sandbox blocked. Rather than failing the task or requiring you to turn sandboxing off, Claude Code includes an escape hatch: Claude analyzes the violation and may retry the command with the `dangerouslyDisableSandbox` parameter.
 
-The retried command runs outside the sandbox, so it goes through the regular permission flow: in Manual mode you get a confirmation prompt; in [auto mode](/docs/en/permission-modes#eliminate-prompts-with-auto-mode) the classifier evaluates the underlying command instead of prompting you. To be prompted on every unsandboxed retry even in auto mode, add an [ask rule](/docs/en/permissions#match-by-input-parameter) for `Bash(dangerouslyDisableSandbox:true)`.
+The retried command runs outside the sandbox, so it goes through the regular permission flow. In Manual mode you get a confirmation prompt. In [auto mode](/docs/en/permission-modes#eliminate-prompts-with-auto-mode), the classifier evaluates the underlying command. While [`permissions.blockReadsOutsideWorkingDirectories`](/docs/en/settings-reference#permissions-blockreadsoutsideworkingdirectories) is on, a retry that needs approval to run outside the sandbox prompts you instead. To be prompted on every unsandboxed retry even in auto mode, add an [ask rule](/docs/en/permissions#match-by-input-parameter) for `Bash(dangerouslyDisableSandbox:true)`.
 
-You can disable this escape hatch by setting `"allowUnsandboxedCommands": false` in your [sandbox settings](/docs/en/settings-reference#sandbox-settings). When disabled, which the `/sandbox` Overrides tab shows as **Strict sandbox mode**, the `dangerouslyDisableSandbox` parameter is completely ignored and all commands must run sandboxed or be explicitly listed in `excludedCommands`.
+You can disable this escape hatch by setting `"allowUnsandboxedCommands": false` in your [sandbox settings](/docs/en/settings-reference#sandbox-settings). With the escape hatch disabled, Claude Code ignores the `dangerouslyDisableSandbox` parameter, and every command Claude runs must run sandboxed unless you've listed it in `excludedCommands`. The `/sandbox` **Overrides** tab shows this setting as **Strict sandbox mode**.
+
+Strict sandbox mode applies to the commands Claude runs. Commands you type yourself at the [`!` shell-mode prompt](/docs/en/interactive-mode#shell-mode-with-prefix) run outside the sandbox unless the session is one of these:
+
+* **A [background session](/docs/en/agent-view)**: strict sandbox mode covers shell-mode commands too
+* **A Linux session with [`CLAUDE_CODE_SUBPROCESS_ENV_SCRUB`](/docs/en/env-vars#variables) set**: every command runs sandboxed, shell-mode commands included
+
+Before v2.1.260, strict sandbox mode sandboxed shell-mode commands in every session.
 
 #### Temporary directories
 
@@ -210,6 +217,8 @@ The example below blocks reading from the entire home directory while still allo
 ```
 
 If you placed the same configuration in `~/.claude/settings.json`, `.` would resolve to `~/.claude` instead, and project files would remain blocked by the `denyRead` rule.
+
+To deny sandboxed commands read access to home directories and mounted volumes while keeping the working directories readable, set [`permissions.blockReadsOutsideWorkingDirectories`](/docs/en/settings-reference#permissions-blockreadsoutsideworkingdirectories) instead of writing path rules.
 
 ### Disable filesystem isolation
 
@@ -604,9 +613,11 @@ The following managed settings configuration enables the sandbox, refuses to sta
 The two keys beyond `enabled` control what happens when the sandbox cannot run a command:
 
 * **`failIfUnavailable`**: a missing dependency such as bubblewrap on Linux blocks Claude Code from starting rather than showing a warning and falling back to unsandboxed execution
-* **`allowUnsandboxedCommands: false`**: the `dangerouslyDisableSandbox` escape hatch is ignored, so commands that fail under the sandbox cannot be retried outside it
+* **`allowUnsandboxedCommands: false`**: Claude Code ignores the `dangerouslyDisableSandbox` escape hatch, so when a command fails under the sandbox, Claude can't retry it unsandboxed
 
 Two additions are worth considering alongside them. Add `excludedCommands` for any organization-approved tools that must run without isolation. Add [`sandbox.credentials`](#protect-credentials) entries for credential directories such as `~/.aws` and `~/.ssh` and for secret environment variables, since the default read policy still allows them.
+
+This configuration sandboxes the commands Claude runs. A developer can still type a command at the [`!` shell-mode prompt](/docs/en/interactive-mode#shell-mode-with-prefix) and run it outside the sandbox, with the same access they already have in any terminal outside Claude Code. See [The unsandboxed retry escape hatch](#the-unsandboxed-retry-escape-hatch) for the sessions where typed commands run sandboxed.
 
 The sandbox does not run on native Windows, so if your fleet includes Windows hosts, scope this configuration to macOS and Linux or have those users run Claude Code inside WSL2 or a container.
 
@@ -651,7 +662,10 @@ Some commands fail inside the sandbox even though they work outside it. The fixe
 * **Go-based CLIs fail TLS verification on macOS**: tools such as `gh`, `gcloud`, and `terraform` may fail TLS verification under Seatbelt. List these tools in `excludedCommands` to run them outside the sandbox. If you are using `httpProxyPort` with a MITM proxy and custom CA, set [`enableWeakerNetworkIsolation`](/docs/en/settings-reference#sandbox-enableweakernetworkisolation) to `true` instead.
 * **`open`, `osascript`, or browser-based auth flows fail with error `-600` on macOS**: the sandbox blocks Apple Events by default. Set [`allowAppleEvents`](/docs/en/settings-reference#sandbox-allowappleevents) to `true` in your user, managed, or CLI settings to allow them. Project settings are ignored for this key. Enabling it removes code-execution isolation, since sandboxed commands can then launch other applications unsandboxed with no user prompt and send AppleScript commands to running applications, subject to the macOS automation-consent prompt (TCC). Alternatively, add the command to `excludedCommands` to run it outside the sandbox.
 * **`docker` commands fail**: `docker` is incompatible with the sandbox. Add `docker *` to `excludedCommands` to run it outside the sandbox.
-* **A git command fails with `unable to unlink old`**: `git merge`, `git checkout`, and similar commands fail this way when they need to replace a file the sandbox denies writes to, whether that file is under a [protected path](#protected-paths) such as `.claude/skills`, under one of your `denyWrite` entries, or outside the directories the sandbox lets commands write to at all. On Linux and WSL2 the error ends with `Read-only file system`. After the failure, Claude may [offer to rerun the command outside the sandbox](#sandbox-modes); approve that retry, or run the git command yourself in another terminal. If you've set `allowUnsandboxedCommands` to `false`, Claude can't offer the retry, so run the command yourself or, if the same git command fails often, add that command to [`excludedCommands`](/docs/en/settings-reference#sandbox-excludedcommands).
+* **`pbcopy`, `xclip`, or `wl-copy` doesn't update the clipboard**: these clipboard utilities can fail to reach the system clipboard from inside the sandbox, in which case the text piped to them doesn't arrive. To put Claude's output on your clipboard, ask Claude to print it in its response, then run [`/copy`](/docs/en/commands), which writes to the clipboard from the Claude Code process rather than from a sandboxed command. Alternatively, add `pbcopy *`, `wl-copy *`, or `xclip *` to `excludedCommands` to run the command outside the sandbox.
+* **A git command fails with `unable to unlink old`**: `git merge`, `git checkout`, and similar commands fail this way when they need to replace a file the sandbox denies writes to, whether that file is under a [protected path](#protected-paths) such as `.claude/skills`, under one of your `denyWrite` entries, or outside the directories the sandbox lets commands write to at all. On Linux and WSL2 the error ends with `Read-only file system`.
+
+  After the failure, Claude may [offer to rerun the command outside the sandbox](#the-unsandboxed-retry-escape-hatch); approve that retry, or run the git command yourself in another terminal. If you've set `allowUnsandboxedCommands` to `false`, Claude can't offer the retry, so run the command yourself. If the same git command fails often, add it to [`excludedCommands`](/docs/en/settings-reference#sandbox-excludedcommands).
 * **Bubblewrap fails to start inside a container**: in an unprivileged container, bubblewrap can't mount a fresh `/proc` filesystem, so sandboxed commands fail with a `bwrap` error such as `Can't mount proc on /newroot/proc: Operation not permitted`. Set [`enableWeakerNestedSandbox`](/docs/en/settings-reference#sandbox-enableweakernestedsandbox) to `true` so the inner sandbox bind-mounts the container's existing `/proc` instead. Only use this setting when the outer container already provides the isolation boundary you need, since it exposes process information to sandboxed commands that a fresh `/proc` mount would hide.
 * **`--dangerously-skip-permissions` fails as root**: this flag is blocked when running as root or via sudo on Linux and macOS, because root access combined with no permission prompts can modify any file or service on the system. The check is skipped automatically inside a recognized sandbox. To run autonomously in a container, use the [dev container](/docs/en/devcontainer) configuration, which runs Claude Code as a non-root user.
 

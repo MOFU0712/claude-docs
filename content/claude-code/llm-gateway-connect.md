@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/llm-gateway-connect
-fetched_at: '2026-09-02T09:46:44+00:00'
-content_hash: fa374aafdb365aed01c150759ffe6c430d946fed89496cafe3de7369567c758c
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: b1850428a0f4e27b1ccc23c64e497bad21e713fe47c6946d6e9c8167f4fc4570
 ---
 
 Point Claude Code at your organization's LLM gateway. Check whether your admin already configured it, or set the base URL and credential yourself, then verify the connection and fix gateway errors.
@@ -12,7 +12,7 @@ This page is for developers running Claude Code through a gateway their organiza
 
 <Note>
   * To deploy a gateway for your organization, see [Roll out an LLM gateway](/docs/en/llm-gateway-rollout)
-  * For what Claude Code sends to a gateway, see the [gateway protocol reference](/docs/en/llm-gateway-protocol)
+  * For what Claude Code sends to a gateway, see the [gateway compatibility guide](/docs/en/llm-gateway-protocol)
 </Note>
 
 ## Check for an existing configuration
@@ -309,7 +309,9 @@ Enable it if your gateway serves model names that aren't in Claude Code's built-
 
 To enable it, set `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1` in your shell or in the `env` block of `~/.claude/settings.json`.
 
-Discovered models appear as additional `/model` entries labeled `From gateway`. To confirm discovery ran, start `claude --debug` and look for the `[gatewayDiscovery]` lines in the debug log at `~/.claude/debug/<session-id>.txt`: Claude Code logs how many models it cached the first time discovery succeeds and again only when the gateway's list changes, and a `404`, timeout, or redirect is recorded there too. For when discovery runs, what it filters, and the response format gateways serve, see the [model discovery reference](/docs/en/llm-gateway-protocol#model-discovery).
+Discovered models appear as additional `/model` entries. Each entry shows the description your gateway supplies for the model, or `From gateway` when it doesn't supply one.
+
+To confirm discovery ran, start `claude --debug` and look for the `[gatewayDiscovery]` lines in the debug log at `~/.claude/debug/<session-id>.txt`. The first time discovery succeeds, Claude Code logs how many models it cached, and it logs again only when the gateway's list changes. A `404`, timeout, or redirect appears there too. For when discovery runs, what it filters, and the response format gateways serve, see the [model discovery reference](/docs/en/llm-gateway-protocol#model-discovery).
 
 ### Rotate credentials with apiKeyHelper
 
@@ -386,7 +388,7 @@ Setting the variable has these effects and limits:
 
 * It disables auto-updates, so plan for another update path, such as your package manager or managed distribution.
 * It suppresses the [fast mode](/docs/en/fast-mode) availability check. Unless a previous check already enabled fast mode on the machine, `/fast` reports that fast mode is unavailable.
-* It turns off [gateway model discovery](#add-gateway-models-to-the-model-picker), even though discovery queries the gateway itself. Previously discovered models stay available from the local cache, but the list isn't refreshed.
+* It doesn't affect [gateway model discovery](#add-gateway-models-to-the-model-picker), which queries only your gateway. Before v2.1.257, the variable also stopped discovery from refreshing, so the picker kept the previously cached list.
 * The WebFetch tool's [domain safety check](/docs/en/data-usage#webfetch-domain-safety-check) isn't affected and still calls `api.anthropic.com`. Turn it off separately with `skipWebFetchPreflight: true` in [settings](/docs/en/settings) if your network blocks that host.
 * For each telemetry stream and the variable that controls it, see [telemetry services](/docs/en/data-usage#telemetry-services).
 
@@ -531,6 +533,6 @@ If Claude Code prompts you to log in repeatedly after removing gateway configura
 
 * [LLM gateways overview](/docs/en/llm-gateway): what a gateway is and how it interacts with claude.ai subscriptions
 * [Roll out an LLM gateway for your organization](/docs/en/llm-gateway-rollout): the admin-facing checklist for deploying and distributing gateway configuration
-* [Gateway protocol reference](/docs/en/llm-gateway-protocol): what Claude Code sends to a gateway, including the headers and fields the gateway must forward
+* [Gateway compatibility guide](/docs/en/llm-gateway-protocol): what Claude Code sends to a gateway, including the headers and fields the gateway must forward
 * [Settings](/docs/en/settings): where settings files live and how the `env` block is read
 * [Authentication](/docs/en/authentication): how credential variables, `apiKeyHelper`, and OAuth login interact

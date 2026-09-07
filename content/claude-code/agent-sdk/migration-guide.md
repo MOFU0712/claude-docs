@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/agent-sdk/migration-guide
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: b4dfb70ddf085e6c3265b0f3d41490d1038cd7cfcdba9dac84fd2678fb2c7b8b
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: 0b505a3bf3c17d70cf35849bbe9f62461ec42b851eb4051314de5e5e0c00b66f
 ---
 
 Guide for migrating the Claude Code TypeScript and Python SDKs to the Claude Agent SDK
@@ -9,6 +9,8 @@ Guide for migrating the Claude Code TypeScript and Python SDKs to the Claude Age
 ## Overview
 
 The Claude Code SDK has been renamed to the **Claude Agent SDK** and its documentation has been reorganized. This change reflects the SDK's broader capabilities for building AI agents beyond just coding tasks.
+
+Migrating from the OpenAI Agents SDK instead? The [OpenAI Agents SDK migration recipe](https://platform.claude.com/cookbook/claude-agent-sdk-04-migrating-from-openai-agents-sdk) maps each primitive onto the Claude Agent SDK through a single worked example.
 
 ## What's Changed
 

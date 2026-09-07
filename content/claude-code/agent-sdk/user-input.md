@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/agent-sdk/user-input
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: ccbe5dbd14dc2ad75a77b008eb902fad2cc4bf5424bfa98297b3d055bf035a89
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: c528807697c0f889d2bded1c183420230954e3ef7cfacf8be52122bfcf22ae75
 ---
 
 Surface Claude's approval requests and clarifying questions to users, then return their decisions to the SDK.
@@ -58,7 +58,9 @@ You can also use the [`PermissionRequest` hook](/docs/en/agent-sdk/hooks#availab
 
 ## Handle tool approval requests
 
-Once you've passed a `canUseTool` callback in your query options, it fires when Claude wants to use a tool that nothing earlier in the permission flow has approved. Your callback receives three arguments:
+Once you've passed a `canUseTool` callback in your query options, it fires when Claude wants to use a tool that nothing earlier in the permission flow has approved. In some configurations, such as `dontAsk` mode, Claude Code doesn't call it; the last step of [How permissions are evaluated](/docs/en/agent-sdk/permissions#how-permissions-are-evaluated) lists them and says what happens to the call instead.
+
+Your callback receives three arguments:
 
 | Argument                            | Description                                                                                                                                                                                                                                                                                                                                |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |

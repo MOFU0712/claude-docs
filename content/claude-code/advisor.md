@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/advisor
-fetched_at: '2026-09-02T09:46:44+00:00'
-content_hash: 97106c80e73317452af5a7134b890c0596a18092745a08eec61a554f59ff159b
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: ca8c0b6a4073352cf3f1f30af2ec312af342baaa20613c551ed27a354d43c106
 ---
 
 Pair your main model with a stronger advisor model that Claude consults at key moments during a task.
@@ -147,7 +147,7 @@ For how advisor tokens are reported in API responses, see [Usage and billing](ht
 
 ## Impact on prompt caching
 
-Enabling or disabling the advisor mid-session does not invalidate your main model's [prompt cache](/docs/en/prompt-caching). Unlike [changing model or effort level](/docs/en/prompt-caching#actions-that-invalidate-the-cache), toggling `/advisor` keeps the cached prefix intact, and the advisor's returned guidance is cached as part of the transcript on later turns.
+Enabling or disabling the advisor mid-session does not invalidate your main model's [prompt cache](/docs/en/prompt-caching). Unlike [switching models](/docs/en/prompt-caching#switching-models), toggling `/advisor` keeps the cached prefix intact, and the advisor's returned guidance is cached as part of the transcript on later turns.
 
 The advisor model's own read of the conversation is not cached. Each advisor call processes the full transcript anew, with no reuse between calls.
 

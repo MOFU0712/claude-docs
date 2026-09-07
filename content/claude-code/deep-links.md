@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/deep-links
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: 7fe4357b1aac8a79bd9dccb672662431023e23a1be8c2aaf855ecfb098243efa
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: 7e8b577abed3bfce01a4d945498d1f752d5e2eef768007a520bf894cd93faac3
 ---
 
 Open a Claude Code terminal session from a URL. Embed `claude-cli://` links in runbooks, alerts, and dashboards so a click opens Claude Code in the right repo with the right prompt.
@@ -53,7 +53,7 @@ Add parameters to control where the session starts and what the prompt box conta
 | Parameter | Description                                                                                                                                                                                                                                 |
 | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `q`       | Text to pre-fill in the prompt box. [URL-encode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent) the value. Use `%0A` for line breaks in multi-line prompts. Maximum 5,000 characters. |
-| `cwd`     | Absolute path to use as the working directory. Network and UNC paths are rejected, and so are paths that contain invisible or bidirectional control characters.                                                                             |
+| `cwd`     | Absolute path to use as the working directory. Network and UNC paths are rejected, and so are paths that contain `..` segments or invisible or bidirectional control characters.                                                            |
 | `repo`    | A GitHub `owner/name` slug. Claude Code resolves it to a local clone it has seen before and starts there. If you have no matching clone, the session opens in your home directory instead.                                                  |
 
 `cwd` and `repo` are [two ways to set the working directory](#choose-between-cwd-and-repo). If you pass both, `cwd` takes precedence and `repo` is ignored, even if the `cwd` path does not exist.

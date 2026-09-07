@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/security
-fetched_at: '2026-08-25T01:58:26+00:00'
-content_hash: 2b1af0d0c239a3e91bf4987f9c489409e0d64a00c6e8116ee63f2caec48ebae5
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: 64f55bbf9989840d1850ca5b7dd23c8fd0f665c3ef93ad18c470421102c3768c
 ---
 
 Learn about Claude Code's security safeguards and best practices for safe usage.
@@ -29,7 +29,7 @@ For detailed permission configuration, see [Permissions](/docs/en/permissions).
 To mitigate risks in agentic systems:
 
 * **Sandboxed bash tool**: [Sandbox](/docs/en/sandboxing) bash commands with filesystem and network isolation, reducing permission prompts while maintaining security. Configure with `/sandbox` to define boundaries where Claude Code can work autonomously
-* **Working directory boundary**: In Manual mode, Claude Code can only write to the folder where it was started and its subfolders, and can't modify files in parent directories without explicit permission. In Manual mode, Claude Code also asks you before reading paths outside this boundary with the Read, Grep, and Glob tools. In auto mode it reads them without asking. Extend the boundary with [additional directories](/docs/en/permissions#working-directories) to skip the prompt, or restrict the broader read access available to read-only Bash commands with [sandbox `denyRead` rules](/docs/en/sandboxing#filesystem-isolation), which apply only when sandboxing is enabled
+* **Working directory boundary**: In Manual mode, Claude Code can only write to the folder where it was started and its subfolders, and can't modify files in parent directories without explicit permission. In Manual mode, Claude Code also asks you before reading paths outside this boundary with the Read, Grep, and Glob tools. Extend the boundary with [additional directories](/docs/en/permissions#working-directories) to skip the prompt, or restrict the broader read access available to read-only Bash commands with [sandbox `denyRead` rules](/docs/en/sandboxing#filesystem-isolation), which apply only when sandboxing is enabled
 * **Prompt fatigue mitigation**: Support for allowlisting frequently used safe commands per-user, per-codebase, or per-organization
 * **Accept Edits mode**: Auto-approves file edits and a fixed set of filesystem Bash commands like `mkdir`, `touch`, `rm`, `mv`, `cp`, and `sed` for paths in the working directory. Other Bash commands and out-of-scope paths still prompt
 

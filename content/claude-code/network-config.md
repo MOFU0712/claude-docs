@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/network-config
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: 47bdf88600819e70704a66d3e350bb5369160e8382e014078a9cc87c63d9a134
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: a167e8ecfcc03c826f6691b1976bda70d34013c34eef77294cb912718b965880
 ---
 
 Configure Claude Code for enterprise environments with proxy servers, custom Certificate Authorities (CA), and mutual Transport Layer Security (mTLS) authentication.
@@ -195,10 +195,12 @@ Configure the timers with these variables, each detailed in the [environment var
 * `CLAUDE_ENABLE_STREAM_WATCHDOG` and `CLAUDE_ENABLE_BYTE_WATCHDOG` force the corresponding watchdog on with `1` or off with `0`, within the connections the table lists; neither variable extends a watchdog to a connection type it doesn't cover. `CLAUDE_ENABLE_BYTE_WATCHDOG` set to `0` also turns off the first-byte deadline.
 * `CLAUDE_STREAM_IDLE_TIMEOUT_MS` sets both watchdogs' timeout. Claude Code raises values below 5 minutes to 5 minutes, and caps the value at 30 minutes for the byte-level watchdog.
 * `CLAUDE_BYTE_STREAM_IDLE_TIMEOUT_MS` sets the byte-level watchdog's timeout without changing the event-level watchdog's, clamped to between 10 seconds and 30 minutes, and takes precedence over `CLAUDE_STREAM_IDLE_TIMEOUT_MS` for that watchdog.
-* `CLAUDE_STREAM_FIRST_BYTE_TIMEOUT_MS` sets the first-byte deadline directly. Leave it unset and Claude Code derives the deadline from the byte-level watchdog's timeout or from an `API_TIMEOUT_MS` you set above that timeout, so `CLAUDE_STREAM_IDLE_TIMEOUT_MS` and `CLAUDE_BYTE_STREAM_IDLE_TIMEOUT_MS` change the deadline too. For the clamps, the upload allowance, and the `API_TIMEOUT_MS` cap, see [No response from API](/docs/en/errors#no-response-from-api).
+* `CLAUDE_STREAM_FIRST_BYTE_TIMEOUT_MS` sets the first-byte deadline directly. Leave it unset and Claude Code uses the byte-level watchdog's timeout, so `CLAUDE_STREAM_IDLE_TIMEOUT_MS` and `CLAUDE_BYTE_STREAM_IDLE_TIMEOUT_MS` change the deadline too. For the clamps, the upload allowance, the `API_TIMEOUT_MS` cap, and how long the retry waits after a no-response abort, see [No response from API](/docs/en/errors#no-response-from-api).
 * `API_FORCE_IDLE_TIMEOUT` set to `0` turns the body idle timeout off, and set to `1` turns it on for every provider. The watchdogs run independently of it, so to let a stream pause longer than their thresholds, also raise or disable them.
 
-When a watchdog aborts a stalled stream, Claude Code treats it as a mid-stream failure: depending on how far the response had got, it retries the request or ends the turn with an error, keeps the completed output and shows an [incomplete-response notice](/docs/en/errors#the-response-above-may-be-incomplete), or ends the turn normally. [Automatic retries](/docs/en/errors#automatic-retries) says where each outcome applies. In a [non-interactive session](/docs/en/headless), Claude Code may first prompt Claude to continue the cut-off response; [that notice's entry](/docs/en/errors#the-response-above-may-be-incomplete) says when it does and when you still see the notice.
+When a watchdog aborts a stalled stream, Claude Code treats the abort as a mid-stream failure, and what you see depends on how far the response had got. Claude Code retries the request or ends the turn with an error, keeps the completed output and shows an [incomplete-response notice](/docs/en/errors#the-response-above-may-be-incomplete), or ends the turn normally. [Automatic retries](/docs/en/errors#automatic-retries) says where each outcome applies.
+
+In a [non-interactive session](/docs/en/headless), and for a subagent's response in any session, Claude Code may first prompt Claude to continue the cut-off response; [that notice's entry](/docs/en/errors#the-response-above-may-be-incomplete) says when it does and when you still see the notice.
 
 When the first-byte deadline fires, no response has started, so there is no partial output to keep. For how Claude Code re-sends the request and when the turn ends instead, see [No response from API](/docs/en/errors#no-response-from-api).
 

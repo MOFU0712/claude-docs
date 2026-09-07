@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/routines
-fetched_at: '2026-09-01T06:13:54+00:00'
-content_hash: a08ad867a4ed9d474ffe86edf95b38cca61a33830ccc873eb7e056a0d1a37cd2
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: 3635c095fc10166191d7c77d33baa9c1f27986e2e01a083d71d728999824e3ee
 ---
 
 Put Claude Code on autopilot. Define routines that run on a schedule, trigger on API calls, or react to GitHub events from cloud infrastructure.
@@ -75,7 +75,7 @@ Routines belong to your individual claude.ai account. They are not shared with t
     Pick a [cloud environment](/docs/en/cloud-environments) for the routine. Environments control what the cloud session has access to:
 
     * **Network access**: set the level of internet access available during each run
-    * **Environment variables**: provide values Claude can use during each run. They're [visible to anyone who uses the environment](/docs/en/cloud-environments#what-carries-over-from-your-setup), so store keys for the APIs Claude calls during a run as [API credentials](/docs/en/cloud-environments#add-api-credentials) instead. That section also lists the requests that never get a credential
+    * **Environment variables**: provide values Claude can use during each run. They're [visible to anyone who uses the environment](/docs/en/cloud-environments#what-carries-over-from-your-setup), so on Pro and Max plans, store keys for the APIs Claude calls during a run as [API credentials](/docs/en/cloud-environments#add-api-credentials) instead. That section also lists the requests that never get a credential
     * **Setup script**: install dependencies and tools the routine needs. The result is [cached](/docs/en/cloud-environments#environment-caching), so the script doesn't re-run on every session
 
     A **Default** environment is provided with **Trusted** network access, which allows only the [default allowlist](/docs/en/cloud-environments#default-allowed-domains) of package registries, cloud provider APIs, container registries, and common development domains through the session's network. Connectors you add to the routine reach their services through Anthropic's servers, so they don't need allowlist changes. If your routine needs to reach your own services directly, or a domain outside that list, edit the environment's [network access](/docs/en/cloud-environments#network-access) before running. To use a separate environment, [create one](/docs/en/cloud-environments#configure-your-environment) first.

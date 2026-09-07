@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/settings-example
-fetched_at: '2026-09-02T09:46:44+00:00'
-content_hash: e167f9a3000d7f0134f72e16dddf0dc9cb4c9865eac02ebec8297a9d1b98c315
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: d2bb1f988bc69a7d299916dd6a940e0cc2171475f7d85ee0ac66e6fc6cb4d5ca
 ---
 
 Realistic settings.json files for a developer, a team, and an organization: copy one, keep the keys you want, and change the values.
@@ -360,9 +360,9 @@ Administrators deploy a file like this as `managed-settings.json`, or the same J
           "repo": "acme-corp/approved-plugins"
         }
       ],
-      // Sandbox every command, refuse to start if the sandbox can't be set up, and
-      // never let a blocked command retry outside the sandbox; network limited to
-      // npm and GitHub, and users can't add domains
+      // Sandbox every command Claude runs, refuse to start if the sandbox can't be
+      // set up, and never let a blocked command retry outside the sandbox; network
+      // limited to npm and GitHub, and users can't add domains
       "sandbox": {
         "enabled": true,
         "failIfUnavailable": true,

@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/auto-mode-config
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: af1b778d20bfe04e84eeae3208dae2a22f474c3871253e45af117be847b9e5ec
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: eee2de2b1ec9d04fc976c62619fc7c1e3c89907fa31e45c8e5636a0fb1ce5035
 ---
 
 Tell the auto mode classifier which repos, buckets, and domains your organization trusts. Set environment context, override the default block and allow rules, and inspect your effective config with the auto-mode CLI subcommands.
@@ -85,7 +85,7 @@ For most organizations, `autoMode.environment` is the only field you need to set
 
 As of Claude Code v2.1.198, `claude auto-mode defaults` prints three kinds of environment entry. Versions before v2.1.195 print only the first five trust slots.
 
-* **Context slots**: describe your organization, stack, and security posture so the classifier reads the other rules in your context. Unlike the other two kinds, context slots have no rules of their own that target them. Each defaults to `None configured` or to the conservative assumption named next to it:
+* **Context slots**: describe your organization, stack, and security posture so the classifier reads the other rules in your context. Each defaults to `None configured` or to the conservative assumption named next to it:
   * **Organization**
   * **Primary use of Claude Code**: defaults to software development
   * **Cloud provider(s)**
@@ -95,6 +95,7 @@ As of Claude Code v2.1.198, `claude auto-mode defaults` prints three kinds of en
   * **Secrets management**
   * **CI/CD deploy targets**
   * **Network posture**
+  * **Host containment**: defaults to an ordinary developer machine or CI runner with open internet. If Claude Code runs in a container, VM, or pod with an egress allow-list or neighbors it must not touch, name the allowed hosts, whether the cloud metadata endpoint should be reachable, and which cloud project, cluster, or registry the task uses and under what identity. Until this entry names that identity, the classifier [blocks](/docs/en/permission-modes#what-the-classifier-blocks-by-default) requests for the host's own credentials. Requires Claude Code v2.1.257 or later
   * **Protected deployment namespaces / environments**: falls back to the Sensitive remote targets heuristic until you name them
   * **Data retention / declassification**
 * **Trust slots**: name what the classifier treats as inside your boundary. The slots are Trusted repo, Source control, Trusted internal domains, Trusted cloud buckets, Key internal services, and Internal package registry. The repo and source-control entries default to the working repository and its configured remotes. Every other trust slot defaults to `None configured`, so nothing else is trusted until you add it. A repository's visibility scopes only confidential material: a private repository is an acceptable destination for confidential material, but making a repository private never clears secrets or personal or entrusted data into it, and the classifier treats content ported, repointed, or first read from outside the working repository as not that repository's own work. This scoping requires Claude Code v2.1.203 or later.

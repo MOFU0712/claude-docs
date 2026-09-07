@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/remote-control
-fetched_at: '2026-09-02T09:46:44+00:00'
-content_hash: 842784d3fd90ba643599fcaafeb9ce7601b37d00a3aeb2d2ab435a7140e30147
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: e78a6d3f90006a5c28a2f5779f5e028c2dac8115b20a85d48048bb0ba2587450
 ---
 
 Continue a local Claude Code session from your phone, tablet, or any browser using Remote Control. Works with claude.ai/code and the Claude mobile app.
@@ -376,10 +376,12 @@ The message names what routed the session away from the Anthropic API, such as `
 
 ### "Remote Control is disabled by your organization's policy"
 
-A policy blocks Remote Control. The message's own text tells you which:
+A policy blocks Remote Control, or Claude Code couldn't load your organization's policy on this machine and keeps Remote Control off in the meantime. Check these causes in order:
 
 * **The error mentions `disableRemoteControl`**: your IT administrator has disabled Remote Control on this device through [managed settings](/docs/en/managed-settings), independent of the organization-wide toggle and of how you're signed in.
-* **Otherwise, an Owner hasn't enabled it for your organization**: this form appears when you're signed in with an eligible claude.ai account but Remote Control is off, the default on Team and Enterprise plans. An Owner can enable it at [claude.ai/admin-settings/claude-code](https://claude.ai/admin-settings/claude-code) by turning on the **Remote Control** toggle. This toggle is a server-side organization setting.
+* **Your claude.ai plan is Pro or Max**: Claude Code is still signed in under a Team or Enterprise organization from an earlier login, so it checks that organization's Remote Control policy. Run `/status` to see which plan and organization your sign-in uses. Run `claude auth logout` then `claude auth login` to sign in again under your current plan.
+* **The organization policy didn't load on this machine**: run `claude doctor` and read the `Organization policy` line. If the line shows the policy isn't loaded, that is what's keeping Remote Control off. Before v2.1.261, `claude doctor` didn't print this line.
+* **Otherwise, an Owner hasn't enabled it for your organization**: Remote Control is off by default on Team and Enterprise plans. An Owner can enable it at [claude.ai/admin-settings/claude-code](https://claude.ai/admin-settings/claude-code) by turning on the **Remote Control** toggle. This toggle is a server-side organization setting.
 
 ### "Remote Control isn't available for your organization due to its compliance policy"
 

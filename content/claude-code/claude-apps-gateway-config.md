@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/claude-apps-gateway-config
-fetched_at: '2026-09-02T09:46:44+00:00'
-content_hash: cb193ff442f395c9fbafe38ac59be040093a5d8e6e0d687b3d35e8ed0441351c
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: ac27b0f78c4523a2aebc8c7475bb997d7b67172878906d704b39dcc9d33a02b6
 ---
 
 Reference for every gateway.yaml option: listener and TLS, OIDC, session, Postgres store, Amazon Bedrock, Claude Platform on AWS, Google Cloud's Agent Platform, and Microsoft Foundry upstreams, model routing, managed policies, and telemetry.
@@ -600,7 +600,6 @@ Because these settings arrive over the network, the CLI shows each developer a s
 * shell-execution settings such as `apiKeyHelper` and `statusLine`
 * the sandbox binary settings `sandbox.bwrapPath`, `sandbox.socatPath`, and `sandbox.ripgrep`
 * Sandbox settings that intercept traffic, inject credentials, or weaken isolation, such as `sandbox.network.tlsTerminate` and the proxy port settings. [Security approval dialogs](/docs/en/server-managed-settings#security-approval-dialogs) lists them all.
-* managed CLAUDE.md content
 
 [Approval memory](/docs/en/server-managed-settings#approval-memory) covers how long an approval lasts and when the dialog appears again.
 

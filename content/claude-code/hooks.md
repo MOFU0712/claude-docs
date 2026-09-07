@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/hooks
-fetched_at: '2026-09-02T09:46:44+00:00'
-content_hash: fa8352e6e4fbd275f6852d7e47d281bd3cb508fece81e6523620b98428f8b8c4
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: c8ac5994894d50f753926d76e2f035a0f1829f28238485c2420410f9f2fbab04
 ---
 
 Reference for Claude Code hook events, configuration schema, JSON input/output formats, exit codes, async hooks, HTTP hooks, prompt hooks, and MCP tool hooks.
@@ -1825,7 +1825,9 @@ Matches on tool name, same values as PreToolUse.
 
 #### PermissionRequest input
 
-PermissionRequest hooks receive `tool_name` and `tool_input` fields like PreToolUse hooks, but without `tool_use_id`. An optional `permission_suggestions` array contains the "always allow" options the user would normally see in the permission dialog.
+PermissionRequest hooks receive `tool_name` and `tool_input` fields like PreToolUse hooks, but without `tool_use_id`. An optional `permission_suggestions` array contains the [permission updates](#permission-update-entries) Claude Code suggests for this request, such as adding an allow rule or changing the permission mode.
+
+The permission dialog builds its "always allow" options from these suggestions, but the array isn't an exact list of the options you see. The dialog can withhold an option whose suggestion stays in the array, for example when [`allowManagedPermissionRulesOnly`](/docs/en/settings-reference#allowmanagedpermissionrulesonly) hides rule-saving options. It can also offer options that have no suggestion entry, such as [**Yes, and switch to auto mode**](/docs/en/permission-modes#switch-permission-modes), which changes the permission mode directly rather than through a permission update.
 
 PreToolUse hooks run before every tool call, whether or not it needs permission. PermissionRequest hooks run only when Claude Code is about to ask you for permission, or when it would otherwise auto-deny a call that can't prompt. Neither event fires for [`EndConversation`](/docs/en/tools-reference#endconversation-tool-behavior).
 
@@ -1908,7 +1910,7 @@ The `destination` field on every entry determines whether the change stays in me
 | `projectSettings` | `.claude/settings.json`                         |
 | `userSettings`    | `~/.claude/settings.json`                       |
 
-A hook can echo one of the `permission_suggestions` it received as its own `updatedPermissions` output, which is equivalent to the user selecting that "always allow" option in the dialog.
+A hook can echo one of the `permission_suggestions` it received as its own `updatedPermissions` output.
 
 ### PostToolUse
 
@@ -2742,7 +2744,7 @@ Claude Code doesn't fire this event when:
 
 * You pass a directory with the `--add-dir` startup flag; [SessionStart](#sessionstart) covers those directories
 * You add a directory on the `/permissions` Workspace tab
-* You add a directory that is already a working directory; the add fails with an error
+* You add a directory that is already a working directory or inside one
 
 Claude Code fires DirectoryAdded after refreshing sandbox and permission state, so sandboxed tools already see the new directory when your hook runs. Hook commands themselves run unsandboxed.
 

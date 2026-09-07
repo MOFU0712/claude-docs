@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/agent-sdk/overview
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: a200dfd57a7b5a81925bb10211d374786500b1d553d74fb112c8b8668ccb80c8
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: f1b35756b0bb1c363013d35452e69c9cc80bc3a6f97b4abe8cf1d7db4fc24deb
 ---
 
 Build production AI agents with Claude Code as a library
@@ -84,6 +84,7 @@ Use of the Claude Agent SDK is governed by [Anthropic's Commercial Terms of Serv
 These resources cover deeper technical detail and example projects for building with the Agent SDK.
 
 * [Quickstart](/docs/en/agent-sdk/quickstart): build your first agent that finds and fixes bugs
+* [Migration guide](/docs/en/agent-sdk/migration-guide): migrate from the Claude Code SDK packages to the Agent SDK
 * [Agent loop](/docs/en/agent-sdk/agent-loop): how Claude plans, calls tools, and decides when a task is done
 * [Example agents](https://github.com/anthropics/claude-agent-sdk-demos): demo apps for local development
 * [TypeScript SDK](/docs/en/agent-sdk/typescript): full TypeScript API reference and examples

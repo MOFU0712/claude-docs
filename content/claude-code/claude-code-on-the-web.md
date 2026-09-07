@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/claude-code-on-the-web
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: 862cccf3cddb893a8fb5929a68dbc30f53cef0367983214a6b76395674529df9
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: 0896f581dc90f1a5eb69a7316cd103dce1721ff308f200b1d7ded79b8719b0bc
 ---
 
 Move sessions between web and terminal with `--cloud` and `--teleport`, manage and share sessions, and auto-fix pull requests from the cloud.
@@ -308,7 +308,7 @@ Each cloud session is separated from your machine and from other sessions throug
 * **Isolated virtual machines**: each session runs in an isolated, Anthropic-managed VM. Sessions your organization routes to a [self-hosted environment](/docs/en/self-hosted-environments) run on your own infrastructure instead, where isolation is your deployment's responsibility
 * **Network access controls**: in Anthropic-hosted environments, network access is limited by default and can be disabled. In a self-hosted environment, you restrict session egress at your own network boundary. When running with network access disabled, Claude Code can still communicate with the Anthropic API, which may allow data to exit the VM.
 * **Credential protection**: in Anthropic-hosted environments, git credentials and signing keys stay outside the sandbox, and a proxy authenticates on the session's behalf with scoped credentials. In a self-hosted environment, your deployment supplies git credentials; see [Configure git](/docs/en/self-hosted-environments-deploy#configure-git)
-* **API credentials**: in Anthropic-hosted environments, keys you [add to a cloud environment](/docs/en/cloud-environments#add-api-credentials) stay outside the sandbox the same way, attached to matching requests after they leave the session. A self-hosted environment doesn't have API credentials
+* **API credentials**: in Anthropic-hosted environments on Pro and Max plans, keys you [add to a cloud environment](/docs/en/cloud-environments#add-api-credentials) stay outside the sandbox the same way, attached to matching requests after they leave the session. A self-hosted environment doesn't have API credentials, and Team and Enterprise plans don't have them yet
 * **Secure analysis**: code is analyzed and modified within the session's isolated environment before creating PRs
 
 ## Troubleshooting

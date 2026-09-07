@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/worktrees
-fetched_at: '2026-08-31T02:39:11+00:00'
-content_hash: afb9117eab710104899e46a168dbb362e92d8acd31298cef65d0e7990bb25982
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: d14c3ed42bd8387ba15d9fba94fdf5d8964364a70539e7f43e029107f6317d48
 ---
 
 Isolate parallel Claude Code sessions in separate git worktrees so changes don't collide. Covers the `--worktree` flag, subagent isolation, `.worktreeinclude`, cleanup, and non-git VCS hooks.
@@ -89,7 +89,7 @@ Claude Code applies four checks:
 * **File edits**: Claude Code blocks an `Edit`, `Write`, or `NotebookEdit` that targets a path in the main checkout.
 * **Command working directory**: Claude Code blocks a Bash, PowerShell, or Monitor command whose working directory resolves to the main checkout, or whose working directory it can't verify stays outside it.
 * **Git redirects**: Claude Code blocks a Bash or Monitor command that redirects git into the main checkout. The redirect can come through `git -C`, `--git-dir`, a `GIT_DIR` or `GIT_WORK_TREE` variable, or a `cd` into the main checkout before running git.
-* **Command shape**: Claude Code blocks a Bash or Monitor command it can't verify stays inside the worktree, even when the command runs no git at all. Claude Code refuses shell constructs it can't trace without running them, such as brace expansion and heredocs with unquoted delimiters. Claude Code tells Claude how to rewrite the refused command, such as splitting it into plain, separate commands. You can't turn this check off.
+* **Command shape**: Claude Code blocks a Bash or Monitor command when it can't verify from the command text that any git the command runs stays inside the worktree, for example when the command name is computed at runtime or the syntax can't be parsed. Claude Code tells Claude how to rewrite the refused command, such as splitting it into plain, separate commands. You can't turn this check off.
 
 The checks apply to the repository you launched Claude Code from. They also cover the main checkout a linked worktree is linked from. For PowerShell commands, Claude Code applies only the working-directory check.
 

@@ -1,7 +1,7 @@
 ---
 source_url: https://code.claude.com/docs/en/sub-agents
-fetched_at: '2026-09-04T00:27:18+00:00'
-content_hash: e47893c762fd30509fe2d781885cc3527353a80dd94e25fe6fadc7bf096df2cb
+fetched_at: '2026-09-07T00:30:10+00:00'
+content_hash: 058fd70b840a0b55ef225a9ea6129c080ec95e96c5a1be7329f802cbe70801c5
 ---
 
 Create and use specialized AI subagents in Claude Code for task-specific workflows and improved context management.
@@ -264,7 +264,7 @@ specific, actionable feedback on quality, security, and best practices.
 
 The frontmatter defines the subagent's metadata and configuration. The body becomes the system prompt that guides the subagent's behavior. Subagents receive only this system prompt plus basic environment details like the working directory, not the Claude Code system prompt.
 
-In [non-interactive mode](/docs/en/headless), pass [`--append-subagent-system-prompt`](/docs/en/cli-reference#cli-flags) to append your text to the end of every subagent's system prompt, nested subagents included, apart from a [forked subagent](#fork-the-current-conversation), which reuses the conversation's own prompt. Requires Claude Code v2.1.205 or later.
+In [non-interactive mode](/docs/en/headless), pass [`--append-subagent-system-prompt`](/docs/en/cli-reference#cli-flags) to append your text to the end of every subagent's system prompt, nested subagents included, apart from a [forked subagent](#fork-the-current-conversation), which reuses the conversation's own prompt. Requires Claude Code v2.1.205 or later. If your text is too long to pass on the command line, save it to a file and pass the path with `--append-subagent-system-prompt-file` instead. The file flag requires Claude Code v2.1.261 or later.
 
 A subagent starts in the main conversation's current working directory. Within a subagent, `cd` commands don't persist between Bash or PowerShell tool calls and don't affect the main conversation's working directory. To give the subagent an isolated copy of the repository instead, set [`isolation: worktree`](#supported-frontmatter-fields).
 
@@ -275,7 +275,7 @@ This working-directory check covers the whole repository containing the director
 For Bash commands, Claude Code also checks the command itself in two ways:
 
 * It blocks a command that redirects git into the main checkout.
-* It refuses a command whose shape it can't verify stays inside the worktree. This refusal applies even to a command that runs no git.
+* It refuses a command when it can't verify from the command text that any git the command runs stays inside the worktree, for example when the command name is computed at runtime.
 
 The redirect vectors and the shape rules are listed under [How Claude Code enforces isolation](/docs/en/worktrees#how-claude-code-enforces-isolation). PowerShell commands get only the working-directory check.
 
@@ -901,6 +901,8 @@ In an interactive session with [agent teams](/docs/en/agent-teams) enabled, a su
 
 ### API errors in subagents
 
+When something [cuts off a subagent's response mid-stream](/docs/en/errors#the-response-above-may-be-incomplete), and the partial response contains text but no tool calls, Claude Code prompts the subagent to continue rather than ending the run. This happens in interactive sessions too. The run ends on the error only once those continuations are used up.
+
 As of v2.1.199, a subagent whose run ends on an API error, such as a usage limit or a repeated server error, reports that failure back to Claude instead of returning the error text as if it were the subagent's findings. What Claude receives depends on where the subagent ran:
 
 * **Foreground**: if a rate limit, overload, or server error cuts off a subagent that already produced text output, the Agent tool returns that partial output with a note that the subagent was cut off and didn't finish its task. A subagent that produced nothing, or whose only output was tool calls, fails with [`Agent terminated early due to an API error`](/docs/en/errors#agent-terminated-early-due-to-an-api-error), followed by the error detail. In v2.1.199, a rate limit, overload, or server error that cut off the tool-calls-only shape returned an empty partial result containing only the cut-off note instead.
@@ -1067,7 +1069,9 @@ Continue that code review and now analyze the authorization logic
 
 A completed subagent that receives a `SendMessage` auto-resumes in the background without a new `Agent` invocation. The same applies to a subagent that Claude stopped with the `TaskStop` tool.
 
-As of v2.1.191, a subagent you stopped yourself, with `x` in `/tasks` or an SDK `stop_task` request, doesn't auto-resume. The `SendMessage` call returns a refusal telling Claude the agent was cancelled. While [that subagent's row is still in the subagent panel](#run-subagents-in-foreground-or-background), type into its transcript to resume it yourself, which clears the stop so later `SendMessage` calls can auto-resume it again.
+A subagent you stopped yourself, with `x` in `/tasks` or an SDK `stop_task` request, doesn't auto-resume. If Claude sends it a message, the message is refused and Claude is told the agent was cancelled.
+
+While [that subagent's row is still in the subagent panel](#run-subagents-in-foreground-or-background), type into its transcript to resume it yourself. After that, a message from Claude can auto-resume it again. Requires Claude Code v2.1.191 or later.
 
 Resuming starts a new run of the agent under the same ID, so a subagent that had already failed or completed shows as running again in the task list and in the Agent SDK's task events. Before v2.1.205, it kept showing its earlier failed or completed status while the resumed run was working.
 
